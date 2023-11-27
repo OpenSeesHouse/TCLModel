@@ -1,0 +1,19 @@
+set Units cm; set Material A992Fy50
+set Shape SteelTube
+set t3 50.8
+set t2 10.16
+set tf 0.886
+set tw 0.886
+set Radius 0
+set Area 103.2
+set AS2 90.1
+set AS3 18
+set J 6493.2
+set I22 1981.3
+set I33 27346.4
+set S22 390
+set S33 1076.6
+set Z22 439.2
+set Z33 1463.4
+set R22 4.381
+set R33 16.276

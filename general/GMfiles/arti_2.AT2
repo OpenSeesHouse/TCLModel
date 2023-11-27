@@ -1,0 +1,4 @@
+t*SIN(2*PI()*t/T)*fac; T = 1s
+
+
+NPTS= 3000, DT= 0.0100

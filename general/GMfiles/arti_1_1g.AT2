@@ -1,0 +1,4 @@
+t*SIN(2*PI()*t/T)*COS(2*PI()/T2_*t)*COS(2*PI()/T3_*t)*fac
+
+
+NPTS= 3000, DT= 0.0100
