@@ -24,7 +24,7 @@ proc manageTags {act args} {
 		if [info exists nodeTagMap($args)] {
 			return $nodeTagMap($args)
 		}
-		error "node with tag: $args not found in map"
+		return 0
 	} elseif {$act == "-newElement"} {
 		if [info exists eleTagMap($args)] {
 			error "element with tag: $args already defined in map"
@@ -35,7 +35,7 @@ proc manageTags {act args} {
 		if [info exists eleTagMap($args)] {
 			return $eleTagMap($args)
 		}
-		error "element with tag: $args not found in map"
+		return 0
 	} elseif {$act == "-newGeomtransf"} {
 		if [info exists transfTagMap($args)] {
 			error "geomTransf with tag: $args already defined in map"
@@ -45,6 +45,18 @@ proc manageTags {act args} {
 	} elseif {$act == "-getGeomtransf"} {
 		if [info exists transfTagMap($args)] {
 			return $transfTagMap($args)
+		}
+		return 0
+	} elseif {$act == "-getAllPos"} {
+		set arg0 [lindex $args 0]
+		set arg1 [lindex $args 1]
+		if {$arg0 == "node"} {
+			return [lsort [array names nodeTagMap]]
+		} elseif {$arg0 == "element"} {
+			if {$arg1 == ""} {
+				return [lsort [array names eleTagMap]]
+			}
+			#todo: filter list by eleCode given as arg1
 		}
 		error "geomTransf with tag: $args not found in map"
 	} else {

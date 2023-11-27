@@ -165,7 +165,7 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 				lappend list1 [manageTags -getElement $eleCode,$elePos,1]
 				lappend list2 [manageTags -getElement $eleCode,$elePos,2]
 			} else {
-				set nSeg $numSegClmn
+				set nSeg $inputs(numSegClmn)
 				for {set iSeg 1} {$iSeg <= $nSeg}  {incr iSeg} {
 					set eleTag [manageTags -getElement "$eleCode,$elePos,$iSeg"]
 					lappend list $eleTag
@@ -197,13 +197,13 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 			set forceDOFs "1 3 6"
 			set rotDOFs "2 3"
 		}
-		# eval "recorder EnvelopeElement -file $inputs(resFolder)/clmnForces/$j.out $timeStr -process maxAbs -procGrpNum $numSegClmn -ele $list -dof $forceDOFs localForce"
+		# eval "recorder EnvelopeElement -file $inputs(resFolder)/clmnForces/$j.out $timeStr -process maxAbs -procGrpNum $inputs(numSegClmn) -ele $list -dof $forceDOFs localForce"
 		eval "recorder EnvelopeElement -file $inputs(resFolder)/storyShears/X$j.out $timeStr -process sum -ele $list -dof 1 force"
 		if {$inputs(numDims) == 3} {
 			eval "recorder EnvelopeElement -file $inputs(resFolder)/storyShears/Y$j.out $timeStr -process sum -ele $list -dof 2 force"
 		}
 		eval "recorder EnvelopeElement -file $inputs(resFolder)/clmnDuctils/$j.out $timeStr -ele $list  maxDuctility"
-		eval "recorder EnvelopeElement -file $inputs(resFolder)/clmnRtns/$j.out $timeStr -process maxAbs -procGrpNum $numSegClmn -ele $list -dof $rotDOFs basicDeformation"
+		eval "recorder EnvelopeElement -file $inputs(resFolder)/clmnRtns/$j.out $timeStr -process maxAbs -procGrpNum $inputs(numSegClmn) -ele $list -dof $rotDOFs basicDeformation"
 		eval "recorder ResidElement -file $inputs(resFolder)/clmnEnergies/$j.out $timeStr -ele $list energy"
 		# for {set secNum 1} {$secNum <= $numIntegPnts} {incr secNum} {
 			# eval "recorder EnvelopeElement -file $inputs(resFolder)/clmnForces/sec-[set secNum]story[set j].out $timeStr -ele $list section $secNum force"

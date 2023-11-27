@@ -1,4 +1,4 @@
-proc I-section { secID matID d bf tf tw nfdw nftw nfbf nftf} {
+proc I-section {secID matID d bf tf tw nfdw nftw nfbf nftf {GJ ""}} {
 	# ###################################################################
 	# I-section  $secID $matID $d $bf $tf $tw $nfdw $nftw $nfbf $nftf
 	# ###################################################################

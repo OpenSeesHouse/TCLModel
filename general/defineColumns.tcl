@@ -56,24 +56,35 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 			} else {
 				set srchStr $sec 
 				if {[info exists FRPAttach] && $FRPAttach($j,clmn) != ""} {
-					set srchStr $sec-$j
+					set sec $sec-$j
 				}
-				set secTagList ""
-				foreach loc "1 2 3" {
-					set loc1 [expr $loc-1]
-					set shFac [lindex $clmnShearReinfSFacs $loc1]
-					set secTag $secIDClmns($srchStr,$shFac)
-					lappend secTagList $secTag
+				if {$inputs(matType) == "Concrete"} {
+					set secTagList ""
+					foreach loc "1 2 3" {
+						set loc1 [expr $loc-1]
+						set shFac [lindex $clmnShearReinfSFacs $loc1]
+						set secTag $secIDClmns($sec,$shFac)
+						lappend secTagList $secTag
+					}
+				} else {
+					set secTagList $secIDClmns($sec)
 				}
 				source $inputs(secFolder)/$sec.tcl
 				source $inputs(secFolder)/convertToM.tcl
 				set rho [expr $inputs(selfWeightMultiplier)*$inputs(density)*$Area]
-				set integType [lindex $clmnInteg 0]
+				set integType [lindex $inputs(clmnInteg) 0]
+				if [info exists inputs(numSegClmn)] {
+					set nSeg $inputs(numSegClmn)
+					set lSeg 0
+				} else {
+					set nSeg 0
+					set lSeg $inputs(lSegClmn)
+				}
 				set p $columnGravLoad($j,$k,$i)
 				set eleType $inputs(columnType)
 				set integStr $inputs(clmnInteg)
-				addFiberBeam $eleType $elePos $eleCode $iNode $jNode $secTagList $rho $p $integStr
-				
+				addFiberBeam $eleType $elePos $eleCode $iNodePos $jNodePos $secTagList nSeg $lSeg 1 $rho $p $integStr
+				set inputs(numSegClmn) $nSeg
 			}
 			set eleData(unitSelfWeight,$eleCode,$elePos) $rho
 			set eleData(length,$eleCode,$elePos) $h

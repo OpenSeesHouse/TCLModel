@@ -1,15 +1,15 @@
-set inputs(sharedInputsFile) $inputs(generalFolder)/sharedInputs3d.tcl
+set inputs(sharedInputsFile) $inputs(generalFolder)/sharedInputs/inputs_NIST3d-hinge.tcl
 set inputs(nFlrs) 4
 set inputs(nBaysY) 5
 set inputs(lBayY) "6.09 6.09 6.09 6.09 6.09"
 set inputs(eccRatX) 0.0
-set inputs(deadRoof)  [expr 1.*47.88/$g*56.0] 		;#=46 (D) + 10 (superDead)
-set inputs(deadFloor) [expr 1.*47.88/$g*64.7] 		;#64.7= 46(D)+15(superDead)+3.7(Facade) in kg/m2
+set inputs(deadRoof)  [expr 1.1*47.88/$g*56.0] 		;#=46 (D) + 10 (superDead)
+set inputs(deadFloor) [expr 1.1*47.88/$g*61.7] 		;#64.7= 46(D)+15(superDead)+3.7(Facade) in kg/m2
 set inputs(liveRoof)  [expr 1.*47.88/$g*30]
 set inputs(liveFloor) [expr 1.*47.88/$g*50]
-set inputs(perimBeamDead) 370.						;#kg/m of perimeter beaam
-set inputs(leaningAreaFac) 1.
-set inputs(defLeanClmn) 1		;# set to 1 when some gravity columns are excluded from the model
+set inputs(perimBeamDead) 370.							;#kg/m of perimeter beaam
+set inputs(deadMassFac) 1.05
+set inputs(liveMassFac) 0.25
 
 set xBraceLabels "
 	-  -  -  -  - 

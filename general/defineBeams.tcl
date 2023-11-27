@@ -67,18 +67,13 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 					}
 					addHingeBeam $pos $eleCode $iNodePos $jNodePos $sec $id $kRat $release rho
 				} else {
-					set secI $beamSec($dir,$j,$i,$k,1)
-					set secJ $secI
-					set secM $secI
-					if [info exists beamSec($j,$i,$k,2)] {
-						set secM $beamSec($j,$i,$k,2)"
-					}
-					if [info exists beamSec($j,$i,$k,3)] {
-						set secJ $beamSec($j,$i,$k,3)
-					}
 					set rho 0
 					set secTagList ""
-					foreach sec "$secI $secM $secJ" {
+					for {set iStat 1} {$iStat <= $inputs(numDesnStats)} {incr iStat} {
+						if ![info exists eleData(section,$eleCode,$pos,$iStat)] {
+							continue
+						}
+						set sec $eleData(section,$eleCode,$pos,$iStat)
 						source $inputs(secFolder)/$sec.tcl
 						source $inputs(secFolder)/convertToM.tcl
 						set rho [expr $rho+$Area*$inputs(density)*$inputs(selfWeightMultiplier)]
@@ -89,11 +84,19 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 						set secTag $secIDBeams($sec)
 						lappend secTagList $secTag
 					}
-					set rho [expr $rho/3.]
+					set rho [expr $rho/$inputs(numDesnStats)]
+					if [info exists inputs(numSegBeam)] {
+						set nSeg $inputs(numSegBeam)
+						set lSeg 0
+					} else {
+						set nSeg 0
+						set lSeg $inputs(lSegBeam)
+					}
 					set p 0
 					set eleType $inputs(beamType)
 					set integStr $inputs(beamInteg)
-					addFiberBeam $eleType $pos $eleCode $iNode $jNode $secTagList $rho $p $integStr
+					addFiberBeam $eleType $pos $eleCode $iNodePos $jNodePos $secTagList nSeg $lSeg $inputs(numDesnStats) $rho $p $integStr
+					set inputs(numSegBeam) $nSeg
 				}
 				set eleData(unitSelfWeight,$eleCode,$pos) $rho
 				set eleData(length,$eleCode,$pos) $l

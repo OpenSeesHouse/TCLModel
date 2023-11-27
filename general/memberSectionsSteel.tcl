@@ -90,9 +90,8 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 						if {$Shape == "SteelTube"} {
 							# section Elastic $secTag $E $A $Iz <$Iy $G $J>
 							Box-section $matTag $ID $d $bf $tf $tw [expr $G*$J]
-							# I-section $matTag $ID $d $bf $tf $tw [expr $G*$J]
 						} elseif {$Shape == "I"} {
-							I-section $matTag $ID $d $bf $tf $tw [expr $G*$J]
+							I-section $ID $matTag $d $bf $tf $tw $inputs(numSubdivL) $inputs(numSubdivT) $inputs(numSubdivL) $inputs(numSubdivT) [expr $G*$J]
 						} else {
 							error "~~~~~~Error! Unknown section type: $shape for section: $sec ~~~~~~"
 						}
@@ -176,7 +175,7 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 					if {$Shape == "SteelTube"} {
 						Box-section $matTag $ID $d $bf $tf $tw [expr $G*$J]
 					} elseif {$Shape == "I"} {
-						I-section $matTag $ID $d $bf $tf $tw [expr $G*$J]
+						I-section $ID $matTag $d $bf $tf $tw $inputs(numSubdivL) $inputs(numSubdivT) $inputs(numSubdivL) $inputs(numSubdivT) [expr $G*$J]
 					} else {
 						error "~~~~~~Error! Unknown section type: $shape for section: $sec ~~~~~~"
 					}

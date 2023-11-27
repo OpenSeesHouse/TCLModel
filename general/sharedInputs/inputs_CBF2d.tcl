@@ -3,15 +3,15 @@
 #_____________________________________________________
 #if let to default, program will calculate these
 set inputs(hasWall) 0
-set inputs(hasBrace) 0
+set inputs(hasBrace) 1
 
 #Geometry
 #_____________________________________________________
 set inputs(numDims) 2
 # set inputs(nFlrs) 12
-set inputs(nBaysX) 3
+set inputs(nBaysX) 1
 set inputs(nBaysY) 0
-set inputs(lBayX) "9.14 9.14 9.14"
+set inputs(lBayX) "6.09"
 set inputs(lBayY) ""
 set inputs(hStory) 5.49
 set inputs(hStoryBase) 4.27
@@ -19,10 +19,10 @@ set inputs(numDesnStats) 1		;#mainly for RC members
 set inputs(eccRatX) 0
 set inputs(eccRatY) 0
 
-set inputs(lx) [expr 5*9.14]
-set inputs(ly) [expr 5*6.09]
-set inputs(planArea) [expr 0.5*$inputs(lx)*$inputs(ly)]
-set inputs(planPerim) [expr $inputs(lx)+$inputs(ly)]
+set inputs(ly) [expr 5*9.14]
+set inputs(lx) [expr 5*6.09]
+set inputs(planArea) [expr 0.25*$inputs(lx)*$inputs(ly)]
+set inputs(planPerim) [expr 0.5*($inputs(lx)+$inputs(ly))]
 set inputs(cornerCrdList) "
 "
 # for recording corner nodes' drifts 
@@ -60,6 +60,8 @@ if {$inputs(matType) == "Steel"} {
 	# set hardeningRatio 0.001		;#for fiber method
 	set inputs(fyBeam) [expr 1*345.e6]
 	set inputs(fyClmn) [expr 1*345.e6]
+	set inputs(fyBrace) [expr 1*323.e6]
+	set inputs(fyGusset) [expr 1*345.e6]
 	set inputs(beamRy) 1.
 	set inputs(clmnRy) 1.
 	set inputs(isColumnA992Gr50) 1
@@ -88,45 +90,47 @@ if {$inputs(matType) == "Steel"} {
 
 set inputs(defLeanClmn) 1		;# set to 1 when some gravity columns are excluded from the model
 set inputs(leaningArea) [expr $inputs(leaningAreaFac)*$inputs(planArea)]
-# Lumped
-#_____________________________________________________
 
 #Units
 #_____________________________________________________
 set inputs(cUnitsToN) 1.
 set inputs(cUnitsToM) 1.
 #_____________________________________________________
-
-set inputs(hingeType) Lignos
-# set inputs(hingeType) ASCE
-set inputs(beamType) Hinge
-set inputs(columnType) Hinge
-set inputs(nFactor) 1.
-set inputs(MyFac) 1.				;#to allow calibrating the model
+# General
 set inputs(rigidZoneFac) 0.5
-set inputs(lbToRy) 100
-#set inputs(clmnCrackOverwrite) 1	;#for RC members
-#set inputs(beamCrackOverwrite) 1	;#for RC members
+
+#_____________________________________________________
+# Lumped
+# set inputs(hingeType) Lignos
+# set inputs(hingeType) ASCE
+# set inputs(beamType) Hinge
+# set inputs(columnType) Hinge
+# set inputs(nFactor) 1.
+# set inputs(MyFac) 1.				;#to allow calibrating the model
+# set inputs(lbToRy) 100
+# #set inputs(clmnCrackOverwrite) 1	;#for RC members
+# #set inputs(beamCrackOverwrite) 1	;#for RC members
 #_____________________________________________________
 
 #fiber
 #_____________________________________________________
-# set numSubdivL	6
-# set numSubdivT	3
+set inputs(numSubdivL)	6
+set inputs(numSubdivT)	3
+#### Columns ####
 ### for Hardening behavior:
-# 	set inputs(columnType) forceBeamColumn 	;#dispBeamColumn
-# 	set numIntegPntsClmn 3
-#	set numSegClmn 3
-#	#set lSegClmn 2.0		;#m
-#	set clmnInteg {Lobatto $secTag $numIntegPntsClmn}
+	set inputs(columnType) dispBeamColumn 	;#dispBeamColumn
+	set inputs(numIntegPntsClmn) 5
+	set inputs(numSegClmn) 1
+#	#set inputs(lSegClmn) 2.0		;#m
+	set inputs(clmnInteg) {Lobatto $secTag $inputs(numIntegPntsClmn)}
 
 ### for Softening behavior:
 # set inputs(columnType) forceBeamColumn
-# set numSegClmn 1
-# set clmnInteg {HingeRadau $secTagI $lpI $secTagJ $lpJ $secTagM}
-# set clmnInteg {HingeRadauTwo $secTagI $lpI $secTagJ $lpJ $secTagM}
-# set clmnInteg {Lobatto -sections 5 $secTagI $secTagM $secTagM $secTagM $secTagJ}
-# set clmnLpFac 0.2
+# set inputs(numSegClmn) 1
+# set inputs(clmnInteg) {HingeRadau $secTagI $lpI $secTagJ $lpJ $secTagM}
+# set inputs(clmnInteg) {HingeRadauTwo $secTagI $lpI $secTagJ $lpJ $secTagM}
+# set inputs(clmnInteg) {Lobatto -sections 5 $secTagI $secTagM $secTagM $secTagM $secTagJ}
+# #set clmnLpFac 0.2
 
 # if ![info exists clmnShearReinfSFacs] {			
 	##set if not set in specParams
@@ -134,21 +138,30 @@ set inputs(lbToRy) 100
 	# puts "clmnShearReinfSFacs = $clmnShearReinfSFacs"
 # }
 
+#### Beams ####
 ### for Hardening:
-#	set inputs(beamType) forceBeamColumn	; #  dispBeamColumn
-#	set numIntegPntsBeam 3
-#	set inputs(numSegBeam) 3
-#	#set lSegBeam 2.0		;#m
-#	set beamInteg {Lobatto \$secTag \$numIntegPntsBeam}
+	set inputs(beamType) dispBeamColumn	; #  dispBeamColumn
+	set inputs(numIntegPntsBeam) 5
+	set inputs(numSegBeam) 1
+#	#set inputs(lSegBeam) 2.0		;#m
+	set inputs(beamInteg) {Lobatto $secTag $inputs(numIntegPntsBeam)}
 ### for Softening
 # set inputs(beamType) forceBeamColumn
 # set inputs(numSegBeam) 1
-# set beamInteg {HingeRadau $secTagI $lpI $secTagJ $lpJ $secTagM}
-# set beamInteg {HingeRadauTwo $secTagI $lpI $secTagJ $lpJ $secTagM}
-# set beamInteg {Lobatto -sections 5 $secTagI $secTagM $secTagM $secTagM $secTagJ}
-# set beamLpFac 0.2
+# set inputs(beamInteg) {HingeRadau $secTagI $lpI $secTagJ $lpJ $secTagM}
+# set inputs(beamInteg) {HingeRadauTwo $secTagI $lpI $secTagJ $lpJ $secTagM}
+# set inputs(beamInteg) {Lobatto -sections 5 $secTagI $secTagM $secTagM $secTagM $secTagJ}
+# #set beamLpFac 0.2
 
-# set recMemSegs "1 3 4 6"
+# #set recMemSegs "1 3 4 6"
+
+#### Braces ####
+set inputs(braceType) dispBeamColumn
+set inputs(braceGeomType) Corotational
+set inputs(braceSpanRat) [expr 1./2.]
+set inputs(imperfectRat) 0.005;
+set inputs(nBraceSeg) 10				;#must be greater than 4 for the program to work
+
 #_____________________________________________________
 
 set inputs(secFolder) ../general/sections
@@ -171,7 +184,7 @@ for {set j $inputs(nFlrs)} {$j >= 1} {incr j -1} {
 # - : gravity beam
 # B2: SMF lateral beam
 set xBeamLabels "
-	B2 B2 B2
+	B1
 "
 set yBeamLabels "
 "
@@ -180,26 +193,24 @@ set yBeamLabels "
 # C3: internal SMF column
 # C4: external CBF column
 set columnLabels "
-	C2 C3 C3 C2
+	C1 C1
 "
 for {set i 1} {$i <= $inputs(nFlrs)} {incr i} {
 	set columnAngleList($i) "
-		90 90 90 90
+		90 90
 	"
 }
-set L1 [expr 0.25*(1.05*$inputs(deadFloor)+0.25*$inputs(liveFloor))*6.1*9.14*$g]
-set L2 [expr 0.50*(1.05*$inputs(deadFloor)+0.25*$inputs(liveFloor))*6.1*9.14*$g]
+set L [expr 0.50*(1.05*$inputs(deadFloor)+0.25*$inputs(liveFloor))*6.1*9.14*$g]
 for {set j 1} {$j < $inputs(nFlrs)} {incr j} {
-	set pntLoadList($j) "$L1 $L2 $L2 $L1"
+	set pntLoadList($j) "$L $L"
 }
 
-set L1 [expr 0.25*(1.05*$inputs(deadRoof)+0.25*$inputs(liveRoof))*6.1*9.14*$g]
-set L2 [expr 0.50*(1.05*$inputs(deadRoof)+0.25*$inputs(liveRoof))*6.1*9.14*$g]
+set L [expr 0.50*(1.05*$inputs(deadRoof)+0.25*$inputs(liveRoof))*6.1*9.14*$g]
 set j $inputs(nFlrs)
-set pntLoadList($j) "$L1 $L2 $L2 $L1"
+set pntLoadList($j) "$L $L"
 
 set L [expr $inputs(perimBeamDead)*$g]
 for {set j 1} {$j < $inputs(nFlrs)} {incr j} {
-	set beamLoadList($j) "$L $L $L $L"
+	set beamLoadList($j) "$L"
 }
 

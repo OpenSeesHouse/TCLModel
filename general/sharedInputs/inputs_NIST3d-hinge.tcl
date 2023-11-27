@@ -16,7 +16,7 @@ set inputs(lBayX) "9.14 9.14 9.14 9.14 9.14"
 set inputs(hStory) 5.49
 set inputs(hStoryBase) 4.27
 set inputs(numDesnStats) 1		;#mainly for RC members
-set inputs(eccRatX) 0
+# set inputs(eccRatX) 0
 set inputs(eccRatY) 0
 
 set inputs(lx) [lsum $inputs(lBayX)]
@@ -44,15 +44,15 @@ set inputs(planPerim) [expr 2*($inputs(lx)+$inputs(ly))]
 
 # Mass
 #_____________________________________________________
-# set inputs(deadRoof) [expr 1.35*47.88/$g*56.0] 		;#=46 (D) + 10 (superDead)
-# set inputs(deadFloor) [expr 1.35*47.88/$g*64.7] 		;#64.7= 46(D)+15(superDead)+3.7(Facade) in kg/m2
-# set inputs(liveRoof) [expr 1.35*47.88/$g*30]
-# set inputs(liveFloor) [expr 1.35*47.88/$g*50]
+# set inputs(deadRoof)  [expr 1.1*47.88/$g*56.0] 		;#=46 (D) + 10 (superDead)
+# set inputs(deadFloor) [expr 1.1*47.88/$g*61.7] 		;#64.7= 46(D)+15(superDead)+3.7(Facade) in kg/m2
+# set inputs(liveRoof)  [expr 1.*47.88/$g*30]
+# set inputs(liveFloor) [expr 1.*47.88/$g*50]
+# set inputs(perimBeamDead) 370.							;#kg/m of perimeter beaam
+# set inputs(deadMassFac) 1.05
+# set inputs(liveMassFac) 0.25
 set inputs(selfWeightMultiplier) 1
-set inputs(deadMassFac) 1.05
-set inputs(liveMassFac) 0.25
-# set set inputs(leaningAreaFac) 1.0
-# inputs(perimBeamDead) 370.							;#kg/m of perimeter beaam
+set inputs(leaningAreaFac) 1.0
 #_____________________________________________________
 
 # Damping
@@ -103,15 +103,18 @@ if {$inputs(matType) == "Steel"} {
 }
 #_____________________________________________________
 
-# set inputs(defLeanClmn) 0		;# set to 1 when some gravity columns are excluded from the model
+set inputs(defLeanClmn) 1		;# set to 1 when some gravity columns are excluded from the model
 set inputs(leaningArea) [expr $inputs(leaningAreaFac)*$inputs(planArea)]
 
 #Units
 #_____________________________________________________
 set inputs(cUnitsToN) 1.
 set inputs(cUnitsToM) 1.
-
 #_____________________________________________________
+# General
+set inputs(rigidZoneFac) 0.5
+#_____________________________________________________
+
 # Lumped
 #_____________________________________________________
 set inputs(hingeType) Lignos
@@ -129,21 +132,21 @@ set inputs(initAxiForeceEleList) ""; #will be set/used by members' proc and used
 
 #fiber
 #_____________________________________________________
-# set numSubdivL	6
-# set numSubdivT	3
+# set inputs(numSubdivL)	6
+# set inputs(numSubdivT)	3
 ### for Hardening behavior:
 # 	set inputs(columnType) forceBeamColumn 	;#dispBeamColumn
-# 	set numIntegPntsClmn 3
-#	set numSegClmn 3
-#	#set lSegClmn 2.0		;#m
-#	set clmnInteg {Lobatto $secTag $numIntegPntsClmn}
+# 	set inputs(numIntegPntsClmn) 3
+#	set inputs(numSegClmn) 3
+#	#set inputs(lSegClmn) 2.0		;#m
+#	set inputs(clmnInteg) {Lobatto $secTag $inputs(numIntegPntsClmn)}
 
 ### for Softening behavior:
 # set inputs(columnType) forceBeamColumn
-# set numSegClmn 1
-# set clmnInteg {HingeRadau $secTagI $lpI $secTagJ $lpJ $secTagM}
-# set clmnInteg {HingeRadauTwo $secTagI $lpI $secTagJ $lpJ $secTagM}
-# set clmnInteg {Lobatto -sections 5 $secTagI $secTagM $secTagM $secTagM $secTagJ}
+# set inputs(numSegClmn) 1
+# set inputs(clmnInteg) {HingeRadau $secTagI $lpI $secTagJ $lpJ $secTagM}
+# set inputs(clmnInteg) {HingeRadauTwo $secTagI $lpI $secTagJ $lpJ $secTagM}
+# set inputs(clmnInteg) {Lobatto -sections 5 $secTagI $secTagM $secTagM $secTagM $secTagJ}
 # set clmnLpFac 0.2
 
 # if ![info exists clmnShearReinfSFacs] {			
@@ -154,16 +157,16 @@ set inputs(initAxiForeceEleList) ""; #will be set/used by members' proc and used
 
 ### for Hardening:
 #	set inputs(beamType) forceBeamColumn	; #  dispBeamColumn
-#	set numIntegPntsBeam 3
+#	set inputs(numIntegPntsBeam) 3
 #	set inputs(numSegBeam) 3
-#	#set lSegBeam 2.0		;#m
-#	set beamInteg {Lobatto \$secTag \$numIntegPntsBeam}
+#	#set inputs(lSegBeam) 2.0		;#m
+#	set inputs(beamInteg) {Lobatto \$secTag \$inputs(numIntegPntsBeam)}
 ### for Softening
 # set inputs(beamType) forceBeamColumn
 # set inputs(numSegBeam) 1
-# set beamInteg {HingeRadau $secTagI $lpI $secTagJ $lpJ $secTagM}
-# set beamInteg {HingeRadauTwo $secTagI $lpI $secTagJ $lpJ $secTagM}
-# set beamInteg {Lobatto -sections 5 $secTagI $secTagM $secTagM $secTagM $secTagJ}
+# set inputs(beamInteg) {HingeRadau $secTagI $lpI $secTagJ $lpJ $secTagM}
+# set inputs(beamInteg) {HingeRadauTwo $secTagI $lpI $secTagJ $lpJ $secTagM}
+# set inputs(beamInteg) {Lobatto -sections 5 $secTagI $secTagM $secTagM $secTagM $secTagJ}
 # set beamLpFac 0.2
 
 # set recMemSegs "1 3 4 6"

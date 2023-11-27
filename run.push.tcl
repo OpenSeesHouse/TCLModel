@@ -9,9 +9,10 @@ set inputs(numPushSteps) 100
 # set sharedInputsName $inputs(generalFolder)/sharedInputs.tcl
 #set inputs(pushDir) Y
 #read models list 
-# set models(1) MC-4-RSA
-set models(1) SMF2D-4-RSA
-set numModels 1
+# set models(1) SMF2d-4-hinge
+set models(1) SMF2d-4-fiber
+# set models(1) MC-4
+# set models(1) CBF2D-4
 set checkResultAvailable 0
 foreach iModel "1" {
 	set inputs(modelFolder) $models($iModel)

@@ -183,7 +183,7 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 							logCommands -comment "#section: $srchStr\n"
 							lappend beamList $srchStr
 							set secIDBeams($srchStr) [incr ID]
-							RCSection $ID $beamBarsMatTag $confConcBeam $unconfConc $B $H $cover $nBarTop $ABarTop $nBarBot $ABarBot $nBarInt $ABarInt $DBarSh $GJ  $numSubdivL $numSubdivT $FRPAreaTop $FRPAreaBot $FRPMatTag 0 0
+							RCSection $ID $beamBarsMatTag $confConcBeam $unconfConc $B $H $cover $nBarTop $ABarTop $nBarBot $ABarBot $nBarInt $ABarInt $DBarSh $GJ  $inputs(numSubdivL) $inputs(numSubdivT) $FRPAreaTop $FRPAreaBot $FRPMatTag 0 0
 						}
 					}
 					source $inputs(secFolder)/unsetSecProps.tcl
@@ -329,7 +329,7 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 						set shS [expr $SStirrup*$shFac]
 						uniaxialMaterial ConfinedConcrete $ID -$fc0 -$ec0 [expr -0.1*$fc0] $lambda $ftU $Ets \
 							-column $B $H $cover $fyh $nBarTop $DBarTop $nBarBot $DBarBot $nBarInt $DBarInt $nBarSh $nBarSh $DBarSh $shS $wrpA $FRP_Fy $wrpS
-						RCSection $ID $clmnBarsMatTag $ID $unconfConc $B $H $cover $nBarTop $ABarTop $nBarBot $ABarBot $nBarInt $ABarInt $DBarSh $GJ $numSubdivL $numSubdivT  $FRPArea $FRPArea $FRPMatTag $FRPArea $FRPArea
+						RCSection $ID $clmnBarsMatTag $ID $unconfConc $B $H $cover $nBarTop $ABarTop $nBarBot $ABarBot $nBarInt $ABarInt $DBarSh $GJ $inputs(numSubdivL) $inputs(numSubdivT)  $FRPArea $FRPArea $FRPMatTag $FRPArea $FRPArea
 					}
 				}
 			}
