@@ -5,6 +5,7 @@ source "$inputs(generalFolder)/lsum.tcl"
 source $inputs(generalFolder)/lNorm.tcl
 source $inputs(generalFolder)/manageTags.tcl
 source $inputs(generalFolder)/eleCodeMap.tcl
+source $inputs(generalFolder)/manageJntData.tcl
 source $inputs(generalFolder)/addNode.tcl
 source $inputs(generalFolder)/releaseFromChar.tcl
 source $inputs(generalFolder)/addHingeBeam.tcl

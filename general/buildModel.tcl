@@ -22,16 +22,15 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 
 if {$inputs(matType) == "Concrete"} {
 	source $inputs(generalFolder)/memberSectionsRC.tcl
-	set density $inputs(concDens)
 } else {
 	source $inputs(generalFolder)/memberSectionsSteel.tcl
-	set density $inputs(steelDens)
 }
 # if {$inputs(numDims) == 3} {
 # 	set zAxis(wallTransfX)	"0 1 0"
 # 	set zAxis(wallTransfY)	"-1 0 0"
 # }
 manageTags -initiate
+source $inputs(generalFolder)/computeJntData.tcl
 source $inputs(generalFolder)/defineNodes.tcl
 source $inputs(generalFolder)/defineBeams.tcl
 source $inputs(generalFolder)/defineColumns.tcl

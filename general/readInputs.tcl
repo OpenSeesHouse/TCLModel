@@ -19,9 +19,19 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 						set eleData(section,$code,$pos) "-"
 					} else {
 						set eleData(section,$code,$pos)  $braceSec($lab,$j)
-						set eleData(config,$code,$pos)  $braceType($lab,$j)
+						set eleData(config,$code,$pos)  $braceConfig($lab,$j)
+						set eleData(gussetDimI_lh,$code,$pos)  $gussetDimI($lab,lh,$j)
+						set eleData(gussetDimI_lv,$code,$pos)  $gussetDimI($lab,lv,$j)
+						set eleData(gussetDimI_lr,$code,$pos)  $gussetDimI($lab,lr,$j)
+						set eleData(gussetDimI_tp,$code,$pos)  $gussetDimI($lab,tp,$j)
+						set eleData(gussetDimJ_lh,$code,$pos)  $gussetDimJ($lab,lh,$j)
+						set eleData(gussetDimJ_lv,$code,$pos)  $gussetDimJ($lab,lv,$j)
+						set eleData(gussetDimJ_lr,$code,$pos)  $gussetDimJ($lab,lr,$j)
+						set eleData(gussetDimJ_tp,$code,$pos)  $gussetDimJ($lab,tp,$j)
 						set inputs(hasBrace) 1
 					}
+				} else {
+					set eleData(section,$code,$pos) "-"
 				}
 				set code [eleCodeMap "X-Beam"]
 				if [info exists beamLoadListX] {
@@ -56,9 +66,19 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 						set eleData(section,$code,$pos) "-"
 					} else {
 						set eleData(section,$code,$pos)  $braceSec($lab,$j)
-						set eleData(config,$code,$pos)  $braceType($lab,$j)
+						set eleData(config,$code,$pos)  $braceConfig($lab,$j)
+						set eleData(gussetDimI_lh,$code,$pos)  $gussetDimI($lab,lh,$j)
+						set eleData(gussetDimI_lv,$code,$pos)  $gussetDimI($lab,lv,$j)
+						set eleData(gussetDimI_lr,$code,$pos)  $gussetDimI($lab,lr,$j)
+						set eleData(gussetDimI_tp,$code,$pos)  $gussetDimI($lab,tp,$j)
+						set eleData(gussetDimJ_lh,$code,$pos)  $gussetDimJ($lab,lh,$j)
+						set eleData(gussetDimJ_lv,$code,$pos)  $gussetDimJ($lab,lv,$j)
+						set eleData(gussetDimJ_lr,$code,$pos)  $gussetDimJ($lab,lr,$j)
+						set eleData(gussetDimJ_tp,$code,$pos)  $gussetDimJ($lab,tp,$j)
 						set inputs(hasBrace) 1
 					}
+				} else {
+					set eleData(section,$code,$pos) "-"
 				}
 				set code [eleCodeMap "Y-Beam"]
 				if [info exists beamLoadListY] {

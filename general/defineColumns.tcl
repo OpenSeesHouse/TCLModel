@@ -23,12 +23,16 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 			if {$sec == "-"} continue
 			set rho 0
 			set j1 [expr $j-1]
-			set iNodePos $j1,$k,$i
-			set jNodePos $j,$k,$i
-			set offsi(Z) [expr $pntData(ZDim,$iNodePos)/2.*$inputs(rigidZoneFac)]
-			set offsj(Z) [expr -$pntData(ZDim,$jNodePos)/2.*$inputs(rigidZoneFac)]
-			set iNodePos $iNodePos,1
-			set jNodePos $jNodePos,1
+			set iNodePos $j1,$k,$i,1
+			set jNodePos $j,$k,$i,1
+			set offsi(Z) [expr ($jntData($iNodePos,dim,X,pp,v) + \
+							    $jntData($iNodePos,dim,X,np,v) +	\
+							    $jntData($iNodePos,dim,Y,pp,v) + \
+							    $jntData($iNodePos,dim,Y,np,v))*0.25*$inputs(rigidZoneFac)]
+			set offsj(Z) [expr -($jntData($jNodePos,dim,X,pn,v) + \
+							     $jntData($jNodePos,dim,X,nn,v) +	\
+							     $jntData($jNodePos,dim,Y,pn,v) + \
+							     $jntData($jNodePos,dim,Y,nn,v))*0.25*$inputs(rigidZoneFac)]
 			set transfTag [manageTags -newGeomtransf "$eleCode,$elePos"]
 			set angle $eleData(angle,$eleCode,$j,$k,$i)
 			set cmnd "geomTransf PDelta $transfTag"

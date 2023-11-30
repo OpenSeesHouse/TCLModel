@@ -1,8 +1,8 @@
 proc eleCodeMap {inputStr} {
     global eleTypeCodes
     if ![info exists eleTypeCodes] {
-        set eleTypeCodes(Y-Beam) 1
-        set eleTypeCodes(X-Beam) 2
+        set eleTypeCodes(X-Beam) 1
+        set eleTypeCodes(Y-Beam) 2
         set eleTypeCodes(Column) 3
         set eleTypeCodes(X-Brace) 4
         set eleTypeCodes(Y-Brace) 5

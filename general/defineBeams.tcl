@@ -1,10 +1,10 @@
 #define Beams
 puts "~~~~~~~~~~~~~~~~~~~~~ Defining Beams ~~~~~~~~~~~~~~~~~~~~~"
+logCommands -comment "#~~~~~~~~~~~~~~~~~~~~~ Defining Beams ~~~~~~~~~~~~~~~~~~~~~\n"
 if {$inputs(numDims) == 3} {
 	set zAxis(XBeams)		"0. -1. 0."
 	set zAxis(YBeams)		"1. 0. 0."
 }
-logCommands -comment "#~~~~~~~~~~~~~~~~~~~~~ Defining Beams ~~~~~~~~~~~~~~~~~~~~~\n"
 for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 	set gravEleWs($j) 0
 	logCommands -comment "### story $j\n"
@@ -40,10 +40,10 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 				} else {
 					set jNodePos "$j,$k,[expr $i+1],1"
 				}
-				set _hc $pntData([set dir]Dim,$pos)
-				set _hc [expr $_hc/2*$inputs(rigidZoneFac)]
-				set offsi($dir) $_hc
-				set offsj($dir) -$_hc
+				set _hci [expr $inputs(rigidZoneFac)*max($jntData($iNodePos,dim,$dir,pp,h),$jntData($iNodePos,dim,$dir,pn,h))]
+				set _hcj [expr $inputs(rigidZoneFac)*max($jntData($jNodePos,dim,$dir,np,h),$jntData($jNodePos,dim,$dir,nn,h))]
+				set offsi($dir) $_hci
+				set offsj($dir) -$_hcj
 				set transfTag [manageTags -newGeomtransf "$eleCode,$pos"]
 				set cmnd "geomTransf Linear $transfTag"
 				if {$inputs(numDims) == 3} {

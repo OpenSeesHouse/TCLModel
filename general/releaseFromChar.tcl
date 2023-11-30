@@ -11,5 +11,5 @@ proc releaseFromChar {rlsChar} {
 			error ("Unacceptable release code: $rlsChar at ($j,$k,$i)")
 		}
 	}
-
+	return $release
 }

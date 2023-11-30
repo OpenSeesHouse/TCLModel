@@ -83,6 +83,11 @@ if {$inputs(matType) == "Steel"} {
 	set inputs(nu) 0.15
 	set inputs(concDens)	2500.			;#kg/m3
 	set inputs(density)		2500.			;#kg/m3
+	
+	#cracked inertia moment factor for elastic and lumped elements.
+	#In case of lumped member, will be overwritten over hinge calculations
+	set inputs(clmnCrackOverwrite) 1	;
+	set inputs(beamCrackOverwrite) 1	;#for RC members
 }
 #_____________________________________________________
 
@@ -96,6 +101,7 @@ set inputs(cUnitsToM) 1.
 #_____________________________________________________
 # General
 set inputs(rigidZoneFac) 0.5
+set inputs(clmnBasePlateHeightFac) 1.	;#ratio of the column section height considered as the base plate connection offset
 #_____________________________________________________
 
 # Lumped
@@ -107,8 +113,9 @@ set inputs(columnType) Hinge
 set inputs(nFactor) 1.
 set inputs(MyFac) 1.				;#to allow calibrating the model
 set inputs(lbToRy) 100
-#set inputs(clmnCrackOverwrite) 1	;#for RC members
-#set inputs(beamCrackOverwrite) 1	;#for RC members
+# set inputs(initAxiForceFiles) {inputs(modelFolder)/gravAxiForce.txt inputs(modelFolder)/DBEAxiForce.txt}
+# set inputs(initAxiForceFacts) "1. 0.2"
+# set inputs(initAxiForeceEleList) ""; #will be set/used by members' proc and used by recorders proc
 #_____________________________________________________
 
 #fiber
