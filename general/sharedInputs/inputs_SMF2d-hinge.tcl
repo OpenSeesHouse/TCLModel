@@ -71,7 +71,7 @@ if {$inputs(matType) == "Steel"} {
 	set inputs(steelDens)		7850.			;#kg/m3
 	set inputs(density)		7850.			;#kg/m3
 	set inputs(useRBSBeams) 1
-	set inputs(usePZSpring) 0
+	set inputs(usePZSpring) 0				;# =1 (panel zone modelling) is not currently supported due to efficiency concerns
 } else {
 	# concrete
 	set inputs(fc0) 30.0e6
@@ -102,6 +102,7 @@ set inputs(cUnitsToM) 1.
 # General
 set inputs(rigidZoneFac) 0.5
 set inputs(clmnBasePlateHeightFac) 1.	;#ratio of the column section height considered as the base plate connection offset
+set inputs(clmnGeomtransfType) Linear	;#set to Linear when all story gravity force is applied on leaning column
 #_____________________________________________________
 
 # Lumped
@@ -193,7 +194,7 @@ set columnLabels "
 "
 for {set i 1} {$i <= $inputs(nFlrs)} {incr i} {
 	set columnAngleList($i) "
-		90 90 90 90
+		0 0 0 0
 	"
 }
 set L1 [expr 0.25*(1.05*$inputs(deadFloor)+0.25*$inputs(liveFloor))*6.1*9.14*$g]

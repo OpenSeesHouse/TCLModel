@@ -17,8 +17,8 @@ proc Vector {args} {
 		set c [expr cos($ang)]
 		set s [expr sin($ang)]
 		foreach "x y z" $vec {}
-		set xx [expr $x*c-$y*s]
-		set yy [expr $x*s+$y*c]
+		set xx [expr $x*$c-$y*$s]
+		set yy [expr $x*$s+$y*$c]
 		return "$xx $yy $z"
 	}
 }

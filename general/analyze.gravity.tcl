@@ -1,8 +1,6 @@
 puts "~~~~~~~~~~~~~~~~~~~~~ applying gravity loading ~~~~~~~~~~~~~~~~~~~~~"
 logCommands -comment "~~~~~~~~~~~~~~~~~~~~~ applying gravity loading ~~~~~~~~~~~~~~~~~~~~~\n"
 #
-set allEleList [getEleTags]
-set allNodesList [getNodeTags]
 pattern Plain 1 Linear {
 	for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 		foreach dir "Y X" nGridX "[expr $inputs(nBaysX)+1] $inputs(nBaysX)" nGridY "$inputs(nBaysY) [expr $inputs(nBaysY)+1]" {

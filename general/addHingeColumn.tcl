@@ -18,13 +18,13 @@ proc addHingeColumn {elePos eleCode iNodePos jNodePos sec angle matId2 matId3 kR
     set jjNode [manageTags -newNode "$eleCode,$elePos,2"]
     eval "addNode $jjNode [nodeCoord $jNode]"
     set tag2 [manageTags -newElement "$eleCode,$elePos,2"]
-    set xV "0 0 1"
-    set zV $inputs(defClmnZAxis)
-    if {$angle > 1e-3} {
-        set zV [Vector rotateAboutZ $zV $angle]
-    }
-    set yV [Vector crossProduct $zV $xV]
     if {$inputs(numDims) == 3} {
+        set xV "0 0 1"
+        set zV $inputs(defClmnZAxis)
+        if {$angle > 1e-3} {
+            set zV [Vector rotateAboutZ $zV $angle]
+        }
+        set yV [Vector crossProduct $zV $xV]
         eval "element zeroLength $tag1 $iNode $iiNode \
             -mat $matId2 $matId3 $rigidMatTag $rigidMatTag $rigidMatTag $rigidMatTag \
             -dir 5 6 1 2 3 4 -orient $xV $yV"
@@ -42,7 +42,7 @@ proc addHingeColumn {elePos eleCode iNodePos jNodePos sec angle matId2 matId3 kR
             set ID $matId2
             set Iz $I22
         } else {
-            error ("Currently, only 0 and 90 degrees are allowed for column rotation angle)
+            error ("Currently, only 0 and 90 degrees are allowed for column rotation angle")
         }
         element zeroLength $tag1 $iNode $iiNode -mat $ID $rigidMatTag $rigidMatTag -dir 3 1 2 
         element elasticBeamColumn $eleTag $iiNode $jjNode $Area $inputs(E) $Iz $transfTag -mass $rho ;

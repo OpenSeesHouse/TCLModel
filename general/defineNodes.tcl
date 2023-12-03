@@ -29,82 +29,12 @@ for {set j 0} {$j <= $inputs(nFlrs)} {incr j} {
 			set tag [manageTags -newNode $pos]
 			addNode $tag $X($k,$i)	$Y($k,$i)	$Z($j)
 			lappend slaveNodeList($j) $tag
-			if {$masterNode($j) == 0} {
+			if {$inputs(numDims) == 2 && $masterNode($j) == 0} {
 				set masterNode($j) $tag		;#used in numDim == 2 for leaning column
 			}
 		}
 		if {$loc == 1} {
-			set cntrNodes($j) [llength $slaveNodeList($j)]
+			set cntrNodes($j) $slaveNodeList($j)
 		}
 	}
-}
-
-if {$inputs(numDims) == 3} {
-	puts "~~~~~~~~~~~~~~~~~~~~~ Defining Diaphragms ~~~~~~~~~~~~~~~~~~~~~"
-	logCommands -comment "#~~~~~~~~~~~~~~~~~~~~~ Defining Diaphragms ~~~~~~~~~~~~~~~~~~~~~\n"
-	for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
-
-		set CMx $inputs(centerMassX)
-		set CMy $inputs(centerMassY)
-		if {$j == $inputs(nFlrs)} {
-			set CMx $inputs(centerMassXRoof)
-			set CMy $inputs(centerMassYRoof)
-		}
-		set masterNode($j) [manageTags -newNode "$j,99"]
-		lappend masterNodeList $masterNode($j)
-		addNode $masterNode($j) $CMx $CMy $Z($j)
-		fix $masterNode($j) 0 0 1 1 1 0
-		addDiaphragm 3 $masterNode($j) $slaveNodeList($j)
-	}
-}
-
-puts "~~~~~~~~~~~~~~~~~~~~~ Defining Masses ~~~~~~~~~~~~~~~~~~~~~"
-logCommands -comment "#~~~~~~~~~~~~~~~~~~~~~ Defining Masses ~~~~~~~~~~~~~~~~~~~~~\n"
-set eps 1.e-6
-for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
-	set mass $diaphMass($j,X)
-	if {$inputs(numDims) == 2} {
-		set mass [expr $mass/$numCntrNodes($j)]
-		foreach tag $slaveNodeList($j) {
-			mass $tag $mass $eps $eps
-		}
-	} else {
-		set massRot $diaphMass($j,R)
-		set tag $masterNode($j)
-		mass $tag $mass $mass $eps $eps $eps $massRot
-		#TODO add input options for including vertical mass
-	}
-}
-
-puts "~~~~~~~~~~~~~~~~~~~~~ Defining Base Supports ~~~~~~~~~~~~~~~~~~~~~"
-logCommands -comment "#~~~~~~~~~~~~~~~~~~~~~ Defining Base Supports ~~~~~~~~~~~~~~~~~~~~~\n"
-set j 0
-foreach loc "1 2 3" locName "central X-beam-splice Y-beam-splice" {
-	logCommands -comment "# $locName nodes ###\n"
-	foreach ki $allkiList {
-		foreach "k i" $ki {}
-		set pos "$j,$k,$i,$loc"
-		if ![manageJntData -exists $pos] {
-			continue
-		}
-		set tag [manageTags -getNode $pos]
-		set x 1
-		set y 1
-		if {$loc == 1} {
-			set xy $fixityFlag($k,$i)
-			set x [string index $xy 0]
-			set y [string index $xy 1]
-		}
-		if {$inputs(numDims) == 2} {
-			fix $tag 1 1 $y
-		} else {
-			fix $tag 1 1 1 $x $y 1
-		}
-	}
-}
-
-if {$inputs(numDims) == 3} {
-	set roofNode $masterNode($inputs(nFlrs))
-} else {
-	set roofNode [lindex $cntrNodes($inputs(nFlrs)) 0]
 }

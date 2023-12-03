@@ -31,12 +31,12 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 							     $jntData($jNodePos,dim,Y,nn,v))*0.25*$inputs(rigidZoneFac)]
 			set transfTag [manageTags -newGeomtransf "$eleCode,$elePos"]
 			set angle $eleData(angle,$eleCode,$j,$k,$i)
-			set zAxis $inputs(defClmnZAxis)
-			if {$angle > 1e-3} {
-				set zAxis [Vector rotateAboutZ $zAxis $angle]
-			}
-			set cmnd "geomTransf PDelta $transfTag"
+			set cmnd "geomTransf $inputs(clmnGeomtransfType) $transfTag"
 			if {$inputs(numDims) == 3} {
+				set zAxis $inputs(defClmnZAxis)
+				if {$angle > 1e-3} {
+					set zAxis [Vector rotateAboutZ $zAxis $angle]
+				}
 				foreach str " $zAxis -jntOffset $offsi(X) $offsi(Y) $offsi(Z) $offsj(X) $offsj(Y) $offsj(Z)" {
 					lappend cmnd $str
 				}
