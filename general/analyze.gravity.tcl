@@ -1,4 +1,5 @@
 puts "~~~~~~~~~~~~~~~~~~~~~ applying gravity loading ~~~~~~~~~~~~~~~~~~~~~"
+logCommands -comment "~~~~~~~~~~~~~~~~~~~~~ applying gravity loading ~~~~~~~~~~~~~~~~~~~~~\n"
 #
 set allEleList [getEleTags]
 set allNodesList [getNodeTags]

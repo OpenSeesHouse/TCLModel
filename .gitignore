@@ -3,3 +3,5 @@
 /videos
 *.out
 *.ops
+*.xlsx
+*.xls

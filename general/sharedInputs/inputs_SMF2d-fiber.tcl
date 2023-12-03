@@ -96,6 +96,7 @@ set inputs(cUnitsToM) 1.
 #_____________________________________________________
 # General
 set inputs(rigidZoneFac) 0.5
+set inputs(clmnBasePlateHeightFac) 1.	;#ratio of the column section height considered as the base plate connection offset
 #_____________________________________________________
 
 # Lumped

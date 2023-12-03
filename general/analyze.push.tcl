@@ -24,16 +24,16 @@ pattern Plain 2 Linear {
 		set wi [expr $mass*$g]
 		set fi [expr $sumWi*$wi*$Z($j)**$inputs(kPush)/$sumWiHi]
 		if {$inputs(numDims) == 3} {
-			set nodeTag [manageTags -getNode $j,99]
+			set nodeTag $masterNode($j)
 			if {$inputs(pushDir) == "X"} {
 				load $nodeTag $fi 0. 0. 0. 0. 0.
 			} else {
 				load $nodeTag 0. $fi 0. 0. 0. 0.
 			}
 		} else {
-			set fi [expr $fi/($inputs(nBaysX)+1)]
-			for {set i 1} {$i <= [expr $inputs(nBaysX)+1]} {incr i} {
-				set nodeTag [manageTags -getNode $j,1,$i,1]
+			set numCntrNodes [llength $cntrNodes($j)]
+			set fi [expr $fi/$numCntrNodes]
+			foreach nodeTag $cntrNodes($j) {
 				load $nodeTag $fi 0. 0.
 			}
 

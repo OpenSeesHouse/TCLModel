@@ -112,14 +112,14 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 	}
 	close $file
 	if {$inputs(beamType) == "Hinge"} {
-		#eval "recorder EnvelopeElement -file $inputs(resFolder)/beamForces/sec-1story$j.out $timeStr -ele $list1 force"		
-		#eval "recorder EnvelopeElement -file $inputs(resFolder)/beamForces/sec-2story$j.out $timeStr -ele $list2 force"		
-		#eval "recorder EnvelopeElement -file $inputs(resFolder)/beamDuctils/sec-1story$j.out $timeStr -ele $list1 material 1 ductility"		
-		#eval "recorder EnvelopeElement -file $inputs(resFolder)/beamDuctils/sec-2story$j.out $timeStr -ele $list2 material 1 ductility"		
-		#eval "recorder EnvelopeElement -file $inputs(resFolder)/beamRtns/sec-1story$j.out $timeStr -ele $list1 material 1 strain"		
-		#eval "recorder EnvelopeElement -file $inputs(resFolder)/beamRtns/sec-2story$j.out $timeStr -ele $list2 material 1 strain"		
-		#eval "recorder ResidElement -file $inputs(resFolder)/beamEnergies/sec-1story$j.out -ele $list1 material 1 energy"		
-		#eval "recorder ResidElement -file $inputs(resFolder)/beamEnergies/sec-2story$j.out -ele $list2 material 1 energy"		
+		# eval "recorder EnvelopeElement -file $inputs(resFolder)/beamForces/sec-1story$j.out $timeStr -ele $list1 force"		
+		# eval "recorder EnvelopeElement -file $inputs(resFolder)/beamForces/sec-2story$j.out $timeStr -ele $list2 force"		
+		eval "recorder EnvelopeElement -file $inputs(resFolder)/beamDuctils/sec-1story$j.out $timeStr -ele $list1 material 1 ductility"		
+		eval "recorder EnvelopeElement -file $inputs(resFolder)/beamDuctils/sec-2story$j.out $timeStr -ele $list2 material 1 ductility"		
+		eval "recorder EnvelopeElement -file $inputs(resFolder)/beamRtns/sec-1story$j.out $timeStr -ele $list1 material 1 strain"		
+		eval "recorder EnvelopeElement -file $inputs(resFolder)/beamRtns/sec-2story$j.out $timeStr -ele $list2 material 1 strain"		
+		eval "recorder ResidElement -file $inputs(resFolder)/beamEnergies/sec-1story$j.out -ele $list1 material 1 energy"		
+		eval "recorder ResidElement -file $inputs(resFolder)/beamEnergies/sec-2story$j.out -ele $list2 material 1 energy"		
 	} else {
 		if {$inputs(numDims) == 3} {
 			set forceDOFs "1 5 6 7 11 12"
@@ -180,15 +180,28 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 		}
 	}
 	close $file
+	if {$inputs(analType) == "push"} {
+		set shearRec Element
+	} else {
+		set shearRec EnvelopeElement
+	}
+	set shearList $list
+	if [info exists leanClmn] {
+		lappend shearList $leanClmn($j)
+	}
+	eval "recorder $shearRec -file $inputs(resFolder)/storyShears/X$j.out $timeStr -process sum -ele $shearList -dof 1 force"
+	if {$inputs(numDims) == 3} {
+		eval "recorder $shearRec -file $inputs(resFolder)/storyShears/Y$j.out $timeStr -process sum -ele $list $shearList -dof 2 force"
+	}
 	if {$inputs(columnType) == "Hinge"} {
-#		eval "recorder EnvelopeElement -file $inputs(resFolder)/clmnForces/sec-1story$j.out $timeStr -ele $list1 force"		
-#		eval "recorder EnvelopeElement -file $inputs(resFolder)/clmnForces/sec-2story$j.out $timeStr -ele $list2 force"		
-#		eval "recorder EnvelopeElement -file $inputs(resFolder)/clmnDuctils/sec-1story$j.out $timeStr -ele $list1 material 1 ductility"		
-#		eval "recorder EnvelopeElement -file $inputs(resFolder)/clmnDuctils/sec-2story$j.out $timeStr -ele $list2 material 1 ductility"		
-#		eval "recorder EnvelopeElement -file $inputs(resFolder)/clmnRtns/sec-1story$j.out $timeStr -ele $list1 material 1 strain"		
-#		eval "recorder EnvelopeElement -file $inputs(resFolder)/clmnRtns/sec-2story$j.out $timeStr -ele $list2 material 1 strain"		
-#		eval "recorder ResidElement -file $inputs(resFolder)/clmnEnergies/sec-1story$j.out -ele $list1 material 1 energy"		
-#		eval "recorder ResidElement -file $inputs(resFolder)/clmnEnergies/sec-2story$j.out -ele $list2 material 1 energy"		
+		# eval "recorder EnvelopeElement -file $inputs(resFolder)/clmnForces/sec-1story$j.out $timeStr -ele $list1 force"		
+		# eval "recorder EnvelopeElement -file $inputs(resFolder)/clmnForces/sec-2story$j.out $timeStr -ele $list2 force"		
+		eval "recorder EnvelopeElement -file $inputs(resFolder)/clmnDuctils/sec-1story$j.out $timeStr -ele $list1 material 1 ductility"		
+		eval "recorder EnvelopeElement -file $inputs(resFolder)/clmnDuctils/sec-2story$j.out $timeStr -ele $list2 material 1 ductility"		
+		eval "recorder EnvelopeElement -file $inputs(resFolder)/clmnRtns/sec-1story$j.out $timeStr -ele $list1 material 1 strain"		
+		eval "recorder EnvelopeElement -file $inputs(resFolder)/clmnRtns/sec-2story$j.out $timeStr -ele $list2 material 1 strain"		
+		eval "recorder ResidElement -file $inputs(resFolder)/clmnEnergies/sec-1story$j.out -ele $list1 material 1 energy"		
+		eval "recorder ResidElement -file $inputs(resFolder)/clmnEnergies/sec-2story$j.out -ele $list2 material 1 energy"		
 	} else {
 		if {$inputs(numDims) == 3} {
 			set forceDOFs "1 5 6 7 11 12"
@@ -198,10 +211,6 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 			set rotDOFs "2 3"
 		}
 		# eval "recorder EnvelopeElement -file $inputs(resFolder)/clmnForces/$j.out $timeStr -process maxAbs -procGrpNum $inputs(numSegClmn) -ele $list -dof $forceDOFs localForce"
-		eval "recorder EnvelopeElement -file $inputs(resFolder)/storyShears/X$j.out $timeStr -process sum -ele $list -dof 1 force"
-		if {$inputs(numDims) == 3} {
-			eval "recorder EnvelopeElement -file $inputs(resFolder)/storyShears/Y$j.out $timeStr -process sum -ele $list -dof 2 force"
-		}
 		eval "recorder EnvelopeElement -file $inputs(resFolder)/clmnDuctils/$j.out $timeStr -ele $list  maxDuctility"
 		eval "recorder EnvelopeElement -file $inputs(resFolder)/clmnRtns/$j.out $timeStr -process maxAbs -procGrpNum $inputs(numSegClmn) -ele $list -dof $rotDOFs basicDeformation"
 		eval "recorder ResidElement -file $inputs(resFolder)/clmnEnergies/$j.out $timeStr -ele $list energy"

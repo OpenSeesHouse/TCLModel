@@ -184,6 +184,12 @@ for {set k 1} {$k <= $inputs(nBaysY)+1} {incr k} {
 		} else {
 			set gridOffset(Y,$k,$i) 0
 		}
+		if [info exists baseFixityFlags] {
+			set xy [lindex $baseFixityFlags [expr ($kk-1)*($inputs(nBaysX)+1) + $i - 1]]
+			set fixityFlag($k,$i) $xy
+		} else {
+			set fixityFlag($k,$i) 11
+		}
 	}
 }
 

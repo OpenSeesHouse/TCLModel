@@ -1,4 +1,4 @@
-proc addHingeColumn {elePos eleCode iNodePos jNodePos sec angle matIdS matIdW kRat rhoName} {
+proc addHingeColumn {elePos eleCode iNodePos jNodePos sec angle matId2 matId3 kRat rhoName} {
     global inputs
     upvar $rhoName rho
     set rigidMatTag $inputs(rigidMatTag)
@@ -12,37 +12,41 @@ proc addHingeColumn {elePos eleCode iNodePos jNodePos sec angle matIdS matIdW kR
 	set transfTag [manageTags -getGeomtransf "$eleCode,$elePos"]
     set I33 [expr $kRat*$I33*($inputs(nFactor)+1)/$inputs(nFactor)]
     set I22 [expr $kRat*$I22*($inputs(nFactor)+1)/$inputs(nFactor)]
-    if {$angle == "90"} {
-        #strong (S) axis aligns with global y (ID4)
-        set ID4 $matIdW
-        set ID5 $matIdS
-        set Iz $I33
-    } else {
-        #strong (S) axis aligns with global x (ID4)
-        set ID4 $matIdS
-        set ID5 $matIdW
-        set Iz $I22
-    }
     set iiNode [manageTags -newNode "$eleCode,$elePos,1"]
     eval "addNode $iiNode [nodeCoord $iNode]"
     set tag1 [manageTags -newElement "$eleCode,$elePos,1"]
     set jjNode [manageTags -newNode "$eleCode,$elePos,2"]
     eval "addNode $jjNode [nodeCoord $jNode]"
     set tag2 [manageTags -newElement "$eleCode,$elePos,2"]
+    set xV "0 0 1"
+    set zV $inputs(defClmnZAxis)
+    if {$angle > 1e-3} {
+        set zV [Vector rotateAboutZ $zV $angle]
+    }
+    set yV [Vector crossProduct $zV $xV]
     if {$inputs(numDims) == 3} {
-        element zeroLength $tag1 $iNode $iiNode \
-            -mat $ID4 $ID5 $rigidMatTag $rigidMatTag $rigidMatTag $rigidMatTag \
-            -dir 4 5 6 1 2 3
-        element elasticBeamColumn $eleTag $iiNode $jjNode $Area $inputs(E) $inputs(G) $J $I22 $I33 $transfTag -mass $rho ;# -release $release
-        element zeroLength $tag2 $jjNode $jNode \
-            -mat $ID4 $ID5 $rigidMatTag $rigidMatTag $rigidMatTag $rigidMatTag \
-            -dir 4 5 6 1 2 3
+        eval "element zeroLength $tag1 $iNode $iiNode \
+            -mat $matId2 $matId3 $rigidMatTag $rigidMatTag $rigidMatTag $rigidMatTag \
+            -dir 5 6 1 2 3 4 -orient $xV $yV"
+        element elasticBeamColumn $eleTag $iiNode $jjNode $Area $inputs(E) $inputs(G) $J $I22 $I33 $transfTag -mass $rho ;
+        eval "element zeroLength $tag2 $jjNode $jNode \
+            -mat $matId2 $matId3 $rigidMatTag $rigidMatTag $rigidMatTag $rigidMatTag \
+            -dir 5 6 1 2 3 4 -orient $xV $yV"
     } else {
-        element zeroLength $tag1 $iNode $iiNode \
-            -mat $ID5 $rigidMatTag $rigidMatTag -dir 3 1 2 
-        element elasticBeamColumn $eleTag $iiNode $jjNode $Area $inputs(E) $Iz $transfTag -mass $rho ;# -release $release
-        element zeroLength $tag2 $jjNode $jNode \
-            -mat $ID5 $rigidMatTag $rigidMatTag -dir 3 1 2
+        if {$angle < 1e-3} {
+            #local z axis aligns with global Y
+            set ID $matId3
+            set Iz $I33
+        } elseif [expr abs($angle-90) < 1.e-3] {
+            #local z axis aligns with global X
+            set ID $matId2
+            set Iz $I22
+        } else {
+            error ("Currently, only 0 and 90 degrees are allowed for column rotation angle)
+        }
+        element zeroLength $tag1 $iNode $iiNode -mat $ID $rigidMatTag $rigidMatTag -dir 3 1 2 
+        element elasticBeamColumn $eleTag $iiNode $jjNode $Area $inputs(E) $Iz $transfTag -mass $rho ;
+        element zeroLength $tag2 $jjNode $jNode -mat $ID $rigidMatTag $rigidMatTag -dir 3 1 2
     }
     return "$tag1 $eleTag $tag2"
 }

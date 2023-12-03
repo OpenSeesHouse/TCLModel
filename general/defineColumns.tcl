@@ -1,10 +1,6 @@
 #define Columns
 puts "~~~~~~~~~~~~~~~~~~~~~ Defining Columns ~~~~~~~~~~~~~~~~~~~~~"
 logCommands -comment "#~~~~~~~~~~~~~~~~~~~~~ Defining Columns ~~~~~~~~~~~~~~~~~~~~~\n"
-if {$inputs(numDims) == 3} {
-	set zAxis(Clmns0)		"-1. 0. 0."
-	set zAxis(Clmns90)		"0. 1. 0."
-}
 set offsi(X) 0
 set offsi(Y) 0
 set offsi(Z) 0
@@ -35,9 +31,13 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 							     $jntData($jNodePos,dim,Y,nn,v))*0.25*$inputs(rigidZoneFac)]
 			set transfTag [manageTags -newGeomtransf "$eleCode,$elePos"]
 			set angle $eleData(angle,$eleCode,$j,$k,$i)
+			set zAxis $inputs(defClmnZAxis)
+			if {$angle > 1e-3} {
+				set zAxis [Vector rotateAboutZ $zAxis $angle]
+			}
 			set cmnd "geomTransf PDelta $transfTag"
 			if {$inputs(numDims) == 3} {
-				foreach str " $zAxis(Clmns$angle) -jntOffset $offsi(X) $offsi(Y) $offsi(Z) $offsj(X) $offsj(Y) $offsj(Z)" {
+				foreach str " $zAxis -jntOffset $offsi(X) $offsi(Y) $offsi(Z) $offsj(X) $offsj(Y) $offsj(Z)" {
 					lappend cmnd $str
 				}
 			} else {
@@ -54,9 +54,9 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 						set kRat $inputs(clmnCrackOverwrite)
 					}
 				}
-				set matIdW $secIDClmns($j,$k,$i,W)
-				set matIdS $secIDClmns($j,$k,$i,S)
-				addHingeColumn $elePos $eleCode $iNodePos $jNodePos $sec $angle $matIdS $matIdW $kRat rho
+				set matId2 $secIDClmns($j,$k,$i,2)
+				set matId3 $secIDClmns($j,$k,$i,3)
+				addHingeColumn $elePos $eleCode $iNodePos $jNodePos $sec $angle $matId2 $matId3 $kRat rho
 			} else {
 				set srchStr $sec 
 				if {[info exists FRPAttach] && $FRPAttach($j,clmn) != ""} {

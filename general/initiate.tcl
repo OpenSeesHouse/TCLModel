@@ -11,7 +11,6 @@ source $inputs(generalFolder)/releaseFromChar.tcl
 source $inputs(generalFolder)/addHingeBeam.tcl
 source $inputs(generalFolder)/addHingeColumn.tcl
 source $inputs(generalFolder)/addFiberBeam.tcl
-
 if ![info exists inputs(modelFolder)] {
     set inputs(modelFolder) ""
 }
@@ -27,6 +26,11 @@ if {$inputs(matType) == "Concrete"} {
 if {$inputs(numDims) == 3} {
 	source $inputs(generalFolder)/Joint3d.tcl
 	source $inputs(generalFolder)/addDiaphragm.tcl
-	# source $inputs(generalFolder)/crossProduct.tcl
+	source $inputs(generalFolder)/Vector.tcl
 }
 model Basic -ndm $inputs(numDims)
+
+#some default settings
+set inputs(defClmnZAxis) "0. 1. 0."
+set inputs(defXBeamZAxis) "0. -1. 0."
+set inputs(defYBeamZAxis) "1. 0. 0."

@@ -18,11 +18,11 @@ set braceConfig(R1,2) "/\\"
 set braceConfig(R1,3) "/\\"
 set braceConfig(R1,4) "/\\"
 
-set gussetDimI(R1,lx,1) 0.46; set gussetDimI(R1,ly,1) 0.46; set gussetDimI(R1,lr,1) 0.65;  set gussetDimI(R1,tp,1) 0.02;
-set gussetDimI(R1,lx,2) 0.46; set gussetDimI(R1,ly,2) 0.46; set gussetDimI(R1,lr,2) 0.65;  set gussetDimI(R1,tp,2) 0.02;
-set gussetDimI(R1,lx,3) 0.46; set gussetDimI(R1,ly,3) 0.46; set gussetDimI(R1,lr,3) 0.65;  set gussetDimI(R1,tp,3) 0.02;
-set gussetDimI(R1,lx,4) 0.46; set gussetDimI(R1,ly,4) 0.46; set gussetDimI(R1,lr,4) 0.65;  set gussetDimI(R1,tp,4) 0.02;
-set gussetDimJ(R1,lx,1) 0.46; set gussetDimJ(R1,ly,1) 0.46; set gussetDimJ(R1,lr,1) 0.65;  set gussetDimJ(R1,tp,1) 0.02;
-set gussetDimJ(R1,lx,2) 0.46; set gussetDimJ(R1,ly,2) 0.46; set gussetDimJ(R1,lr,2) 0.65;  set gussetDimJ(R1,tp,2) 0.02;
-set gussetDimJ(R1,lx,3) 0.46; set gussetDimJ(R1,ly,3) 0.46; set gussetDimJ(R1,lr,3) 0.65;  set gussetDimJ(R1,tp,3) 0.02;
-set gussetDimJ(R1,lx,4) 0.46; set gussetDimJ(R1,ly,4) 0.46; set gussetDimJ(R1,lr,4) 0.65;  set gussetDimJ(R1,tp,4) 0.02;
+set gussetDimI(R1,lh,1) 0.50; set gussetDimI(R1,lv,1) 0.50; set gussetDimI(R1,lr,1) 0.80;  set gussetDimI(R1,tp,1) 0.02;
+set gussetDimI(R1,lh,2) 0.50; set gussetDimI(R1,lv,2) 0.50; set gussetDimI(R1,lr,2) 0.80;  set gussetDimI(R1,tp,2) 0.02;
+set gussetDimI(R1,lh,3) 0.50; set gussetDimI(R1,lv,3) 0.50; set gussetDimI(R1,lr,3) 0.80;  set gussetDimI(R1,tp,3) 0.02;
+set gussetDimI(R1,lh,4) 0.50; set gussetDimI(R1,lv,4) 0.50; set gussetDimI(R1,lr,4) 0.80;  set gussetDimI(R1,tp,4) 0.02;
+set gussetDimJ(R1,lh,1) 0.50; set gussetDimJ(R1,lv,1) 0.50; set gussetDimJ(R1,lr,1) 0.80;  set gussetDimJ(R1,tp,1) 0.02;
+set gussetDimJ(R1,lh,2) 0.50; set gussetDimJ(R1,lv,2) 0.50; set gussetDimJ(R1,lr,2) 0.80;  set gussetDimJ(R1,tp,2) 0.02;
+set gussetDimJ(R1,lh,3) 0.50; set gussetDimJ(R1,lv,3) 0.50; set gussetDimJ(R1,lr,3) 0.80;  set gussetDimJ(R1,tp,3) 0.02;
+set gussetDimJ(R1,lh,4) 0.50; set gussetDimJ(R1,lv,4) 0.50; set gussetDimJ(R1,lr,4) 0.80;  set gussetDimJ(R1,tp,4) 0.02;

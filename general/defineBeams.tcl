@@ -1,10 +1,6 @@
 #define Beams
 puts "~~~~~~~~~~~~~~~~~~~~~ Defining Beams ~~~~~~~~~~~~~~~~~~~~~"
 logCommands -comment "#~~~~~~~~~~~~~~~~~~~~~ Defining Beams ~~~~~~~~~~~~~~~~~~~~~\n"
-if {$inputs(numDims) == 3} {
-	set zAxis(XBeams)		"0. -1. 0."
-	set zAxis(YBeams)		"1. 0. 0."
-}
 for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 	set gravEleWs($j) 0
 	logCommands -comment "### story $j\n"
@@ -46,8 +42,9 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 				set offsj($dir) -$_hcj
 				set transfTag [manageTags -newGeomtransf "$eleCode,$pos"]
 				set cmnd "geomTransf Linear $transfTag"
+				set zAxis $inputs(def[set dir]BeamZAxis)
 				if {$inputs(numDims) == 3} {
-					foreach str " $zAxis([set dir]Beams) -jntOffset $offsi(X) $offsi(Y) $offsi(Z) $offsj(X) $offsj(Y) $offsj(Z)" {
+					foreach str " $zAxis -jntOffset $offsi(X) $offsi(Y) $offsi(Z) $offsj(X) $offsj(Y) $offsj(Z)" {
 						lappend cmnd $str
 					}
 				} else {
@@ -65,7 +62,7 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 							set kRat $inputs(beamCrackOverwrite)
 						}
 					}
-					addHingeBeam $pos $eleCode $iNodePos $jNodePos $sec $id $kRat $release rho
+					addHingeBeam $pos $eleCode $iNodePos $jNodePos $sec $id $kRat $release rho $zAxis
 				} else {
 					set rho 0
 					set secTagList ""

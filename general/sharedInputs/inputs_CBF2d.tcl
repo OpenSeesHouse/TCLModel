@@ -98,6 +98,7 @@ set inputs(cUnitsToM) 1.
 #_____________________________________________________
 # General
 set inputs(rigidZoneFac) 0.5
+set inputs(clmnBasePlateHeightFac) 1.	;#ratio of the column section height considered as the base plate connection offset
 
 #_____________________________________________________
 # Lumped
@@ -160,7 +161,7 @@ set inputs(braceType) dispBeamColumn
 set inputs(braceGeomType) Corotational
 set inputs(braceSpanRat) [expr 1./2.]
 set inputs(imperfectRat) 0.005;
-set inputs(nBraceSeg) 10				;#must be greater than 4 for the program to work
+set inputs(nBraceSeg) 10				;#must be even
 
 #_____________________________________________________
 
@@ -181,6 +182,9 @@ for {set j $inputs(nFlrs)} {$j >= 1} {incr j -1} {
 	lappend diaphMassList $rotMass
 }
 
+set xBraceLabels "
+	R1
+"
 # - : gravity beam
 # B2: SMF lateral beam
 set xBeamLabels "

@@ -72,8 +72,8 @@ if {$inputs(matType) == "Steel"} {
 	# set hardeningRatio 0.001		;#for fiber method
 	set inputs(fyBeam) [expr 1*345.e6]
 	set inputs(fyClmn) [expr 1*345.e6]
-	set inputs(beamRy) 1.1
-	set inputs(clmnRy) 1.1
+	set inputs(beamRy) 1.
+	set inputs(clmnRy) 1.
 	set inputs(isColumnA992Gr50) 1
 	set inputs(isBeamA992Gr50) 1
 	set inputs(nu) 0.15
@@ -113,6 +113,7 @@ set inputs(cUnitsToM) 1.
 #_____________________________________________________
 # General
 set inputs(rigidZoneFac) 0.5
+set inputs(clmnBasePlateHeightFac) 1.	;#ratio of the column section height considered as the base plate connection offset
 #_____________________________________________________
 
 # Lumped
@@ -121,13 +122,12 @@ set inputs(hingeType) Lignos
 # set inputs(hingeType) ASCE
 set inputs(beamType) Hinge
 set inputs(columnType) Hinge
-set inputs(nFactor) 10.
+set inputs(nFactor) 1.
 set inputs(MyFac) 1.				;#to allow calibrating the model
-set inputs(rigidZoneFac) 0.5
-set inputs(lbToRy) 50
-set inputs(initAxiForceFiles) {inputs(modelFolder)/gravAxiForce.txt inputs(modelFolder)/DBEAxiForce.txt}
-set inputs(initAxiForceFacts) "1. 0.2"
-set inputs(initAxiForeceEleList) ""; #will be set/used by members' proc and used by recorders proc
+set inputs(lbToRy) 100
+# set inputs(initAxiForceFiles) {inputs(modelFolder)/gravAxiForce.txt inputs(modelFolder)/DBEAxiForce.txt}
+# set inputs(initAxiForceFacts) "1. 0.2"
+# set inputs(initAxiForeceEleList) ""; #will be set/used by members' proc and used by recorders proc
 #_____________________________________________________
 
 #fiber
@@ -200,6 +200,16 @@ for {set j $inputs(nFlrs)} {$j >= 1} {incr j -1} {
 	lappend diaphMassList $mass
 	lappend diaphMassList $rotMass
 }
+
+#10: fixed about axis 1 (X), free about axis 2
+set baseFixityFlags "
+	00  01 01 01 01 00
+	10  00 00 00 00 10
+	10  00 00 00 00 10
+	10  00 00 00 00 10
+	10  00 00 00 00 10
+	00  01 01 01 01 00
+"
 
 ######## Beams ##########
 # B1: gravity beam

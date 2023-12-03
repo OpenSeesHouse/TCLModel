@@ -6,7 +6,7 @@ source $inputs(generalFolder)/computeHingeRBS.tcl
 source $inputs(generalFolder)/computeHingeWBeam.tcl
 source $inputs(generalFolder)/computeHingeWColumn.tcl
 
-set elasticMatTag 1
+set inputs(elasticMatTag) 1
 set E $inputs(Es)
 set G [expr $E/2.6]
 uniaxialMaterial Elastic 1 $inputs(Es)
@@ -15,9 +15,9 @@ set inputs(rigidMatTag) 2
 source "$inputs(secFolder)/$typSec.tcl"
 source "$inputs(secFolder)/convertToM.tcl"
 set inputs(typA) $Area
-set typIz $I33
-set typIy $I22
-set typJ $J
+set inputs(typIz) $I33
+set inputs(typIy) $I22
+set inputs(typJ) $J
 
 uniaxialMaterial Elastic $inputs(rigidMatTag) [expr 100*$inputs(typA)*$inputs(Es)/$inputs(hStory)]
 
@@ -57,17 +57,13 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 				if {$sec == "-"} continue
 				source "$inputs(secFolder)/$sec.tcl"
 				source "$inputs(secFolder)/convertToM.tcl"
-				set d $t3
-		        set bf $t2
-		        set Iz $I33
-		        set Iy $I22
 				# puts $beamPropFile "$sec $dir $tetay $tetau $my"
 				if {$inputs(beamType) == "Hinge"} {
 					logCommands -comment "#section: $sec j,k,i,dir: $j,$k,$i,$dir\n"
 					set secIDBeams($j,$k,$i,$dir) [incr ID]
 					if {$inputs(hingeType) == "Lignos"} {
 						if {$Shape == "SteelTube"} {
-							computeHingeHSS $ID d $tf $bf $tw $Z33 $I33 $Ls $N $Area $fy $cUnitsToKsi $inputs(MyFac)
+							computeHingeHSS $ID $t3 $tf $t2 $tw $Z33 $I33 $Ls $N $Area $fy $cUnitsToKsi $inputs(MyFac)
 						} elseif {$Shape == "I"} {
 							if {$inputs(useRBSBeams)} {
 								computeHingeRBS		$ID $t3 $tw $t2 $tf $I33 $Z33 $Ls $inputs(lbToRy) $inputs(Es) $fy $inputs(beamRy) $inputs(nFactor) $cUnitToIn $cUnitsToKsi
@@ -88,10 +84,10 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 						lappend beamList $sec
 						set secIDBeams($sec) [incr ID]
 						if {$Shape == "SteelTube"} {
-							# section Elastic $secTag $E $A $Iz <$Iy $G $J>
-							Box-section $matTag $ID $d $bf $tf $tw [expr $G*$J]
+							# section Elastic $secTag $E $A $I33 <$I22 $G $J>
+							Box-section $matTag $ID $d $t2 $tf $tw [expr $G*$J]
 						} elseif {$Shape == "I"} {
-							I-section $ID $matTag $d $bf $tf $tw $inputs(numSubdivL) $inputs(numSubdivT) $inputs(numSubdivL) $inputs(numSubdivT) [expr $G*$J]
+							I-section $ID $matTag $d $t2 $tf $tw $inputs(numSubdivL) $inputs(numSubdivT) $inputs(numSubdivL) $inputs(numSubdivT) [expr $G*$J]
 						} else {
 							error "~~~~~~Error! Unknown section type: $shape for section: $sec ~~~~~~"
 						}
@@ -105,8 +101,6 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 #column sections/M-Theta's
 set clmnSecList ""
 logCommands -comment "#~~~~ column sections/Panel zone spring material ~~~~\n"
-set eleType "Column"
-set inputs(typA) 0
 set fy $inputs(fyClmn)
 set code [eleCodeMap Column]
 set cnt 0
@@ -121,23 +115,11 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 			set sec $eleData(section,$code,$j,$k,$i)
 			if {$sec == "-"} continue
 			source "$inputs(secFolder)/$sec.tcl"
-			source "$inputs(secFolder)/convertToM.tcl"
-			if {$inputs(typA) == 0} {
-				set inputs(typA) $Area
-				set typIz $I33
-				set typIy $I22
-				set typJ $J
-			}
-			set d $t3
-		    set bf $t2
-		    set Iz $I33
-		    set Iy $I22
-			set angle $eleData(angle,$code,$j,$k,$i)
-					
+			source "$inputs(secFolder)/convertToM.tcl"					
 			if {$inputs(columnType) == "Hinge"} {
 				logCommands -comment "#section: $sec j,k,i: $j,$k,$i\n"
-				set secIDClmns($j,$k,$i,S) [incr ID]
-				set secIDClmns($j,$k,$i,W) [expr $ID*1000]
+				set secIDClmns($j,$k,$i,3) [incr ID]
+				set secIDClmns($j,$k,$i,2) [expr $ID*1000]
 				set N 0
 				if [info exists initAxiForce] {
 					set N $initAxiForce($cnt)
@@ -146,12 +128,12 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 				}
 				if {$inputs(hingeType) == "Lignos"} {
 					if {$Shape == "SteelTube"} {
-						computeHingeHSS $ID d $tf $bf $tw $Z33 $I33 $Ls $N $Area $fy $cUnitsToKsi $inputs(MyFac)
+						computeHingeHSS $ID t3 $tf $t2 $tw $Z33 $I33 $Ls $N $Area $fy $cUnitsToKsi $inputs(MyFac)
 						# uniaxialMaterial Elastic $ID [expr ($inputs(nFactor)+1)*$ke]
-						set secIDClmns($j,$k,$i,W) $ID
+						set secIDClmns($j,$k,$i,2) $ID
 					} elseif {$Shape == "I"} {
-						computeHingeWColumn $ID 			$t3 $tw $t2 $tf $I33 $Z33 $Ls $inputs(lbToRy) $inputs(Es) $inputs(fyClmn) $inputs(clmnRy) $inputs(nFactor) $inputs(MyFac) $cUnitsToKsi $inputs(isColumnA992Gr50) $Area $N
-						computeHingeWColumn [expr $ID*1000] $t3 $tw $t2 $tf $I22 $Z22 $Ls $inputs(lbToRy) $inputs(Es) $inputs(fyClmn) $inputs(clmnRy) $inputs(nFactor) $inputs(MyFac) $cUnitsToKsi $inputs(isColumnA992Gr50) $Area $N
+						computeHingeWColumn $ID 			$t3 $tw $t2 $tf $I33 $Z33 $Ls $inputs(lbToRy) $inputs(Es) $fy $inputs(clmnRy) $inputs(nFactor) $inputs(MyFac) $cUnitsToKsi $inputs(isColumnA992Gr50) $Area $N
+						computeHingeWColumn [expr $ID*1000] $t3 $tw $t2 $tf $I22 $Z22 $Ls $inputs(lbToRy) $inputs(Es) $fy $inputs(clmnRy) $inputs(nFactor) $inputs(MyFac) $cUnitsToKsi $inputs(isColumnA992Gr50) $Area $N
 					}
 				} else {
 					source $inputs(generalFolder)/computeHingeASCEStrong.tcl
@@ -173,9 +155,9 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 					lappend clmnSecList $sec
 					set secIDClmns($sec) [incr ID]			
 					if {$Shape == "SteelTube"} {
-						Box-section $matTag $ID $d $bf $tf $tw [expr $G*$J]
+						Box-section $matTag $ID $t3 $t2 $tf $tw [expr $G*$J]
 					} elseif {$Shape == "I"} {
-						I-section $ID $matTag $d $bf $tf $tw $inputs(numSubdivL) $inputs(numSubdivT) $inputs(numSubdivL) $inputs(numSubdivT) [expr $G*$J]
+						I-section $ID $matTag $t3 $t2 $tf $tw $inputs(numSubdivL) $inputs(numSubdivT) $inputs(numSubdivL) $inputs(numSubdivT) [expr $G*$J]
 					} else {
 						error "~~~~~~Error! Unknown section type: $shape for section: $sec ~~~~~~"
 					}
@@ -186,19 +168,20 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 			if {$inputs(usePZSpring) == 0} continue
 			error ("this part of code needs revision")
 			logCommands -comment "#panel zone material:\n"
-			set dc $d
+			set dc $t3
 			#Strong dir.:
-			set bf_s $bf
+			set bf_s $t2
 			set tf_s $tf
 			set tp_s $tw
 			if {$Shape == "SteelTube"} {
 				set tp_s [expr 2*$tw]
 			}
 			#weak dir.:
-			set bf_w [expr $d-$tf*2]
+			set bf_w [expr $t3-$tf*2]
 			set tf_w $tw
 			set tp_w [expr 2*$tf]
 			source $inputs(secFolder)/unsetSecProps.tcl
+			set angle $eleData(angle,$code,$j,$k,$i)
 			foreach dir "X Y" {
 				set pzIDs($j,$k,$i,$dir) $inputs(rigidMatTag)
 				# continue

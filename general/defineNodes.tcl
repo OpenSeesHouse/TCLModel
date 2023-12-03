@@ -34,7 +34,7 @@ for {set j 0} {$j <= $inputs(nFlrs)} {incr j} {
 			}
 		}
 		if {$loc == 1} {
-			set numCntrNodes($j) [llength $slaveNodeList($j)]
+			set cntrNodes($j) [llength $slaveNodeList($j)]
 		}
 	}
 }
@@ -79,17 +79,32 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 puts "~~~~~~~~~~~~~~~~~~~~~ Defining Base Supports ~~~~~~~~~~~~~~~~~~~~~"
 logCommands -comment "#~~~~~~~~~~~~~~~~~~~~~ Defining Base Supports ~~~~~~~~~~~~~~~~~~~~~\n"
 set j 0
-foreach tag $slaveNodeList($j) {
-	if {$inputs(numDims) == 2} {
-		fix $tag 1 1 1
-	} else {
-		fix $tag 1 1 1 1 1 1
+foreach loc "1 2 3" locName "central X-beam-splice Y-beam-splice" {
+	logCommands -comment "# $locName nodes ###\n"
+	foreach ki $allkiList {
+		foreach "k i" $ki {}
+		set pos "$j,$k,$i,$loc"
+		if ![manageJntData -exists $pos] {
+			continue
+		}
+		set tag [manageTags -getNode $pos]
+		set x 1
+		set y 1
+		if {$loc == 1} {
+			set xy $fixityFlag($k,$i)
+			set x [string index $xy 0]
+			set y [string index $xy 1]
+		}
+		if {$inputs(numDims) == 2} {
+			fix $tag 1 1 $y
+		} else {
+			fix $tag 1 1 1 $x $y 1
+		}
 	}
-	#TODO add input option for variable base support conditions
 }
 
 if {$inputs(numDims) == 3} {
-	set roofNode [manageTags -getNode $inputs(nFlrs),99]
+	set roofNode $masterNode($inputs(nFlrs))
 } else {
-	set roofNode [manageTags -getNode $inputs(nFlrs),1,1,1]
+	set roofNode [lindex $cntrNodes($inputs(nFlrs)) 0]
 }

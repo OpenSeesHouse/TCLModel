@@ -26,7 +26,7 @@ foreach lName "xBeamLabels yBeamLabels" n "$n1 $n2" {
 	}
 }
 
-foreach lName "gridOffsetListX gridOffsetListY columnLabels" {
+foreach lName "gridOffsetListX gridOffsetListY columnLabels baseFixityFlags" {
 	if ![info exists $lName] continue
 	set nl [llength [set $lName]]
 	if {$nl != $n3} {
