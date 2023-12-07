@@ -6,9 +6,9 @@ if {$inputs(numDims) == 3} {
 	# set baseCrnrs ""
 	set roofCrnrs ""
 	foreach "i k" $inputs(cornerGrdList) {
-		set tag [manageTags -getNode "0,$k,$i,1"]
+		set tag [manageFEData -getNode "0,$k,$i,1"]
 		lappend baseCrnrs $tag
-		set tag [manageTags -getNode "$inputs(nFlrs),$k,$i,1"]
+		set tag [manageFEData -getNode "$inputs(nFlrs),$k,$i,1"]
 		lappend roofCrnrs $tag
 	}
 	eval "recorder Drift -file $inputs(resFolder)/globalDriftX.out -time -iNode $baseNode -jNode $roofNode -dof 1 -perpDirn $perpDirn"
@@ -42,10 +42,10 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 	} else {
 		set crnrNds ""
 		foreach "i k" $inputs(cornerGrdList) {
-			set tag [manageTags -getNode $j,$k,$i,1]
+			set tag [manageFEData -getNode $j,$k,$i,1]
 			lappend crnrNds $tag
 		}
-		set nd2 [manageTags -getNode "$j,99"]
+		set nd2 [manageFEData -getNode "$j,99"]
 		set recTags([expr 2*$j-1]) [eval "recorder EnvelopeDrift -file $inputs(resFolder)/envelopeDrifts/CMX$j.out -time -iNode $nd1 -jNode $nd2 -dof 1 -perpDirn $perpDirn"]
 		set recTags([expr 2*$j-0]) [eval "recorder EnvelopeDrift -file $inputs(resFolder)/envelopeDrifts/CMY$j.out -time -iNode $nd1 -jNode $nd2 -dof 2 -perpDirn $perpDirn"]
 		eval "recorder EnvelopeDrift -file $inputs(resFolder)/envelopeDrifts/CMR$j.out -time -iNode $nd1 -jNode $nd2 -dof 6 -perpDirn $perpDirn"
@@ -89,20 +89,20 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 					continue
 				}
 				if {$inputs(beamType) == "Hinge"} {
-					set eleTag [manageTags -getElement $eleCode,$elePos]
+					set eleTag [manageFEData -getElement $eleCode,$elePos]
 					puts $file "$dir $i $k"
 					lappend list $eleTag
-					lappend list1 [manageTags -getElement $eleCode,$elePos,1]
-					lappend list2 [manageTags -getElement $eleCode,$elePos,2]
+					lappend list1 [manageFEData -getElement $eleCode,$elePos,1]
+					lappend list2 [manageFEData -getElement $eleCode,$elePos,2]
 				} else {
 					set nSeg $inputs(numSegBeam)
 					for {set iSeg 1} {$iSeg <= $nSeg}  {incr iSeg} {
-						set eleTag [manageTags -getElement "$eleCode,$elePos,$iSeg"]
+						set eleTag [manageFEData -getElement "$eleCode,$elePos,$iSeg"]
 						lappend list $eleTag
 						puts $file "Y $i $k $iSeg"
 					}
 					# foreach iSeg $recMemSegs {
-						# set eleTag [manageTags -getElement [expr $elePos*100+$iSeg]]
+						# set eleTag [manageFEData -getElement [expr $elePos*100+$iSeg]]
 						# lappend list2 $eleTag
 						# puts $file "Y $i $k $iSeg"
 					# }
@@ -159,20 +159,20 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 			set sec $eleData(section,$eleCode,$elePos)
 			if {$sec == "-"} continue
 			if {$inputs(columnType) == "Hinge"} {
-				set eleTag [manageTags -getElement $eleCode,$elePos]
+				set eleTag [manageFEData -getElement $eleCode,$elePos]
 				puts $file "$i $k"
 				lappend list $eleTag
-				lappend list1 [manageTags -getElement $eleCode,$elePos,1]
-				lappend list2 [manageTags -getElement $eleCode,$elePos,2]
+				lappend list1 [manageFEData -getElement $eleCode,$elePos,1]
+				lappend list2 [manageFEData -getElement $eleCode,$elePos,2]
 			} else {
 				set nSeg $inputs(numSegClmn)
 				for {set iSeg 1} {$iSeg <= $nSeg}  {incr iSeg} {
-					set eleTag [manageTags -getElement "$eleCode,$elePos,$iSeg"]
+					set eleTag [manageFEData -getElement "$eleCode,$elePos,$iSeg"]
 					lappend list $eleTag
 					puts $file "$i $k $iSeg"
 				}
 				# foreach iSeg $recMemSegs {
-					# set eleTag [manageTags -getElement [expr $elePos*100+$iSeg]]
+					# set eleTag [manageFEData -getElement [expr $elePos*100+$iSeg]]
 					# lappend list2 $eleTag
 					# puts $file "Y $i $k $iSeg"
 				# }

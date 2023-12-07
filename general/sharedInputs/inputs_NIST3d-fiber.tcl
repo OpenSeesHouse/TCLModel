@@ -7,38 +7,50 @@ set inputs(hasBrace) 0
 
 #Geometry
 #_____________________________________________________
-set inputs(numDims) 2
+set inputs(numDims) 3
 # set inputs(nFlrs) 12
-set inputs(nBaysX) 3
-set inputs(nBaysY) 0
-set inputs(lBayX) "9.14 9.14 9.14"
-set inputs(lBayY) ""
+set inputs(nBaysX) 5
+# set inputs(nBaysY) 3
+set inputs(lBayX) "9.14 9.14 9.14 9.14 9.14"
+# set inputs(lBayY) "6. 6. 6."
 set inputs(hStory) 5.49
 set inputs(hStoryBase) 4.27
 set inputs(numDesnStats) 1		;#mainly for RC members
-set inputs(eccRatX) 0
+# set inputs(eccRatX) 0
 set inputs(eccRatY) 0
 
-set inputs(lx) [expr 5*9.14]
-set inputs(ly) [expr 5*6.09]
-set inputs(planArea) [expr 0.5*$inputs(lx)*$inputs(ly)]
-set inputs(planPerim) [expr $inputs(lx)+$inputs(ly)]
+set inputs(lx) [lsum $inputs(lBayX)]
+set inputs(ly) [lsum $inputs(lBayY)]
 set inputs(cornerCrdList) "
+	9.14			0.
+	[expr $inputs(lx)-9.14] 0.
+	$inputs(lx) [expr $inputs(ly)-9.14]
+	0.	$inputs(ly)
 "
 # for recording corner nodes' drifts 
 set inputs(cornerGrdList) "
+	1	2
+	2	1
+	[expr $inputs(nBaysX)+1-1]	1
+	[expr $inputs(nBaysX)+1]	2
+	[expr $inputs(nBaysX)+1]	[expr $inputs(nBaysY)+1-1]
+	[expr $inputs(nBaysX)+1-1]	[expr $inputs(nBaysY)+1]
+	2	[expr $inputs(nBaysY)+1]
+	1	[expr $inputs(nBaysY)+1-1]
 "
+set inputs(planArea) [expr $inputs(lx)*$inputs(ly)]
+set inputs(planPerim) [expr 2*($inputs(lx)+$inputs(ly))]
 #_____________________________________________________
 
 # Mass
 #_____________________________________________________
-set inputs(deadRoof)  [expr 1.1*47.88/$g*56.0] 		;#=46 (D) + 10 (superDead)
-set inputs(deadFloor) [expr 1.1*47.88/$g*61.7] 		;#64.7= 46(D)+15(superDead)+3.7(Facade) in kg/m2
-set inputs(liveRoof)  [expr 1.*47.88/$g*30]
-set inputs(liveFloor) [expr 1.*47.88/$g*50]
-set inputs(perimBeamDead) 370.							;#kg/m of perimeter beaam
-set inputs(deadMassFac) 1.05
-set inputs(liveMassFac) 0.25
+# set inputs(deadRoof)  [expr 1.1*47.88/$g*56.0] 		;#=46 (D) + 10 (superDead)
+# set inputs(deadFloor) [expr 1.1*47.88/$g*61.7] 		;#64.7= 46(D)+15(superDead)+3.7(Facade) in kg/m2
+# set inputs(liveRoof)  [expr 1.*47.88/$g*30]
+# set inputs(liveFloor) [expr 1.*47.88/$g*50]
+# set inputs(perimBeamDead) 370.							;#kg/m of perimeter beaam
+# set inputs(deadMassFac) 1.05
+# set inputs(liveMassFac) 0.25
 set inputs(selfWeightMultiplier) 1
 set inputs(leaningAreaFac) 1.0
 #_____________________________________________________
@@ -71,7 +83,7 @@ if {$inputs(matType) == "Steel"} {
 	set inputs(steelDens)		7850.			;#kg/m3
 	set inputs(density)		7850.			;#kg/m3
 	set inputs(useRBSBeams) 1
-	set inputs(usePZSpring) 0				;# =1 (panel zone modelling) is not currently supported due to efficiency concerns
+	set inputs(usePZSpring) 0
 } else {
 	# concrete
 	set inputs(fc0) 30.0e6
@@ -108,15 +120,15 @@ set inputs(clmnGeomtransfType) Linear	;#set to Linear when all story gravity for
 # Lumped
 #_____________________________________________________
 # set inputs(hingeType) Lignos
-# #set inputs(hingeType) ASCE
+# set inputs(hingeType) ASCE
 # set inputs(beamType) Hinge
 # set inputs(columnType) Hinge
 # set inputs(nFactor) 1.
 # set inputs(MyFac) 1.				;#to allow calibrating the model
 # set inputs(lbToRy) 100
-# #set inputs(initAxiForceFiles) {inputs(modelFolder)/gravAxiForce.txt inputs(modelFolder)/DBEAxiForce.txt}
-# #set inputs(initAxiForceFacts) "1. 0.2"
-# #set inputs(initAxiForeceEleList) ""; #will be set/used by members' proc and used by recorders proc
+# set inputs(initAxiForceFiles) {inputs(modelFolder)/gravAxiForce.txt inputs(modelFolder)/DBEAxiForce.txt}
+# set inputs(initAxiForceFacts) "1. 0.2"
+# set inputs(initAxiForeceEleList) ""; #will be set/used by members' proc and used by recorders proc
 #_____________________________________________________
 
 #fiber
@@ -125,9 +137,9 @@ set inputs(numSubdivL)	6
 set inputs(numSubdivT)	3
 ### for Hardening behavior:
 	set inputs(columnType) forceBeamColumn 	;#dispBeamColumn
-	set inputs(numIntegPntsClmn) 5
-	set inputs(numSegClmn) 1
-	#set inputs(lSegClmn) 2.0		;#m
+	set inputs(numIntegPntsClmn) 3
+	set inputs(numSegClmn) 3
+#	#set inputs(lSegClmn) 2.0		;#m
 	set inputs(clmnInteg) {Lobatto $secTag $inputs(numIntegPntsClmn)}
 
 ### for Softening behavior:
@@ -148,7 +160,7 @@ set inputs(numSubdivT)	3
 	set inputs(beamType) forceBeamColumn	; #  dispBeamColumn
 	set inputs(numIntegPntsBeam) 5
 	set inputs(numSegBeam) 1
-	#set inputs(lSegBeam) 2.0		;#m
+#	#set inputs(lSegBeam) 2.0		;#m
 	set inputs(beamInteg) {Lobatto $secTag $inputs(numIntegPntsBeam)}
 ### for Softening
 # set inputs(beamType) forceBeamColumn
@@ -159,57 +171,175 @@ set inputs(numSubdivT)	3
 # set beamLpFac 0.2
 
 # set recMemSegs "1 3 4 6"
+
+#### Braces ####
+set inputs(braceType) dispBeamColumn
+set inputs(braceGeomType) Corotational
+set inputs(braceSpanRat) [expr 1./2.]
+set inputs(imperfectRat) 0.005;
+set inputs(nBraceSeg) 10				;#must be even
 #_____________________________________________________
 
 set inputs(secFolder) ../general/sections
+# set inputs(lx) [lsum $inputs(lBayX)]
+# set inputs(ly) [lsum $inputs(lBayY)]
+# set inputs(eccRatX) 0.05
+# set inputs(eccRatY) 0.05
+set inputs(centerMassX) 	[expr ($inputs(eccRatX)+0.5)*$inputs(lx)]
+set inputs(centerMassY) 	[expr ($inputs(eccRatY)+0.5)*$inputs(ly)]
+set inputs(centerMassXRoof) 	[expr ($inputs(eccRatX)+0.5)*$inputs(lx)]
+set inputs(centerMassYRoof) 	[expr ($inputs(eccRatY)+0.5)*$inputs(ly)]
+
 set inputs(floorMass) [expr ($inputs(deadMassFac)*$inputs(deadFloor)+$inputs(liveMassFac)*$inputs(liveFloor))*$inputs(planArea)+$inputs(deadMassFac)*$inputs(perimBeamDead)*$inputs(planPerim)]
 set inputs(roofMass) [expr ($inputs(deadMassFac)*$inputs(deadRoof)+$inputs(liveMassFac)*$inputs(liveRoof))*$inputs(planArea)]
+set inputs(floorRotMass) [expr $inputs(floorMass)*($inputs(lx)+$inputs(ly))/6.]
+set inputs(roofRotMass) [expr $inputs(roofMass)*($inputs(lx)+$inputs(ly))/6.]
 puts "inputs(floorMass)= $inputs(floorMass)"
 puts "inputs(roofMass)= $inputs(roofMass)"
 puts "totalWeight = [expr 9.81*($inputs(roofMass)+($inputs(nFlrs)-1)*$inputs(floorMass))/1000.] kN"
 set diaphMassList	""
 for {set j $inputs(nFlrs)} {$j >= 1} {incr j -1} {
 	set mass $inputs(floorMass)
-	set rotMass 0
+	set rotMass $inputs(floorRotMass)
 	if {$j == $inputs(nFlrs)} {
 		set mass $inputs(roofMass)
+		set rotMass $inputs(roofRotMass)
 	}
 	lappend diaphMassList $mass
 	lappend diaphMassList $rotMass
 }
 
-# - : gravity beam
+#10: fixed about axis 1 (X), free about axis 2
+set baseFixityFlags "
+	00  01 01 01 01 00
+	10  00 00 00 00 10
+	10  00 00 00 00 10
+	10  00 00 00 00 10
+	10  00 00 00 00 10
+	00  01 01 01 01 00
+"
+
+######## Beams ##########
+# B1: gravity beam
 # B2: SMF lateral beam
-set xBeamLabels "
-	B2 B2 B2
-"
-set yBeamLabels "
-"
-# - : gravity column
-# C2: external SMF column
-# C3: internal SMF column
-# C4: external CBF column
-set columnLabels "
-	C2 C3 C3 C2
-"
-for {set i 1} {$i <= $inputs(nFlrs)} {incr i} {
-	set columnAngleList($i) "
-		0 0 0 0
-	"
-}
-set L1 [expr 0.25*(1.05*$inputs(deadFloor)+0.25*$inputs(liveFloor))*6.1*9.14*$g]
-set L2 [expr 0.50*(1.05*$inputs(deadFloor)+0.25*$inputs(liveFloor))*6.1*9.14*$g]
-for {set j 1} {$j < $inputs(nFlrs)} {incr j} {
-	set pntLoadList($j) "$L1 $L2 $L2 $L1"
-}
+# set xBeamLabels "
+# 	B1 B2 B2 B2 B1
+# 	B1 B1 B1 B1 B1 
+# 	B1 B2 B2 B2 B1
+# "
+# set yBeamLabels "
+# 	B1 B2 B1 B2 B1
+# 	B1 B1 B1 B1 B1
+# 	B1 B1 B1 B1 B1
+# 	B1 B1 B1 B1 B1
+# 	B1 B2 B1 B2 B1
+# "
 
-set L1 [expr 0.25*(1.05*$inputs(deadRoof)+0.25*$inputs(liveRoof))*6.1*9.14*$g]
-set L2 [expr 0.50*(1.05*$inputs(deadRoof)+0.25*$inputs(liveRoof))*6.1*9.14*$g]
-set j $inputs(nFlrs)
-set pntLoadList($j) "$L1 $L2 $L2 $L1"
+# # C1: gravity column
+# # C2: external SMF column
+# # C3: internal SMF column
+# # C4: external CBF column
+# set columnLabels "
+# 	C1  C2 C3 C3 C2 C1
+# 	C4  C1 C1 C1 C1 C4
+# 	C4  C1 C1 C1 C1 C4
+# 	C4  C1 C1 C1 C1 C4
+# 	C4  C1 C1 C1 C1 C4
+# 	C1  C2 C3 C3 C2 C1
+# "
+#column section rotation aFDngle: 0/90 only
+## default zero: local y coincides with global Y
+# for {set i 1} {$i <= $inputs(nFlrs)} {incr i} {
+# 	set columnAngleList($i) "
+# 		0  0  0  0  0  0  
+# 		0  0  0  0  0  0  
+# 		0  0  0  0  0  0  
+# 		0  0  0  0  0  0  
+# 	"
+# }
 
-set L [expr $inputs(perimBeamDead)*$g]
-for {set j 1} {$j < $inputs(nFlrs)} {incr j} {
-	set beamLoadList($j) "$L $L $L $L"
-}
+# set L [expr (1.2*$floorDead+1.0*$floorLive)*$g]
+# for {set j 1} {$j < $inputs(nFlrs)} {incr j} {
+# 	set deckLoad($j) "
+# 		$L $L $L $L $L
+# 		$L $L $L $L $L
+# 		$L $L $L $L $L
+# 	"
+# }
+# set L [expr (1.2*$roofDead+1.0*$roofLive)*$g]
+# set j  $inputs(nFlrs)
+# set deckLoad($j) "
+# 	$L $L $L $L $L
+# 	$L $L $L $L $L
+# 	$L $L $L $L $L
+# "
+# ##deckLoadDir == X|Y
+# for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
+# 	set deckLoadDir($j) "
+# 		X X X X X
+# 		X X X X X
+# 		X X X X X
+# 		X X X X X
+# 		X X X X X
+# 	"
+# }
 
+# set L [expr (1.2*$floorDead+1.0*$floorLive)*$g]
+# for {set j 1} {$j < $inputs(nFlrs)} {incr j} {
+# 	set slabLoad($j) "
+# 		$L $L $L $L $L
+# 		$L $L $L $L $L
+# 		$L $L $L $L $L
+# 	"
+# }
+# set L [expr (1.2*$roofDead+1.0*$roofLive)*$g]
+# set j  $inputs(nFlrs)
+# set slabLoad($j) "
+# 	$L $L $L $L $L
+# 	$L $L $L $L $L
+# 	$L $L $L $L $L
+# "
+
+# set L [expr 1.2*$roofWall*$g]
+# set roofBeamLoadX "
+# 	$L $L $L $L $L
+# 	- - - - -
+# 	- - - - -
+# 	$L $L $L $L $L
+# "
+# set L [expr 1.2*$floorWall*$g]
+# set floorBeamLoadX "
+# 	$L $L $L $L $L
+# 	- - - - -
+# 	- - - - -
+# 	$L $L $L $L $L
+# "
+# set L [expr 1.2*$roofWall*$g]
+# set roofBeamLoadY "
+# 	$L $L $L 
+# 	- - - 
+# 	- - - 
+# 	- - - 
+# 	- - - 
+# 	$L $L $L 
+# "
+# set L [expr 1.2*$floorWall*$g]
+# set floorBeamLoadY "
+# 	$L $L $L 
+# 	- - - 
+# 	- - - 
+# 	- - - 
+# 	- - - 
+# 	$L $L $L 
+# "
+
+## beam end releases about local z axis
+## R:retained	F:free
+# for {set i 1} {$i <= $inputs(nFlrs)} {incr i} {
+# set xBeamReleaseList($j) "
+# 	FF FR RF RR
+# "
+# set yBeamReleaseList($j) "
+# 	FF FR RF RR
+# "
+# }

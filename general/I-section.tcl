@@ -25,7 +25,7 @@ proc I-section {secID matID d bf tf tw nfdw nftw nfbf nftf {GJ ""}} {
 	set z3 [expr -$tw/2]
 	set z4 [expr -$bf/2]
   
-	section fiberSec  $secID  {
+	section fiberSec  $secID -GJ $GJ {
    		#                     nfIJ  nfJK    yI  zI    yJ  zJ    yK  zK    yL  zL
    		patch quad  $matID  $nfbf $nftf   $y1 $z1   $y1 $z4   $y2 $z4   $y2 $z1
    		patch quad  $matID  $nftw $nfdw   $y2 $z2   $y2 $z3   $y3 $z3   $y3 $z2

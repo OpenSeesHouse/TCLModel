@@ -1,4 +1,4 @@
-proc eleCodeMap {inputStr} {
+proc eleCodeMap {args} {
     global eleTypeCodes
     if ![info exists eleTypeCodes] {
         set eleTypeCodes(X-Beam) 1
@@ -9,20 +9,31 @@ proc eleCodeMap {inputStr} {
         set eleTypeCodes(X-Wall) 6
         set eleTypeCodes(Y-Wall) 7
     }
-    if {$inputStr == "-getAllTypes"} {
+    set arg0 [lindex $args 0]
+    if {$arg0 == "-getAllTypes"} {
         return [lsort [array names eleTypeCodes]]
     }
-    if {$inputStr == "-getAllCodes"} {
+    if {$arg0 == "-getAllCodes"} {
         set res ""
         foreach typ [array names eleTypeCodes] {
             lappend res $eleTypeCodes($typ)
         }
         return [lsort -integer $res]
     }
+    if {$arg0 == "-getType"} {
+        set code [lindex $args 1]
+        set res ""
+        foreach typ [array names eleTypeCodes] {
+            if {$eleTypeCodes($typ) == $code} {
+                return $typ
+            }
+        }
+        error ("no type was found for code: $code in the map")
+    }
     foreach typ [array names eleTypeCodes] {
-        if {$inputStr == $typ} {
+        if {$arg0 == $typ} {
             return $eleTypeCodes($typ)
         }
     }
-    error "eleType: option: $inputStr is unrecognized"
+    error "eleType: option: $arg0 is unrecognized"
 }

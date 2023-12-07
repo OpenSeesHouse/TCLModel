@@ -14,15 +14,13 @@ pattern Plain 1 Linear {
 					}
 					set selfW $eleData(unitSelfWeight,$eleCode,$elePos)
 					set load [expr -$selfW-$eleData(load,$eleCode,$elePos)]
-					if {$inputs(beamType) == "Hinge"} {
-						set eleTag [manageTags -getElement "$eleCode,$elePos"]
-						eleLoad -ele $eleTag -type -beamUniform $load 0
-					} else {
-						set nSeg $inputs(numSegBeam)					
-						for {set iSeg 1} {$iSeg <= $nSeg}  {incr iSeg} {
-							set eleTag [manageTags -getElement "$eleCode,$elePos,$iSeg"]
-							eleLoad -ele $eleTag -type -beamUniform $load 0
+					set allPos [manageFEData -getAllPos element $eleCode,$elePos]
+					foreach pos $allPos {
+						if [string match *h* $pos] {
+							continue
 						}
+						set eleTag [manageFEData -getElement $pos]
+						eleLoad -ele $eleTag -type -beamUniform $load 0
 					}
 				}
 			}
@@ -30,7 +28,7 @@ pattern Plain 1 Linear {
 		#Columns
 		for {set i 1} {$i <= [expr $inputs(nBaysX)+1]} {incr i} {
 			for {set k 1} {$k <= [expr $inputs(nBaysY)+1]} {incr k} {
-				set ndTag [manageTags -getNode "$j,$k,$i,1"]
+				set ndTag [manageFEData -getNode "$j,$k,$i,1"]
 				if {[info exists pntLoadList] && $ndTag != 0} {
 					if {$inputs(numDims) == 3} {
 						load $ndTag 0. 0. -$pointData(load,$j,$k,$i) 0. 0. 0.
@@ -43,15 +41,12 @@ pattern Plain 1 Linear {
 				if {$eleData(section,$eleCode,$elePos) != "-"} {
 					set w $eleData(unitSelfWeight,$eleCode,$elePos)
 					set eleTags ""
-					if {$inputs(beamType) == "Hinge"} {
-						set eleTags [manageTags -getElement "$eleCode,$elePos"]
-					} else {
-						set nSeg $inputs(numSegBeam)					
-						for {set iSeg 1} {$iSeg <= $nSeg}  {incr iSeg} {
-							lappend eleTags [manageTags -getElement "$eleCode,$elePos,$iSeg"]
+					set allPos [manageFEData -getAllPos element $eleCode,$elePos]
+					foreach pos $allPos {
+						if [string match *h* $pos] {
+							continue
 						}
-					}
-					foreach eleTag $eleTags {
+						set eleTag [manageFEData -getElement $pos]
 						if {$inputs(numDims) == 3} {
 							eleLoad -ele $eleTag -type -beamUniform 0 0 -$w
 						} else {

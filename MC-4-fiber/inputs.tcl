@@ -1,4 +1,4 @@
-set inputs(sharedInputsFile) $inputs(generalFolder)/sharedInputs/inputs_NIST3d-hinge.tcl
+set inputs(sharedInputsFile) $inputs(generalFolder)/sharedInputs/inputs_NIST3d-fiber.tcl
 set inputs(nFlrs) 4
 set inputs(nBaysY) 5
 set inputs(lBayY) "6.09 6.09 6.09 6.09 6.09"

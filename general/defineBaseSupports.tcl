@@ -6,10 +6,10 @@ foreach loc "1 2 3" locName "central X-beam-splice Y-beam-splice" {
 	foreach ki $allkiList {
 		foreach "k i" $ki {}
 		set pos "$j,$k,$i,$loc"
-		if ![manageJntData -exists $pos] {
+		if ![manageGeomData -jntExists $pos] {
 			continue
 		}
-		set tag [manageTags -getNode $pos]
+		set tag [manageFEData -getNode $pos]
 		set x 1
 		set y 1
 		if {$loc == 1} {

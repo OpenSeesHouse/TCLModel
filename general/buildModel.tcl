@@ -29,7 +29,7 @@ if {$inputs(matType) == "Concrete"} {
 # 	set zAxis(wallTransfX)	"0 1 0"
 # 	set zAxis(wallTransfY)	"-1 0 0"
 # }
-manageTags -initiate
+manageFEData -initiate
 source $inputs(generalFolder)/computeJntData.tcl
 source $inputs(generalFolder)/defineNodes.tcl
 source $inputs(generalFolder)/defineBaseSupports.tcl

@@ -21,14 +21,17 @@ set inputs(typJ) $J
 
 uniaxialMaterial Elastic $inputs(rigidMatTag) [expr 100*$inputs(typA)*$inputs(Es)/$inputs(hStory)]
 
-set beamsMatTag 3
-uniaxialMaterial Steel01 3 $inputs(fyBeam) $E 0.01
-# uniaxialMaterial Elastic 1 $E
+if {$inputs(beamType) != "Hinge"} {
+	set beamsMatTag 3
+	uniaxialMaterial Steel01 3 $inputs(fyBeam) $E 0.01
+	# uniaxialMaterial Elastic 1 $E
+}
 
-set clmnsMatTag 4
-uniaxialMaterial Steel01 4 $inputs(fyClmn) $E 0.01
-# uniaxialMaterial Elastic 2 $E
-
+if {$inputs(columnType) != "Hinge"} {
+	set clmnsMatTag 4
+	uniaxialMaterial Steel01 4 $inputs(fyClmn) $E 0.01
+	# uniaxialMaterial Elastic 2 $E
+}
 
 set matTag $beamsMatTag
 set cUnitsToKsi [expr $inputs(cUnitsToN)/($inputs(cUnitsToM)**2.)*1.45038e-7]
@@ -85,9 +88,9 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 						set secIDBeams($sec) [incr ID]
 						if {$Shape == "SteelTube"} {
 							# section Elastic $secTag $E $A $I33 <$I22 $G $J>
-							Box-section $matTag $ID $d $t2 $tf $tw [expr $G*$J]
+							Box-section $matTag $ID $t3 $t2 $tf $tw [expr $G*$J]
 						} elseif {$Shape == "I"} {
-							I-section $ID $matTag $d $t2 $tf $tw $inputs(numSubdivL) $inputs(numSubdivT) $inputs(numSubdivL) $inputs(numSubdivT) [expr $G*$J]
+							I-section $ID $matTag $t3 $t2 $tf $tw $inputs(numSubdivL) $inputs(numSubdivT) $inputs(numSubdivL) $inputs(numSubdivT) [expr $G*$J]
 						} else {
 							error "~~~~~~Error! Unknown section type: $shape for section: $sec ~~~~~~"
 						}

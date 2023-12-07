@@ -3,10 +3,13 @@
 set g 9.81
 source "$inputs(generalFolder)/lsum.tcl"
 source $inputs(generalFolder)/lNorm.tcl
-source $inputs(generalFolder)/manageTags.tcl
+source $inputs(generalFolder)/sortArray.tcl
+source $inputs(generalFolder)/manageFEData.tcl
 source $inputs(generalFolder)/eleCodeMap.tcl
-source $inputs(generalFolder)/manageJntData.tcl
+source $inputs(generalFolder)/manageGeomData.tcl
 source $inputs(generalFolder)/addNode.tcl
+source $inputs(generalFolder)/addElement.tcl
+source $inputs(generalFolder)/addGeomTransf.tcl
 source $inputs(generalFolder)/releaseFromChar.tcl
 source $inputs(generalFolder)/addHingeBeam.tcl
 source $inputs(generalFolder)/addHingeColumn.tcl

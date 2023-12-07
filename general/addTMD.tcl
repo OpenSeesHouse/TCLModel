@@ -34,8 +34,9 @@ for \{set i 0} \{ $i < $numTMDs } \{ incr i } \{
     set C_TMD [expr 2*$kesiTMD*$massTMD*$omegaTMD]
 
     set TMDNodeTag [expr 10000+$i]
-    set refNode [lindex $masterNodeList [expr $TMDLoc($i,nFlr)-1]]
-    eval "node $TMDNodeTag  [nodeCoord $refNode] -mass $massTMD    $massTMD   $massTMD  0.  0.  0."
+    set refNodePos $TMDLoc($i,nFlr),99
+    set refNode [manageFEData -getNode $refNodePos]
+    eval "node $TMDNodeTag  [manageFEData -getNodeCrds $refNodePos] -mass $massTMD    $massTMD   $massTMD  0.  0.  0."
 
     equalDOF $refNode TMDNodeTag 3 4 5 6 
 

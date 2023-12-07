@@ -24,11 +24,11 @@ proc Joint3D {eleTag Nd1 Nd2 Nd3 Nd4 Nd5 Nd6 NdC args} {
 		global setting
 		set E $inputs(E)
 		set G $inputs(G)
-		set crds1 [nodeCoord $Nd1]
+		set crds1 [manageFEData -getNodeCrds $Nd1Pos]
 		set x1 [lindex $crds1 0]
 		set y [lindex $crds1 1]
 		set z [lindex $crds1 2]
-		set crds2 [nodeCoord $Nd2] 
+		set crds2 [manageFEData -getNodeCrds $Nd2Pos]
 		set x2 [lindex $crds2 0]
 		set x [expr ($x1+$x2)/2.]
 		node $NdC $x $y $z

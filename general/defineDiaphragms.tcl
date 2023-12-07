@@ -9,13 +9,13 @@ if {$inputs(numDims) == 3} {
 			set CMx $inputs(centerMassXRoof)
 			set CMy $inputs(centerMassYRoof)
 		}
-		set masterNode($j) [manageTags -newNode "$j,99"]
+		set masterNode($j) [addNode "$j,99" $CMx $CMy $Z($j)]
 		lappend masterNodeList $masterNode($j)
-		addNode $masterNode($j) $CMx $CMy $Z($j)
+		
 		fix $masterNode($j) 0 0 1 1 1 0
 		set slaveNodes $slaveNodeList($j)
 		if [info exists leanClmn($j)] {
-			lappend slaveNodes [manageTags -getNode $j,98]
+			lappend slaveNodes [manageFEData -getNode $j,98]
 		}
 		addDiaphragm 3 $masterNode($j) $slaveNodes
 	}
