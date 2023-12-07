@@ -4,8 +4,10 @@ if {$Units == "mm"} {
 	set t2		[expr $t2     *1.e-3]
 	set tf		[expr $tf     *1.e-3]
 	set tw		[expr $tw     *1.e-3]
-	set t2b		[expr $t2b    *1.e-3]
-	set tfb		[expr $tfb    *1.e-3]
+	if [info exists t2b] {
+		set t2b		[expr $t2b    *1.e-3]
+		set tfb		[expr $tfb    *1.e-3]
+	}
 	set Area	[expr $Area   *1.e-6]
 	set AS2 	[expr $AS2    *1.e-6]
 	set AS3 	[expr $AS3    *1.e-6]
@@ -19,7 +21,7 @@ if {$Units == "mm"} {
 	set R22		[expr $R22    *1.e-3]
 	set R33		[expr $R33    *1.e-3]
 	set Radius	[expr $Radius *1.e-3]
-	
+
 	set Units m
 } elseif {$Units == "cm"} {
 	#conver section props from cm to m
@@ -27,8 +29,10 @@ if {$Units == "mm"} {
 	set t2		[expr $t2     *1.e-2]
 	set tf		[expr $tf     *1.e-2]
 	set tw		[expr $tw     *1.e-2]
-	set t2b		[expr $t2b    *1.e-2]
-	set tfb		[expr $tfb    *1.e-2]
+	if [info exists t2b] {
+		set t2b		[expr $t2b    *1.e-2]
+		set tfb		[expr $tfb    *1.e-2]
+	}
 	set Area	[expr $Area   *1.e-4]
 	set AS2 	[expr $AS2    *1.e-4]
 	set AS3 	[expr $AS3    *1.e-4]

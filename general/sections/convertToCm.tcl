@@ -4,8 +4,10 @@ if {$Units == "mm"} {
 	set t2		[expr $t2     *1.e-1]
 	set tf		[expr $tf     *1.e-1]
 	set tw		[expr $tw     *1.e-1]
-	set t2b		[expr $t2b    *1.e-1]
-	set tfb		[expr $tfb    *1.e-1]
+	if [info exists t2b] {
+		set t2b		[expr $t2b    *1.e-1]
+		set tfb		[expr $tfb    *1.e-1]
+	}
 	set Area	[expr $Area   *1.e-2]
 	set AS2 	[expr $AS2    *1.e-2]
 	set AS3 	[expr $AS3    *1.e-2]

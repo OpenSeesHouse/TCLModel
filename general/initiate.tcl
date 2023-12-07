@@ -13,7 +13,7 @@ source $inputs(generalFolder)/addGeomTransf.tcl
 source $inputs(generalFolder)/releaseFromChar.tcl
 source $inputs(generalFolder)/addHingeBeam.tcl
 source $inputs(generalFolder)/addHingeColumn.tcl
-source $inputs(generalFolder)/addFiberBeamColumn.tcl
+source $inputs(generalFolder)/addFiberMember.tcl
 if ![info exists inputs(modelFolder)] {
     set inputs(modelFolder) ""
 }
@@ -37,3 +37,5 @@ model Basic -ndm $inputs(numDims)
 set inputs(defClmnZAxis) "0. 1. 0."
 set inputs(defXBeamZAxis) "0. -1. 0."
 set inputs(defYBeamZAxis) "1. 0. 0."
+set inputs(defXBraceZAxis) "0. -1. 0."
+set inputs(defYBraceZAxis) "1. 0. 0."

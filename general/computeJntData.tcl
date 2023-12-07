@@ -57,29 +57,12 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 					updateVar -sum jntData($iNode,dim,$dir,pp,v) $H2
 					updateVar -sum jntData($jNode,dim,$dir,nn,v) $H2
 					updateVar -sum jntData($jNode,dim,$dir,np,v) $H2
-
-					#beam internal joints
-					# set nSeg $nBeamSeg
-					# if {$nSeg == 0} {
-					# 	set nSeg [expr int($l/$lSeg)]
-					# }
-					# for {set m 1} {$m < $nSeg} {incr m} {
-					# 	set pos $j,$k,$i,B[set dir]_$m
-					# 	foreach d "X Y" {
-					# 		foreach vrt "pp np nn pn" {
-					# 			foreach com "h v" {
-					# 				set name $pos,dim,$d,$vrt,$com
-					# 				set jntData($name) 0
-					# 			}
-					# 		}
-					# 	}
-					# }
 				}
 
 				#brace
 				set elePos "$j,$k,$i"
 				set eleCode [eleCodeMap $dir-Brace]
-				if {$eleData(section,$eleCode,$elePos) != "-"} {
+				if {$eleData(section,$eleCode,$elePos,L) != "-"} {
 					#gusset dims.
 					#J        J
 					# \      /
@@ -107,43 +90,47 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 						set nNodePos [expr $j-1],$k,$i,2
 					} else {
 						set jNodePos $j,[expr $k+1],$i,1
-						set jNodePos [expr $j-1],[expr $k+1],$i,1
+						set lNodePos [expr $j-1],[expr $k+1],$i,1
 						set mNodePos $j,$k,$i,3
 						set nNodePos [expr $j-1],$k,$i,3
 					}
 
 					set conf $eleData(config,$eleCode,$elePos)
-					# k and j
-					if {$conf == "/" || $conf == "X"} {
-						#k
+					# k
+					if {$conf == "/" || $conf == "/\\" || $conf == "X"} {
 						updateVar -sum jntData($kNodePos,dim,$dir,pp,h) $lhI
 						updateVar -sum jntData($kNodePos,dim,$dir,pp,v) $lvI
-						#j
+					}
+					#j
+					if {$conf == "/" || $conf == "\\/" || $conf == "X"} {
 						updateVar -sum jntData($jNodePos,dim,$dir,nn,h) $lhJ
 						updateVar -sum jntData($jNodePos,dim,$dir,nn,v) $lvJ
 					}
-					# i and l
-					if {$conf == "\\" || $conf == "X"} {
+					# i
+					if {$conf == "\\" || $conf == "\\/" || $conf == "X"} {
 						#i
 						updateVar -sum jntData($iNodePos,dim,$dir,pn,h) $lhJ
 						updateVar -sum jntData($iNodePos,dim,$dir,pn,v) $lvJ
-						#l
+					}
+					#l
+					if {$conf == "\\" || $conf == "/\\" || $conf == "X"} {
 						updateVar -sum jntData($lNodePos,dim,$dir,np,h) $lhI
 						updateVar -sum jntData($lNodePos,dim,$dir,np,v) $lvI
 					}
 					# m
 					if {$conf == "/\\" || $conf == "|"} {
-						updateVar -sum jntData($mNodePos,dim,$dir,nn,h) [expr $lhJ]
-						updateVar -sum jntData($mNodePos,dim,$dir,nn,v) $lvJ
-						updateVar -sum jntData($mNodePos,dim,$dir,pn,h) [expr $lhJ]
-						updateVar -sum jntData($mNodePos,dim,$dir,pn,v) $lvJ
+						puts "updateVar -sum jntData($mNodePos,dim,$dir,nn,h) [expr $lhJ]"
+						set jntData($mNodePos,dim,$dir,nn,h) [expr $lhJ]
+						set jntData($mNodePos,dim,$dir,nn,v) [expr $H/2.+$lvJ]
+						set jntData($mNodePos,dim,$dir,pn,h) [expr $lhJ]
+						set jntData($mNodePos,dim,$dir,pn,v) [expr $H/2.+$lvJ]
 					}
 					# n
 					if {$conf == "\\/" || $conf == "|"} {
-						updateVar -sum jntData($nNodePos,dim,$dir,np,h) [expr $lhI]
-						updateVar -sum jntData($nNodePos,dim,$dir,np,v) $lvI
-						updateVar -sum jntData($nNodePos,dim,$dir,pp,h) [expr $lhI]
-						updateVar -sum jntData($nNodePos,dim,$dir,pp,v) $lvI
+						set jntData($nNodePos,dim,$dir,np,h) [expr $lhI]
+						set jntData($nNodePos,dim,$dir,np,v) [expr $H/2. + $lvI]
+						set jntData($nNodePos,dim,$dir,pp,h) [expr $lhI]
+						set jntData($nNodePos,dim,$dir,pp,v) [expr $H/2. + $lvI]
 					}
 
 					# #brace internal joints

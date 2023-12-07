@@ -39,7 +39,7 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 				set p $columnGravLoad($j,$k,$i)
 				set eleType $inputs(columnType)
 				set integStr $inputs(clmnInteg)
-				addFiberBeamColumn $eleType $elePos $eleCode $iNodePos $jNodePos 1 rho $p $integStr $inputs(clmnGeomtransfType) $zAxis 0
+				addFiberMember $eleType $elePos $eleCode $iNodePos $jNodePos 1 rho $p $integStr $inputs(clmnGeomtransfType) $zAxis 0
 			}
 			set eleData(unitSelfWeight,$eleCode,$elePos) $rho
 			set eleData(length,$eleCode,$elePos) $h

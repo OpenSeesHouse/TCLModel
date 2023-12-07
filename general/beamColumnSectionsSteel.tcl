@@ -88,7 +88,7 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 						set ID [manageFEData -newSection beam,$sec]
 						if {$Shape == "SteelTube"} {
 							# section Elastic $secTag $E $A $I33 <$I22 $G $J>
-							Box-section $matTag $ID $t3 $t2 $tf $tw [expr $G*$J]
+							Box-section $matTag $ID $t3 $t2 $tf $tw $inputs(numSubdivL) $inputs(numSubdivT) [expr $G*$J]
 						} elseif {$Shape == "I"} {
 							I-section $ID $matTag $t3 $t2 $tf $tw $inputs(numSubdivL) $inputs(numSubdivT) $inputs(numSubdivL) $inputs(numSubdivT) [expr $G*$J]
 						} else {

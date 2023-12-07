@@ -1,4 +1,4 @@
-proc addFiberBeamColumn {eleType elePos eleCode iNode jNode nDesStats rhoName p integStr transType zAxis release} {
+proc addFiberMember {eleType elePos eleCode iNode jNode nDesStats rhoName p integStr transType zAxis release} {
 	global inputs
 	global jntData
 	global eleData
@@ -9,6 +9,7 @@ proc addFiberBeamColumn {eleType elePos eleCode iNode jNode nDesStats rhoName p 
 	set mNodes [manageFEData -getEleAlignedJntPos $eleCode $elePos]
 	if {$bcType != "Column"} {
 		set dir [string index $bcType 0]
+		set bcType [string range $bcType 2 end]
 	} else {
 		set dir Z
 	}
@@ -49,7 +50,7 @@ proc addFiberBeamColumn {eleType elePos eleCode iNode jNode nDesStats rhoName p 
 			} else {
 				set secTag [manageFEData -getSection clmn,$sec]
 			}
-		} else {
+		} elseif {$bcType == "Beam"} {
 			if ![info exists eleData(section,$eleCode,$elePos,$iStat)] {
 				continue
 			}
@@ -59,6 +60,9 @@ proc addFiberBeamColumn {eleType elePos eleCode iNode jNode nDesStats rhoName p 
 				set str $sec-$j
 			}
 			set secTag [manageFEData -getSection beam,$str]
+		} else {
+			set sec $eleData(section,$eleCode,$elePos)
+			set secTag [manageFEData -getSection brace,$elePos]
 		}
 		source $inputs(secFolder)/$sec.tcl
 		source $inputs(secFolder)/convertToM.tcl
@@ -81,13 +85,14 @@ proc addFiberBeamColumn {eleType elePos eleCode iNode jNode nDesStats rhoName p 
 	set offsVecj(Z) 0
 	set eleTags ""
 	set sumD 0
+	set iOfs 0
 	set i 0
 	if {$bcType == "Column"} {
 		set iOfs [expr ($jntData($iNode,dim,X,pp,v) + \
 			$jntData($iNode,dim,X,np,v) +	\
 			$jntData($iNode,dim,Y,pp,v) + \
 			$jntData($iNode,dim,Y,np,v))*0.25*$inputs(rigidZoneFac)]
-	} else {
+	} elseif {$bcType == "Beam"} {
 		set iOfs [expr 0.5*($jntData($iNode,dim,$dir,pp,h) + $jntData($iNode,dim,$dir,pn,h))*$inputs(rigidZoneFac)]
 	}
 	foreach mNode $mNodes d $ds {
@@ -110,13 +115,12 @@ proc addFiberBeamColumn {eleType elePos eleCode iNode jNode nDesStats rhoName p 
 		}
 		set mOfs 0
 		if [manageGeomData -jntExists $mNode] {
-			
 			if {$bcType == "Column"} {
 				set mOfs [expr -($jntData($mNode,dim,X,pn,v) + \
 					$jntData($mNode,dim,X,nn,v) +	\
 					$jntData($mNode,dim,Y,pn,v) + \
 					$jntData($mNode,dim,Y,nn,v))*0.25*$inputs(rigidZoneFac)]
-			} else {
+			} elseif {$bcType == "Beam"} {
 				set mOfs [expr -0.5*($jntData($mNode,dim,$dir,np,h) + $jntData($mNode,dim,$dir,nn,h))*$inputs(rigidZoneFac)]
 			}
 		}
@@ -142,7 +146,7 @@ proc addFiberBeamColumn {eleType elePos eleCode iNode jNode nDesStats rhoName p 
 					$jntData($mNode,dim,X,np,v) +	\
 					$jntData($mNode,dim,Y,pp,v) + \
 					$jntData($mNode,dim,Y,np,v))*0.25*$inputs(rigidZoneFac)]
-			} else {
+			} elseif {$bcType == "Beam"} {
 				set iOfs [expr 0.5*($jntData($mNode,dim,$dir,pp,h) + $jntData($mNode,dim,$dir,pn,h))*$inputs(rigidZoneFac)]
 			}
 		}

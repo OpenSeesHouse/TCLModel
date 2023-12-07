@@ -88,7 +88,6 @@ proc manageGeomData {args} {
 			foreach otherVert $otherJntVrts($vrt,$com) {
 				set otherName $pos,dim,$d,$otherVert,$com
 				if [info exists jntData($otherName)] {
-					# puts "jntData($pos,dim,$dir,$vrt,$com) = jntData($otherName)"
 					return $jntData($otherName)
 				}
 			}
@@ -153,7 +152,7 @@ proc manageGeomData {args} {
 	}
 	if {$arg0 == "-setBraceLength"} {
 		set whr [lindex $args 1]
-		set code $eleCodeMap([lindex $args 2])
+		set code [lindex $args 2]
 		set pos [lindex $args 3]
 		set val [lindex $args 4]
 		set eleData($code,$pos,Length,$whr) $val
@@ -161,10 +160,9 @@ proc manageGeomData {args} {
 	}
 	if {$arg0 == "-getBraceLength"} {
 		set whr [lindex $args 1]
-		set code $eleCodeMap([lindex $args 2])
+		set code [lindex $args 2]
 		set pos [lindex $args 3]
-		set val [lindex $args 4]
-		return $eleData($code,$pos,Length,$whr) $val
+		return $eleData($code,$pos,Length,$whr)
 	}
 
 }

@@ -16,9 +16,10 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 				if [info exists xBraceLabels] {
 					set lab [lindex $xBraceLabels [expr ($kk-1)*$inputs(nBaysX) + $i - 1]]
 					if {$lab == "-"} {
-						set eleData(section,$code,$pos) "-"
+						set eleData(section,$code,$pos,L) "-"
 					} else {
-						set eleData(section,$code,$pos)  $braceSec($lab,$j)
+						set eleData(section,$code,$pos,L)  $braceSec($lab,$j)
+						set eleData(section,$code,$pos,R)  $braceSec($lab,$j)
 						set eleData(config,$code,$pos)  $braceConfig($lab,$j)
 						set eleData(gussetDimI_lh,$code,$pos)  $gussetDimI($lab,lh,$j)
 						set eleData(gussetDimI_lv,$code,$pos)  $gussetDimI($lab,lv,$j)
@@ -31,7 +32,7 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 						set inputs(hasBrace) 1
 					}
 				} else {
-					set eleData(section,$code,$pos) "-"
+					set eleData(section,$code,$pos,L) "-"
 				}
 				set code [eleCodeMap "X-Beam"]
 				if [info exists beamLoadListX] {
@@ -63,9 +64,10 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 				if [info exists yBraceLabels] {
 					set lab [lindex $yBraceLabels [expr ($i-1)*$inputs(nBaysY) + $k - 1]]
 					if {$lab == "-"} {
-						set eleData(section,$code,$pos) "-"
+						set eleData(section,$code,$pos,L) "-"
 					} else {
-						set eleData(section,$code,$pos)  $braceSec($lab,$j)
+						set eleData(section,$code,$pos,L)  $braceSec($lab,$j)
+						set eleData(section,$code,$pos,R)  $braceSec($lab,$j)
 						set eleData(config,$code,$pos)  $braceConfig($lab,$j)
 						set eleData(gussetDimI_lh,$code,$pos)  $gussetDimI($lab,lh,$j)
 						set eleData(gussetDimI_lv,$code,$pos)  $gussetDimI($lab,lv,$j)
@@ -78,7 +80,7 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 						set inputs(hasBrace) 1
 					}
 				} else {
-					set eleData(section,$code,$pos) "-"
+					set eleData(section,$code,$pos,L) "-"
 				}
 				set code [eleCodeMap "Y-Beam"]
 				if [info exists beamLoadListY] {

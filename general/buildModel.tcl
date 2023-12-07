@@ -19,6 +19,7 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 	}
 	if {$found} break
 }
+manageFEData -initiate
 
 if {$inputs(matType) == "Concrete"} {
 	source $inputs(generalFolder)/beamColumnSectionsRC.tcl
@@ -29,7 +30,6 @@ if {$inputs(matType) == "Concrete"} {
 # 	set zAxis(wallTransfX)	"0 1 0"
 # 	set zAxis(wallTransfY)	"-1 0 0"
 # }
-manageFEData -initiate
 source $inputs(generalFolder)/computeJntData.tcl
 source $inputs(generalFolder)/defineNodes.tcl
 source $inputs(generalFolder)/defineBaseSupports.tcl

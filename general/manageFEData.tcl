@@ -7,7 +7,7 @@ proc manageFEData {act args} {
 	global lastNodeTag
 	global lastEleTag
 	global lastTransfTag
-	global lastMatTag
+	global lastMaterialTag
 	global lastSecTag
 	global eleAlignedPos
 	global nodeCrds
@@ -15,7 +15,7 @@ proc manageFEData {act args} {
 		set lastNodeTag 0
 		set lastEleTag 0
 		set lastTransfTag 0
-		set lastMatTag 0
+		set lastMaterialTag 0
 		set lastSecTag 0
 		if [info exists nodeTagMap] {
 			unset nodeTagMap
@@ -86,8 +86,8 @@ proc manageFEData {act args} {
 		if [info exists matTagMap($args)] {
 			error "material with tag: $args already defined in map"
 		}
-		set matTagMap($args) [incr lastMatTag]
-		return $lastMatTag
+		set matTagMap($args) [incr lastMaterialTag]
+		return $lastMaterialTag
 	}
 	if {$act == "-setMaterial"} {
 		foreach "pos val" $args {}
@@ -158,7 +158,7 @@ proc manageFEData {act args} {
 		if [info exists nodeCrds($pos,x)] {
 			return "$nodeCrds($pos,x) $nodeCrds($pos,y) $nodeCrds($pos,z)"
 		}
-		error ("nodeCrds not found for pos: $pos")
+		error "nodeCrds not found for pos: $pos"
 	}
 	error "unknown act: $act in manageFEData"
 }

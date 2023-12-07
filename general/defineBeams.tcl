@@ -45,7 +45,7 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 					set p 0
 					set eleType $inputs(beamType)
 					set integStr $inputs(beamInteg)
-					set eleTags [addFiberBeamColumn $eleType $pos $eleCode $iNodePos $jNodePos $inputs(numDesnStats) rho $p $integStr Linear $zAxis $release]
+					set eleTags [addFiberMember $eleType $pos $eleCode $iNodePos $jNodePos $inputs(numDesnStats) rho $p $integStr Linear $zAxis $release]
 				}
 				#TODO use eleTags list for defining internal element resp. recorders
 				set eleData(unitSelfWeight,$eleCode,$pos) $rho

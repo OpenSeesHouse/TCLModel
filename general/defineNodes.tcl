@@ -163,18 +163,17 @@ for {set j 0} {$j <= $inputs(nFlrs)} {incr j} {
 					set z [expr $z+$dz]
 					addNode $pos $x $y $z $eleCode $elePos
 				}
-			} elseif {$loc == "RX || $loc == RY"} {
+			} elseif {$loc == "RX" || $loc == "RY"} {
 				if {$j == 0} {
 					continue
 				}
 				set elePos "$j,$k,$i"
 				set dir [string index $loc 1]
-				puts "loc= $loc, dir= $dir"
 				if {($dir == "X" && $i > $inputs(nBaysX)) || ($dir == "Y" && $k > $inputs(nBaysY))} {
 					continue
 				}
 				set eleCode [eleCodeMap $dir-Brace]
-				if {$eleData(section,$eleCode,$elePos) == "-"} {
+				if {$eleData(section,$eleCode,$elePos,L) == "-"} {
 					continue
 				}
 				set i1 $i
@@ -236,35 +235,34 @@ for {set j 0} {$j <= $inputs(nFlrs)} {incr j} {
 					}
 					foreach "xi yi zi" [manageFEData -getNodeCrds $iNode] {}
 					foreach "xj yj zj" [manageFEData -getNodeCrds $jNode] {}
-					# puts "xi yi zi = $xi $yi $zi"
-					# puts "xi yi zi = $xj $yj $zj"
 					set l 0
 					foreach d "dx dy dz" d1 "xi yi zi" d2 "xj yj zj" {
 						set $d [expr [set $d2] - [set $d1]]
 						set l [expr $l + [set $d]**2.]
 					}
+					set l [expr $l**0.5]
 					#cosine (unit) vector:
 					foreach d "dx dy dz" {
 						set $d [expr [set $d]/$l]
 					}
 					#chord length
-					set l [expr $l**0.5-$dgi-$dgj]
-					[manageGeomData -setBraceLength $mem $eleCode $elePos $l]
+					set l [expr $l-$dgi-$dgj]
+					manageGeomData -setBraceLength $mem $eleCode $elePos $l
 					#gusset nodes
 					foreach d "xi yi zi" dd "dx dy dz" {
 						set $d [expr [set $d]+[set $dd]*$dgi]
 					}
 					set pos $eleCode,$elePos,$mem,g1
-					addNode $pos $x $y $z
+					addNode $pos $xi $yi $zi
 					set pos $eleCode,$elePos,$mem,g2
-					addNode $pos $x $y $z
+					addNode $pos $xi $yi $zi
 					foreach d "xj yj zj" dd "dx dy dz" {
 						set $d [expr [set $d]-[set $dd]*$dgj]
 					}
 					set pos $eleCode,$elePos,$mem,g3
-					addNode $pos $x $y $z
+					addNode $pos $xj $yj $zj
 					set pos $eleCode,$elePos,$mem,g4
-					addNode $pos $x $y $z
+					addNode $pos $xj $yj $zj
 
 					#imperfect sinusoidal meshing
 					if {$inputs(numDims) == 2} {
@@ -284,7 +282,7 @@ for {set j 0} {$j <= $inputs(nFlrs)} {incr j} {
 						set x [expr $xi+$xl*$dx+$yl*$dnx]
 						set y [expr $yi+$xl*$dy+$yl*$dny]
 						set z [expr $zi+$xl*$dz+$yl*$dnz]
-						addNode $pos $x $y $z $eleCode,$elePos,$mem
+						addNode $pos $x $y $z $eleCode $elePos,$mem
 					}
 				}
 			}
