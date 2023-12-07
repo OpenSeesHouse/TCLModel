@@ -1,4 +1,4 @@
-proc addFiberBeam {eleType elePos eleCode iNode jNode nDesStats rhoName p integStr transType zAxis release} {
+proc addFiberBeamColumn {eleType elePos eleCode iNode jNode nDesStats rhoName p integStr transType zAxis release} {
 	global inputs
 	global jntData
 	global eleData
@@ -39,15 +39,15 @@ proc addFiberBeam {eleType elePos eleCode iNode jNode nDesStats rhoName p integS
 		if {$bcType == "Column"} {
 			set sec $eleData(section,$eleCode,$elePos)
 			set str $sec
-			if {[info exists FRPAttach] && $FRPAttach($j,clmn) != ""} {
-				set str $sec-$j
-			}
 			if {$inputs(matType) == "Concrete"} {
+				if {[info exists FRPAttach] && $FRPAttach($j,clmn) != ""} {
+					set str $sec-$j
+				}
 				set loc1 [expr $iStat-1]
 				set shFac [lindex $clmnShearReinfSFacs $loc1]
-				set secTag $secIDClmns($str,$shFac)
+				set secTag [manageFEData -getSection clmn,$str,$shFac)
 			} else {
-				set secTag $secIDClmns($sec)
+				set secTag [manageFEData -getSection clmn,$sec]
 			}
 		} else {
 			if ![info exists eleData(section,$eleCode,$elePos,$iStat)] {
@@ -58,7 +58,7 @@ proc addFiberBeam {eleType elePos eleCode iNode jNode nDesStats rhoName p integS
 			if [info exists FRPAttach] {
 				set str $sec-$j
 			}
-			set secTag $secIDBeams($str)
+			set secTag [manageFEData -getSection beam,$str]
 		}
 		source $inputs(secFolder)/$sec.tcl
 		source $inputs(secFolder)/convertToM.tcl

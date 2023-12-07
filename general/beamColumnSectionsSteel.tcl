@@ -6,12 +6,12 @@ source $inputs(generalFolder)/computeHingeRBS.tcl
 source $inputs(generalFolder)/computeHingeWBeam.tcl
 source $inputs(generalFolder)/computeHingeWColumn.tcl
 
-set inputs(elasticMatTag) 1
+set tag [manageFEData -newMaterial elastic]
 set E $inputs(Es)
 set G [expr $E/2.6]
-uniaxialMaterial Elastic 1 $inputs(Es)
+uniaxialMaterial Elastic $tag $inputs(Es)
 
-set inputs(rigidMatTag) 2
+set tag [manageFEData -newMaterial rigid]
 source "$inputs(secFolder)/$typSec.tcl"
 source "$inputs(secFolder)/convertToM.tcl"
 set inputs(typA) $Area
@@ -19,21 +19,21 @@ set inputs(typIz) $I33
 set inputs(typIy) $I22
 set inputs(typJ) $J
 
-uniaxialMaterial Elastic $inputs(rigidMatTag) [expr 100*$inputs(typA)*$inputs(Es)/$inputs(hStory)]
+uniaxialMaterial Elastic $tag [expr 100*$inputs(typA)*$inputs(Es)/$inputs(hStory)]
 
 if {$inputs(beamType) != "Hinge"} {
-	set beamsMatTag 3
-	uniaxialMaterial Steel01 3 $inputs(fyBeam) $E 0.01
+	set tag [manageFEData -newMaterial fiberBeams]
+	uniaxialMaterial Steel02 $tag $inputs(fyBeam) $E 0.01
 	# uniaxialMaterial Elastic 1 $E
 }
 
 if {$inputs(columnType) != "Hinge"} {
-	set clmnsMatTag 4
-	uniaxialMaterial Steel01 4 $inputs(fyClmn) $E 0.01
+	set tag [manageFEData -newMaterial fiberClmns]
+	uniaxialMaterial Steel02 $tag $inputs(fyClmn) $E 0.01
 	# uniaxialMaterial Elastic 2 $E
 }
 
-set matTag $beamsMatTag
+set matTag [manageFEData -getMaterial fiberBeams]
 set cUnitsToKsi [expr $inputs(cUnitsToN)/($inputs(cUnitsToM)**2.)*1.45038e-7]
 set cUnitToIn [expr $inputs(cUnitsToM)/0.0254]
 set N 0.
@@ -63,7 +63,7 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 				# puts $beamPropFile "$sec $dir $tetay $tetau $my"
 				if {$inputs(beamType) == "Hinge"} {
 					logCommands -comment "#section: $sec j,k,i,dir: $j,$k,$i,$dir\n"
-					set secIDBeams($j,$k,$i,$dir) [incr ID]
+					set ID [manageFEData -newMaterial beamHinge,$j,$k,$i,$dir]
 					if {$inputs(hingeType) == "Lignos"} {
 						if {$Shape == "SteelTube"} {
 							computeHingeHSS $ID $t3 $tf $t2 $tw $Z33 $I33 $Ls $N $Area $fy $cUnitsToKsi $inputs(MyFac)
@@ -85,7 +85,7 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 					if {[lsearch $beamList $sec] == -1} {
 						logCommands -comment "#section: $sec\n"
 						lappend beamList $sec
-						set secIDBeams($sec) [incr ID]
+						set ID [manageFEData -newSection beam,$sec]
 						if {$Shape == "SteelTube"} {
 							# section Elastic $secTag $E $A $I33 <$I22 $G $J>
 							Box-section $matTag $ID $t3 $t2 $tf $tw [expr $G*$J]
@@ -106,6 +106,7 @@ set clmnSecList ""
 logCommands -comment "#~~~~ column sections/Panel zone spring material ~~~~\n"
 set fy $inputs(fyClmn)
 set code [eleCodeMap Column]
+set matTag [manageFEData -getMaterial fiberClmns]
 set cnt 0
 for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 	set L [expr $Z($j)-$Z([expr $j-1])]
@@ -121,8 +122,7 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 			source "$inputs(secFolder)/convertToM.tcl"					
 			if {$inputs(columnType) == "Hinge"} {
 				logCommands -comment "#section: $sec j,k,i: $j,$k,$i\n"
-				set secIDClmns($j,$k,$i,3) [incr ID]
-				set secIDClmns($j,$k,$i,2) [expr $ID*1000]
+				set ID3 [manageFEData -newMaterial clmnHinge,$j,$k,$i,3]
 				set N 0
 				if [info exists initAxiForce] {
 					set N $initAxiForce($cnt)
@@ -131,23 +131,25 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 				}
 				if {$inputs(hingeType) == "Lignos"} {
 					if {$Shape == "SteelTube"} {
-						computeHingeHSS $ID t3 $tf $t2 $tw $Z33 $I33 $Ls $N $Area $fy $cUnitsToKsi $inputs(MyFac)
+						computeHingeHSS $ID3 t3 $tf $t2 $tw $Z33 $I33 $Ls $N $Area $fy $cUnitsToKsi $inputs(MyFac)
 						# uniaxialMaterial Elastic $ID [expr ($inputs(nFactor)+1)*$ke]
-						set secIDClmns($j,$k,$i,2) $ID
+						manageFEData -setMaterial clmnHinge,$j,$k,$i,2 $ID3
 					} elseif {$Shape == "I"} {
-						computeHingeWColumn $ID 			$t3 $tw $t2 $tf $I33 $Z33 $Ls $inputs(lbToRy) $inputs(Es) $fy $inputs(clmnRy) $inputs(nFactor) $inputs(MyFac) $cUnitsToKsi $inputs(isColumnA992Gr50) $Area $N
-						computeHingeWColumn [expr $ID*1000] $t3 $tw $t2 $tf $I22 $Z22 $Ls $inputs(lbToRy) $inputs(Es) $fy $inputs(clmnRy) $inputs(nFactor) $inputs(MyFac) $cUnitsToKsi $inputs(isColumnA992Gr50) $Area $N
+						set ID2 [manageFEData -newMaterial clmnHinge,$j,$k,$i,2]
+						computeHingeWColumn $ID3 $t3 $tw $t2 $tf $I33 $Z33 $Ls $inputs(lbToRy) $inputs(Es) $fy $inputs(clmnRy) $inputs(nFactor) $inputs(MyFac) $cUnitsToKsi $inputs(isColumnA992Gr50) $Area $N
+						computeHingeWColumn $ID2 $t3 $tw $t2 $tf $I22 $Z22 $Ls $inputs(lbToRy) $inputs(Es) $fy $inputs(clmnRy) $inputs(nFactor) $inputs(MyFac) $cUnitsToKsi $inputs(isColumnA992Gr50) $Area $N
 					}
 				} else {
 					source $inputs(generalFolder)/computeHingeASCEStrong.tcl
 					set tetau [expr $tetay+$tetap+$tetapc]
-					uniaxialMaterial Bilin $ID $ke $alfah $alfah $my -$my $Lamda 0\
+					uniaxialMaterial Bilin $ID3 $ke $alfah $alfah $my -$my $Lamda 0\
 						0 0 1 0 0 0 $tetap $tetap $tetapc $tetapc 0 0 $tetau $tetau 1 1 $inputs(nFactor)
 					# uniaxialMaterial Elastic $ID [expr ($inputs(nFactor)+1)*$ke]
 						
+					set ID2 [manageFEData -newMaterial clmnHinge,$j,$k,$i,2]
 					source $inputs(generalFolder)/computeHingeASCEWeak.tcl
 					set tetau [expr $tetay+$tetap+$tetapc]
-					uniaxialMaterial Bilin [expr $ID*1000] $ke $alfah $alfah $my -$my $Lamda 0\
+					uniaxialMaterial Bilin $ID2 $ke $alfah $alfah $my -$my $Lamda 0\
 						0 0 1 0 0 0 $tetap $tetap $tetapc $tetapc 0 0 $tetau $tetau 1 1 $inputs(nFactor)
 					# uniaxialMaterial Elastic [expr $ID*1000] [expr ($inputs(nFactor)+1)*$ke]
 				}
@@ -156,7 +158,7 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 				if {[lsearch $clmnSecList $sec] == -1} {
 					logCommands -comment "#section: $sec\n"
 					lappend clmnSecList $sec
-					set secIDClmns($sec) [incr ID]			
+					set ID [manageFEData -newSection clmn,$sec]
 					if {$Shape == "SteelTube"} {
 						Box-section $matTag $ID $t3 $t2 $tf $tw [expr $G*$J]
 					} elseif {$Shape == "I"} {
@@ -169,7 +171,7 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 
 			#panel zone springs for X and Y directions
 			if {$inputs(usePZSpring) == 0} continue
-			error ("this part of code needs revision")
+	error ("this part of code needs revision")
 			logCommands -comment "#panel zone material:\n"
 			set dc $t3
 			#Strong dir.:

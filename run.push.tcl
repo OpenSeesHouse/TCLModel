@@ -12,8 +12,8 @@ set inputs(numPushSteps) 100
 #read models list 
 # set models(1) SMF2d-4-hinge
 # set models(1) SMF2d-4-fiber
-# set models(1) MC-4
-set models(1) MC-4-fiber
+set models(1) MC-4
+# set models(1) MC-4-fiber
 # set models(1) CBF2D-4
 set checkResultAvailable 0
 foreach iModel "1" {

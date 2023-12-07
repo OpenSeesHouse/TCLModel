@@ -21,9 +21,9 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 }
 
 if {$inputs(matType) == "Concrete"} {
-	source $inputs(generalFolder)/memberSectionsRC.tcl
+	source $inputs(generalFolder)/beamColumnSectionsRC.tcl
 } else {
-	source $inputs(generalFolder)/memberSectionsSteel.tcl
+	source $inputs(generalFolder)/beamColumnSectionsSteel.tcl
 }
 # if {$inputs(numDims) == 3} {
 # 	set zAxis(wallTransfX)	"0 1 0"

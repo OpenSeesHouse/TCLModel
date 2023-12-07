@@ -13,7 +13,7 @@ source $inputs(generalFolder)/addGeomTransf.tcl
 source $inputs(generalFolder)/releaseFromChar.tcl
 source $inputs(generalFolder)/addHingeBeam.tcl
 source $inputs(generalFolder)/addHingeColumn.tcl
-source $inputs(generalFolder)/addFiberBeam.tcl
+source $inputs(generalFolder)/addFiberBeamColumn.tcl
 if ![info exists inputs(modelFolder)] {
     set inputs(modelFolder) ""
 }

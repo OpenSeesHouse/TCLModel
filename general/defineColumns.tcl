@@ -15,7 +15,6 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 			set j1 [expr $j-1]
 			set iNodePos $j1,$k,$i,1
 			set jNodePos $j,$k,$i,1
-			set transfTag [manageFEData -newGeomtransf "$eleCode,$elePos"]
 			set angle $eleData(angle,$eleCode,$j,$k,$i)
 			set zAxis ""
 			if {$inputs(numDims) == 3} {
@@ -32,15 +31,15 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 						set kRat $inputs(clmnCrackOverwrite)
 					}
 				}
-				set matId2 $secIDClmns($j,$k,$i,2)
-				set matId3 $secIDClmns($j,$k,$i,3)
+				set matId2 [manageFEData -getMaterial clmnHinge,$j,$k,$i,2]
+				set matId3 [manageFEData -getMaterial clmnHinge,$j,$k,$i,3]
 				addHingeColumn $elePos $eleCode $iNodePos $jNodePos $sec $angle $matId2 $matId3 $kRat rho $zAxis
 			} else {
 				set integType [lindex $inputs(clmnInteg) 0]
 				set p $columnGravLoad($j,$k,$i)
 				set eleType $inputs(columnType)
 				set integStr $inputs(clmnInteg)
-				addFiberBeam $eleType $elePos $eleCode $iNodePos $jNodePos 1 rho $p $integStr $inputs(clmnGeomtransfType) $zAxis 0
+				addFiberBeamColumn $eleType $elePos $eleCode $iNodePos $jNodePos 1 rho $p $integStr $inputs(clmnGeomtransfType) $zAxis 0
 			}
 			set eleData(unitSelfWeight,$eleCode,$elePos) $rho
 			set eleData(length,$eleCode,$elePos) $h

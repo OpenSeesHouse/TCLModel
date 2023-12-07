@@ -2,19 +2,27 @@ proc manageFEData {act args} {
 	global nodeTagMap
 	global eleTagMap
 	global transfTagMap
+	global matTagMap
+	global secTagMap
 	global lastNodeTag
 	global lastEleTag
 	global lastTransfTag
+	global lastMatTag
+	global lastSecTag
 	global eleAlignedPos
 	global nodeCrds
 	if {$act == "-initiate"} {
 		set lastNodeTag 0
 		set lastEleTag 0
 		set lastTransfTag 0
+		set lastMatTag 0
+		set lastSecTag 0
 		if [info exists nodeTagMap] {
 			unset nodeTagMap
 			unset eleTagMap
 			unset transfTagMap
+			unset matTagMap
+			unset secTagMap
 			unset eleAlignedPos
 			unset nodeCrds
 		}
@@ -71,6 +79,40 @@ proc manageFEData {act args} {
 	if {$act == "-getGeomtransf"} {
 		if [info exists transfTagMap($args)] {
 			return $transfTagMap($args)
+		}
+		return 0
+	}
+	if {$act == "-newMaterial"} {
+		if [info exists matTagMap($args)] {
+			error "material with tag: $args already defined in map"
+		}
+		set matTagMap($args) [incr lastMatTag]
+		return $lastMatTag
+	}
+	if {$act == "-setMaterial"} {
+		foreach "pos val" $args {}
+		if [info exists matTagMap($pos)] {
+			error "material with tag: $pos already defined in map"
+		}
+		set matTagMap($pos) $val
+		return
+	}
+	if {$act == "-getMaterial"} {
+		if [info exists matTagMap($args)] {
+			return $matTagMap($args)
+		}
+		return 0
+	}
+	if {$act == "-newSection"} {
+		if [info exists secTagMap($args)] {
+			error "section with tag: $args already defined in map"
+		}
+		set secTagMap($args) [incr lastSecTag]
+		return $lastSecTag
+	}
+	if {$act == "-getSection"} {
+		if [info exists secTagMap($args)] {
+			return $secTagMap($args)
 		}
 		return 0
 	}

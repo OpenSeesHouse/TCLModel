@@ -32,7 +32,7 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 				}
 				set zAxis $inputs(def[set dir]BeamZAxis)
 				if {$inputs(beamType) == "Hinge"} {
-					set id $secIDBeams($j,$k,$i,$dir)
+					set id [manageFEData -getMaterial beamHinge,$j,$k,$i,$dir]
 					set kRat 1
 					if {$inputs(matType) == "Concrete"} {
 						set kRat $kRatBeams($j,$k,$i,$dir)
@@ -45,7 +45,7 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 					set p 0
 					set eleType $inputs(beamType)
 					set integStr $inputs(beamInteg)
-					set eleTags [addFiberBeam $eleType $pos $eleCode $iNodePos $jNodePos $inputs(numDesnStats) rho $p $integStr Linear $zAxis $release]
+					set eleTags [addFiberBeamColumn $eleType $pos $eleCode $iNodePos $jNodePos $inputs(numDesnStats) rho $p $integStr Linear $zAxis $release]
 				}
 				#TODO use eleTags list for defining internal element resp. recorders
 				set eleData(unitSelfWeight,$eleCode,$pos) $rho

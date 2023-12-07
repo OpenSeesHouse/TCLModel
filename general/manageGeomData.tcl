@@ -8,7 +8,6 @@ proc manageGeomData {args} {
 	global Y
 	global Z
 	global storyJnts
-
 	set memVarNames "jntData _allJntPos eleData X Y Z storyJnts"
 	if ![info exists otherJntVrts(pp,n)] {
 		set otherJntVrts(pp,h) "pn np"
@@ -151,6 +150,21 @@ proc manageGeomData {args} {
 		set val [lindex $args 4]
 		set eleData($code,$pos,GussDim,$whr) $val
 		return
+	}
+	if {$arg0 == "-setBraceLength"} {
+		set whr [lindex $args 1]
+		set code $eleCodeMap([lindex $args 2])
+		set pos [lindex $args 3]
+		set val [lindex $args 4]
+		set eleData($code,$pos,Length,$whr) $val
+		return
+	}
+	if {$arg0 == "-getBraceLength"} {
+		set whr [lindex $args 1]
+		set code $eleCodeMap([lindex $args 2])
+		set pos [lindex $args 3]
+		set val [lindex $args 4]
+		return $eleData($code,$pos,Length,$whr) $val
 	}
 
 }

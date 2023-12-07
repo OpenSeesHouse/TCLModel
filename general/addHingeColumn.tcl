@@ -1,8 +1,8 @@
-proc addHingeColumn {elePos eleCode iNode jNode sec angle matId2 matId3 kRat rhoName} {
+proc addHingeColumn {elePos eleCode iNode jNode sec angle matId2 matId3 kRat rhoName zAxis} {
     global inputs
     global jntData
     upvar $rhoName rho
-    set rigidMatTag $inputs(rigidMatTag)
+    set rigidMatTag [manageFEData -getMaterial rigid]
     foreach "j k i" [split $elePos ,] {}
 	source $inputs(secFolder)/$sec.tcl
 	source $inputs(secFolder)/convertToM.tcl
@@ -24,10 +24,10 @@ proc addHingeColumn {elePos eleCode iNode jNode sec angle matId2 matId3 kRat rho
     set I33 [expr $kRat*$I33*($inputs(nFactor)+1)/$inputs(nFactor)]
     set I22 [expr $kRat*$I22*($inputs(nFactor)+1)/$inputs(nFactor)]
     set iiNode "$eleCode,$elePos,1"
-    addNode $iiNode [manageFEData -getNodeCrds $iNode]
+    eval "addNode $iiNode [manageFEData -getNodeCrds $iNode]"
     set tag1 "$eleCode,$elePos,h1"
     set jjNode "$eleCode,$elePos,2"
-    addNode $jjNode [manageFEData -getNodeCrds $jNode]
+    eval "addNode $jjNode [manageFEData -getNodeCrds $jNode]"
     set tag2 "$eleCode,$elePos,h2"
     if {$inputs(numDims) == 3} {
         set xV "0 0 1"
@@ -41,7 +41,7 @@ proc addHingeColumn {elePos eleCode iNode jNode sec angle matId2 matId3 kRat rho
             -dir 5 6 1 2 3 4 -orient $xV $yV"]
         set id [addElement elasticBeamColumn $eleTag $iiNode $jjNode "$Area $inputs(E) $inputs(G) $J $I22 $I33 $transfTag -mass $rho"]
         set id2 [addElement zeroLength $tag2 $jjNode $jNode \
-            "-mat $matId2 $matId3 $rigidMatTag $rigidMatTag $rigidMatTag $rigidMatTag
+            "-mat $matId2 $matId3 $rigidMatTag $rigidMatTag $rigidMatTag $rigidMatTag \
             -dir 5 6 1 2 3 4 -orient $xV $yV"]
     } else {
         if {$angle < 1e-3} {

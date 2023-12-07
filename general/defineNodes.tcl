@@ -16,6 +16,7 @@ if [info exists inputs(numSegBeam)] {
 	set lSegBeam $inputs(lSegBeam)
 } else {
 	set nBeamSeg 1
+	set lSegBeam 0
 }
 if [info exists inputs(numSegClmn)] {
 	set nClmnSeg $inputs(numSegClmn)
@@ -25,6 +26,7 @@ if [info exists inputs(numSegClmn)] {
 	set lSegClmn $inputs(lSegClmn)
 } else {
 	set nClmnSeg 1
+	set lSegClmn 0
 }
 set masterNodeList ""
 set allkiList ""
@@ -247,7 +249,7 @@ for {set j 0} {$j <= $inputs(nFlrs)} {incr j} {
 					}
 					#chord length
 					set l [expr $l**0.5-$dgi-$dgj]
-
+					[manageGeomData -setBraceLength $mem $eleCode $elePos $l]
 					#gusset nodes
 					foreach d "xi yi zi" dd "dx dy dz" {
 						set $d [expr [set $d]+[set $dd]*$dgi]
