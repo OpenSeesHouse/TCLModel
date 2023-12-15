@@ -17,37 +17,39 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 	set sumWi [expr $sumWi + $mass*$g]
 	set massArr($j) $mass
 }
-# puts "sumWi= $sumWi"
+puts "pushover sumWi= $sumWi"
 pattern Plain 2 Linear {
 	for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 		set mass $massArr($j)
 		set wi [expr $mass*$g]
 		set fi [expr $sumWi*$wi*$Z($j)**$inputs(kPush)/$sumWiHi]
 		if {$inputs(numDims) == 3} {
-			set nodeTag $masterNode($j)
+			set nodeTag  [manageFEData -getNode $masterNode($j)]
 			if {$inputs(pushDir) == "X"} {
 				load $nodeTag $fi 0. 0. 0. 0. 0.
 			} else {
 				load $nodeTag 0. $fi 0. 0. 0. 0.
 			}
 		} else {
-			set numCntrNodes [llength $cntrNodes($j)]
-			set fi [expr $fi/$numCntrNodes]
-			foreach nodeTag $cntrNodes($j) {
+			set numSlaveNodeList [llength $slaveNodeList($j)]
+			set fi [expr $fi/$numSlaveNodeList]
+			foreach pos $slaveNodeList($j) {
+				set nodeTag  [manageFEData -getNode $pos]
 				load $nodeTag $fi 0. 0.
 			}
 
 		}
 	}
 }
-if {$inputs(pushDir) == "X"} {
+if {$inputs(numDims) == 2 || $inputs(pushDir) == "X"} {
 	set cntrlDof 1
 } else {
 	set cntrlDof 2
 }
+set roofNodeTag [manageFEData -getNode $roofNode]
 set LBuilding $Z($inputs(nFlrs))
 set incr [expr 0.05*$LBuilding/$inputs(numPushSteps)]
-set tol 1.e-3
-set algoList "{NewtonLineSearch 0.65} Newton ModifiedNewton KrylovNewton Broyden"
+set tol 1.e-4
+set algoList "Newton ModifiedNewton {NewtonLineSearch 0.65} KrylovNewton Broyden"
 source $inputs(generalFolder)/analyze.pushover.run.tcl
 remove loadPattern 2

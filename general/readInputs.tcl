@@ -35,8 +35,18 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 					set eleData(section,$code,$pos,L) "-"
 				}
 				set code [eleCodeMap "X-Beam"]
+				if [info exists xBeamLabels] {
+					set lab [lindex $xBeamLabels [expr ($kk-1)*$inputs(nBaysX) + $i - 1]]
+					if {$lab != "-"} {
+						if [info exists settingsGroup($lab)] {
+							set eleData(SG,$code,$pos)  $settingsGroup($lab)
+						} else {
+							set eleData(SG,$code,$pos)  SG1
+						}
+					}
+				}
 				if [info exists beamLoadListX] {
-					set eleData(load,$code,$pos) [lindex $beamLoadListX($j) [expr ($kk-1)*$inputs(nBaysX) + $i - 1]] 
+					set eleData(load,$code,$pos) [lindex $beamLoadListX($j) [expr ($kk-1)*$inputs(nBaysX) + $i - 1]]
 					if {$eleData(load,$code,$pos) == "-"} {
 						set eleData(load,$code,$pos) 0
 					}
@@ -51,7 +61,7 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 				}
 				set code [eleCodeMap "X-Wall"]
 				if [info exists xWallSecList] {
-					set eleData(section,$code,$pos)  [lindex $xWallSecList($j) [expr ($kk-1)*$inputs(nBaysX) + $i - 1]] 
+					set eleData(section,$code,$pos)  [lindex $xWallSecList($j) [expr ($kk-1)*$inputs(nBaysX) + $i - 1]]
 				} else {
 					set eleData(section,$code,$pos)  "-"
 				}
@@ -83,8 +93,18 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 					set eleData(section,$code,$pos,L) "-"
 				}
 				set code [eleCodeMap "Y-Beam"]
+				if [info exists yBeamLabels] {
+					set lab [lindex $yBeamLabels [expr ($i-1)*$inputs(nBaysY) + $k - 1]]
+					if {$lab != "-"} {
+						if [info exists settingsGroup($lab)] {
+							set eleData(SG,$code,$pos)  $settingsGroup($lab)
+						} else {
+							set eleData(SG,$code,$pos)  SG1
+						}
+					}
+				}
 				if [info exists beamLoadListY] {
-					set eleData(load,$code,$pos) [lindex $beamLoadListY($j) [expr ($i-1)*$inputs(nBaysY) + $k - 1]] 
+					set eleData(load,$code,$pos) [lindex $beamLoadListY($j) [expr ($i-1)*$inputs(nBaysY) + $k - 1]]
 					if {$eleData(load,$code,$pos) == "-"} {
 						set eleData(load,$code,$pos) 0
 					}
@@ -99,7 +119,7 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 				}
 				set code [eleCodeMap "Y-Wall"]
 				if [info exists yWallSecList] {
-					set eleData(section,$code,$pos) [lindex $yWallSecList($j) [expr ($i-1)*$inputs(nBaysY) + $k - 1]] 
+					set eleData(section,$code,$pos) [lindex $yWallSecList($j) [expr ($i-1)*$inputs(nBaysY) + $k - 1]]
 				} else {
 					set eleData(section,$code,$pos) "-"
 				}
@@ -123,7 +143,7 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 							set eleData(section,$code,$pos,$iStat)  $sec
 						}
 					} else {
-						set eleData(section,$code,$pos,$iStat)  [lindex $xBeamSecList($j) [expr ($kk-1)*$inputs(nBaysX) + $i - 1]] 
+						set eleData(section,$code,$pos,$iStat)  [lindex $xBeamSecList($j) [expr ($kk-1)*$inputs(nBaysX) + $i - 1]]
 					}
 				}
 				if {$k <= $inputs(nBaysY)} {
@@ -141,7 +161,7 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 							set eleData(section,$code,$pos,$iStat)  $sec
 						}
 					} else {
-						set eleData(section,$code,$pos,$iStat) [lindex $yBeamSecList($j) [expr ($i-1)*$inputs(nBaysY) + $k - 1]] 
+						set eleData(section,$code,$pos,$iStat) [lindex $yBeamSecList($j) [expr ($i-1)*$inputs(nBaysY) + $k - 1]]
 					}
 				}
 			}
@@ -152,11 +172,16 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 					set sec  "-"
 				} else {
 					set sec $columnSec($lab,$j)
+					if [info exists settingsGroup($lab)] {
+						set eleData(SG,$code,$pos)  $settingsGroup($lab)
+					} else {
+						set eleData(SG,$code,$pos)  SG1
+					}
 				}
 			} else {
 				set sec [lindex $columnSecList($j) [expr ($kk-1)*($inputs(nBaysX)+1) + $i - 1]]
 			}
-			set eleData(section,$code,$pos) $sec		
+			set eleData(section,$code,$pos) $sec
 			set eleData(angle,$code,$pos) [lindex $columnAngleList($j) [expr ($kk-1)*($inputs(nBaysX)+1) + $i - 1]]
 
 			if [info exists pntLoadList] {
@@ -164,7 +189,6 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 				if {$pointData(load,$pos) == ""} {
 					set pointData(load,$pos) 0.
 				}
-				# puts "pointData(load,$pos)= $pointData(load,$pos)"
 			} else {
 				set pointData(load,$pos) 0.
 			}
@@ -310,7 +334,7 @@ for {set j 2} {$j <= $inputs(nFlrs)} {incr j} {
 }
 # set Z(0) 0.
 # for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
-	# set Z($j) [expr $Z([expr $j-1])+[lindex $inputs(hStory) [expr $j-1]]]
+# set Z($j) [expr $Z([expr $j-1])+[lindex $inputs(hStory) [expr $j-1]]]
 # }
 
 # calculate gravity loads on columns
@@ -386,7 +410,7 @@ if {0} {
 			for {set j 0} {$j < $n} {incr j} {
 				set v 0
 				for {set k 1} {$k <= $i} {incr k} {
-					set v [expr $v+$f($k)*[lindex $line($k) $j]] 
+					set v [expr $v+$f($k)*[lindex $line($k) $j]]
 				}
 				set initAxiForce([expr $j+1]) $v
 			}

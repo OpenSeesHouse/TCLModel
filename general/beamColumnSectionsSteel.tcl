@@ -21,17 +21,13 @@ set inputs(typJ) $J
 
 uniaxialMaterial Elastic $tag [expr 100*$inputs(typA)*$inputs(Es)/$inputs(hStory)]
 
-if {$inputs(beamType) != "Hinge"} {
 	set tag [manageFEData -newMaterial fiberBeams]
 	uniaxialMaterial Steel02 $tag $inputs(fyBeam) $E 0.01
 	# uniaxialMaterial Elastic 1 $E
-}
 
-if {$inputs(columnType) != "Hinge"} {
 	set tag [manageFEData -newMaterial fiberClmns]
 	uniaxialMaterial Steel02 $tag $inputs(fyClmn) $E 0.01
 	# uniaxialMaterial Elastic 2 $E
-}
 
 set matTag [manageFEData -getMaterial fiberBeams]
 set cUnitsToKsi [expr $inputs(cUnitsToN)/($inputs(cUnitsToM)**2.)*1.45038e-7]
@@ -61,7 +57,8 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 				source "$inputs(secFolder)/$sec.tcl"
 				source "$inputs(secFolder)/convertToM.tcl"
 				# puts $beamPropFile "$sec $dir $tetay $tetau $my"
-				if {$inputs(beamType) == "Hinge"} {
+				set sg $eleData(SG,$code,$pos)
+				if {$inputs($sg,eleType) == "Hinge"} {
 					logCommands -comment "#section: $sec j,k,i,dir: $j,$k,$i,$dir\n"
 					set ID [manageFEData -newMaterial beamHinge,$j,$k,$i,$dir]
 					if {$inputs(hingeType) == "Lignos"} {
@@ -120,7 +117,8 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 			if {$sec == "-"} continue
 			source "$inputs(secFolder)/$sec.tcl"
 			source "$inputs(secFolder)/convertToM.tcl"					
-			if {$inputs(columnType) == "Hinge"} {
+				set sg $eleData(SG,$code,$pos)
+			if {$inputs($sg,eleType) == "Hinge"} {
 				logCommands -comment "#section: $sec j,k,i: $j,$k,$i\n"
 				set ID3 [manageFEData -newMaterial clmnHinge,$j,$k,$i,3]
 				set N 0

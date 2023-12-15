@@ -76,6 +76,7 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 					if {[lsearch $missConfs($mem) $conf] != -1} {
 						continue
 					}
+					set eleData(numSeg,$eleCode,$elePos,$mem) 0
 					if {$mem == "L"} {
 						set iNode $j1,$k,$i,1
 						set jNode $j,$k1,$i1,1
@@ -95,45 +96,43 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 							set jNode $j,$k,$i,$mc
 						}
 					}
-					foreach d "dx dy dz" x [manageFEData -getNodeCrds $iNode] y [manageFEData -getNodeCrds $jNode] {
-						set $d [expr $y-$x]
-					}
-					set xV "$dx $dy $dz"
-					set zAxis $inputs(def[set dir]BraceZAxis)
-					set yV [Vector crossProduct $zAxis $xV]
-					set l [manageGeomData -getBraceLength $mem $eleCode $elePos]
+					set zAxis $inputs(defZAxis-$dir-Brace)
 					set rigMat [manageFEData -getMaterial rigid]
-
+					set l [manageGeomData -getBraceLength $mem $eleCode $elePos]
+					set transf [addGeomTransf -getZeroOffsetTransf "Linear $dir-Brace"]
+					set gusMat [manageFEData -getMaterial gusset,$dir,$j,$k,$i,$mem]
 					if {$inputs(numDims) == 2} {
-						set args "-mat $rigMat $rigMat $rigMat -dir 1 2 3"
+						# set args1 "-mat $rigMat $rigMat $rigMat -dir 3 1 2"
+						set args1 "-mat $gusMat $rigMat $rigMat -dir 3 1 2"
+						set args2 "$inputs(typA) [expr 100*$inputs(E)] $inputs(typIz) $transf"
 					} else {
-						set args "-mat $rigMat $rigMat $rigMat $rigMat $rigMat $rigMat -dir 1 2 3 4 5 6"
+						foreach d "dx dy dz" x [manageFEData -getNodeCrds $iNode] y [manageFEData -getNodeCrds $jNode] {
+							set $d [expr $y-$x]
+						}
+						set xV "$dx $dy $dz"
+						set yV [Vector crossProduct $zAxis $xV]
+						set args1 "-mat $gusMat $rigMat $rigMat $rigMat $rigMat $rigMat -dir 5 1 2 3 4 6 -orient $xV $yV"
+						set args2 "$inputs(typA) [expr 100*$inputs(E)] [expr 100*$inputs(G)] $inputs(typJ) \
+							$inputs(typIy) $inputs(typIz) $transf"
 					}
 
-					#gusset 1
 					set nd1 $eleCode,$elePos,$mem,g1
 					set nd2 $eleCode,$elePos,$mem,g2
-					addElement zeroLength [manageFEData -newElement $eleCode,$elePos,$mem,g1] $nd1 $nd2 $args
-
-					#gusset 2
 					set nd3 $eleCode,$elePos,$mem,g3
 					set nd4 $eleCode,$elePos,$mem,g4
-					addElement zeroLength [manageFEData -newElement $eleCode,$elePos,$mem,g2] $nd3 $nd4 $args
-
-
-					if {$inputs(numDims) == 2} {
-						set args "-mat $rigMat $rigMat $rigMat -dir 1 2 3 -orient $yV"
+					addElement elasticBeamColumn $eleCode,$elePos,$mem,r1 $iNode $nd1 $args2
+					addElement elasticBeamColumn $eleCode,$elePos,$mem,r2 $nd4 $jNode $args2
+					if {$inputs(seeGussetSpring)} {
+						addElement zeroLength [manageFEData -newElement $eleCode,$elePos,$mem,g1] $nd1 $nd2 $args1
+						addElement zeroLength [manageFEData -newElement $eleCode,$elePos,$mem,g2] $nd3 $nd4 $args1
+						set iNode $nd2
+						set jNode $nd3
 					} else {
-						set args "-mat $rigMat $rigMat $rigMat $rigMat $rigMat $rigMat -dir 1 2 3 4 5 6 -orient $yV"
+						set iNode $nd1
+						set jNode $nd4
 					}
-					#rigid links
-					addElement twoNodeLink $eleCode,$elePos,$mem,r1 $iNode $nd1 $args
-					addElement twoNodeLink $eleCode,$elePos,$mem,r2 $nd4 $jNode $args
-
-					set iNode $nd2
-					set jNode $nd3
-					addFiberMember $inputs(braceType) $elePos,$mem $eleCode $iNode $jNode 1 rho 0 $inputs(braceInteg) $inputs(braceGeomType) $zAxis 0
 					#imperfect sinusoidal meshing
+					addFiberMember $inputs(braceType) $elePos,$mem $eleCode $iNode $jNode 1 rho 0 $inputs(braceInteg) $inputs(braceGeomType) $zAxis 0 eleData(numSeg,$eleCode,$elePos,$mem)
 					set eleData(unitSelfWeight,$eleCode,$pos,$mem) $rho
 					set sumStrucWeigh($eleCode,$j) [expr $sumStrucWeigh($eleCode,$j)+$l*$rho]
 				}

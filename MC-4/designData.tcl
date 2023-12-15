@@ -18,14 +18,14 @@ set braceConfig(R1,2) "/\\"
 set braceConfig(R1,3) "/\\"
 set braceConfig(R1,4) "/\\"
 
-set gussetDimI(R1,lh,1) 0.50; set gussetDimI(R1,lv,1) 0.50; set gussetDimI(R1,lr,1) 0.80;  set gussetDimI(R1,tp,1) 0.02;
-set gussetDimI(R1,lh,2) 0.50; set gussetDimI(R1,lv,2) 0.50; set gussetDimI(R1,lr,2) 0.80;  set gussetDimI(R1,tp,2) 0.02;
-set gussetDimI(R1,lh,3) 0.50; set gussetDimI(R1,lv,3) 0.50; set gussetDimI(R1,lr,3) 0.80;  set gussetDimI(R1,tp,3) 0.02;
-set gussetDimI(R1,lh,4) 0.50; set gussetDimI(R1,lv,4) 0.50; set gussetDimI(R1,lr,4) 0.80;  set gussetDimI(R1,tp,4) 0.02;
-set gussetDimJ(R1,lh,1) 0.50; set gussetDimJ(R1,lv,1) 0.50; set gussetDimJ(R1,lr,1) 0.80;  set gussetDimJ(R1,tp,1) 0.02;
-set gussetDimJ(R1,lh,2) 0.50; set gussetDimJ(R1,lv,2) 0.50; set gussetDimJ(R1,lr,2) 0.80;  set gussetDimJ(R1,tp,2) 0.02;
-set gussetDimJ(R1,lh,3) 0.50; set gussetDimJ(R1,lv,3) 0.50; set gussetDimJ(R1,lr,3) 0.80;  set gussetDimJ(R1,tp,3) 0.02;
-set gussetDimJ(R1,lh,4) 0.50; set gussetDimJ(R1,lv,4) 0.50; set gussetDimJ(R1,lr,4) 0.80;  set gussetDimJ(R1,tp,4) 0.02;
+set gussetDimI(R1,lh,1) 0.50; set gussetDimI(R1,lv,1) 0.50; set gussetDimI(R1,lr,1) 0.50;  set gussetDimI(R1,tp,1) 0.02;
+set gussetDimI(R1,lh,2) 0.50; set gussetDimI(R1,lv,2) 0.50; set gussetDimI(R1,lr,2) 0.50;  set gussetDimI(R1,tp,2) 0.02;
+set gussetDimI(R1,lh,3) 0.50; set gussetDimI(R1,lv,3) 0.50; set gussetDimI(R1,lr,3) 0.50;  set gussetDimI(R1,tp,3) 0.02;
+set gussetDimI(R1,lh,4) 0.50; set gussetDimI(R1,lv,4) 0.50; set gussetDimI(R1,lr,4) 0.50;  set gussetDimI(R1,tp,4) 0.02;
+set gussetDimJ(R1,lh,1) 0.50; set gussetDimJ(R1,lv,1) 0.50; set gussetDimJ(R1,lr,1) 0.50;  set gussetDimJ(R1,tp,1) 0.02;
+set gussetDimJ(R1,lh,2) 0.50; set gussetDimJ(R1,lv,2) 0.50; set gussetDimJ(R1,lr,2) 0.50;  set gussetDimJ(R1,tp,2) 0.02;
+set gussetDimJ(R1,lh,3) 0.50; set gussetDimJ(R1,lv,3) 0.50; set gussetDimJ(R1,lr,3) 0.50;  set gussetDimJ(R1,tp,3) 0.02;
+set gussetDimJ(R1,lh,4) 0.50; set gussetDimJ(R1,lv,4) 0.50; set gussetDimJ(R1,lr,4) 0.50;  set gussetDimJ(R1,tp,4) 0.02;
 
 set braceSec(R1,1) HSS6X6X1-2
 set braceSec(R1,2) HSS5-1-2X5-1-2X3-8

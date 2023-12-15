@@ -1,7 +1,9 @@
-proc addHingeColumn {elePos eleCode iNode jNode sec angle matId2 matId3 kRat rhoName zAxis} {
+proc addHingeColumn {elePos eleCode iNode jNode sec angle matId2 matId3 kRat rhoName zAxis nSegName} {
     global inputs
     global jntData
     upvar $rhoName rho
+    upvar $nSegName nSeg
+    set nSeg 1
     set rigidMatTag [manageFEData -getMaterial rigid]
     foreach "j k i" [split $elePos ,] {}
 	source $inputs(secFolder)/$sec.tcl
@@ -31,18 +33,18 @@ proc addHingeColumn {elePos eleCode iNode jNode sec angle matId2 matId3 kRat rho
     set tag2 "$eleCode,$elePos,h2"
     if {$inputs(numDims) == 3} {
         set xV "0 0 1"
-        set zV $inputs(defClmnZAxis)
+        set zV $inputs(defZAxis-Column)
         if {$angle > 1e-3} {
             set zV [Vector rotateAboutZ $zV $angle]
         }
         set yV [Vector crossProduct $zV $xV]
         set id1 [addElement zeroLength $tag1 $iNode $iiNode \
-            "-mat $matId2 $matId3 $rigidMatTag $rigidMatTag $rigidMatTag $rigidMatTag \
-            -dir 5 6 1 2 3 4 -orient $xV $yV"]
+            "-mat $matId3 $matId3 $rigidMatTag $rigidMatTag $rigidMatTag $rigidMatTag \
+            -dir 6 5 1 2 3 4 -orient $xV $yV"]
         set id [addElement elasticBeamColumn $eleTag $iiNode $jjNode "$Area $inputs(E) $inputs(G) $J $I22 $I33 $transfTag -mass $rho"]
         set id2 [addElement zeroLength $tag2 $jjNode $jNode \
-            "-mat $matId2 $matId3 $rigidMatTag $rigidMatTag $rigidMatTag $rigidMatTag \
-            -dir 5 6 1 2 3 4 -orient $xV $yV"]
+            "-mat $matId3 $matId2 $rigidMatTag $rigidMatTag $rigidMatTag $rigidMatTag \
+            -dir 6 5 1 2 3 4 -orient $xV $yV"]
     } else {
         if {$angle < 1e-3} {
             #local z axis aligns with global Y

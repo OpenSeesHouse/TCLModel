@@ -109,8 +109,8 @@ set inputs(clmnGeomtransfType) Linear	;#set to Linear when all story gravity for
 #_____________________________________________________
 set inputs(hingeType) Lignos
 # set inputs(hingeType) ASCE
-set inputs(beamType) Hinge
-set inputs(columnType) Hinge
+set inputs(SG1,eleType) Hinge
+set inputs(SG1,numSeg) 1
 set inputs(nFactor) 1.
 set inputs(MyFac) 1.				;#to allow calibrating the model
 set inputs(lbToRy) 100
@@ -119,47 +119,6 @@ set inputs(lbToRy) 100
 # set inputs(initAxiForeceEleList) ""; #will be set/used by members' proc and used by recorders proc
 #_____________________________________________________
 
-#fiber
-#_____________________________________________________
-# set inputs(numSubdivL)	6
-# set inputs(numSubdivT)	3
-### for Hardening behavior:
-# 	set inputs(columnType) forceBeamColumn 	;#dispBeamColumn
-# 	set inputs(numIntegPntsClmn) 3
-#	set inputs(numSegClmn) 3
-#	#set inputs(lSegClmn) 2.0		;#m
-#	set inputs(clmnInteg) {Lobatto $secTag $inputs(numIntegPntsClmn)}
-
-### for Softening behavior:
-# set inputs(columnType) forceBeamColumn
-# set inputs(numSegClmn) 1
-# set inputs(clmnInteg) {HingeRadau $secTagI $lpI $secTagJ $lpJ $secTagM}
-# set inputs(clmnInteg) {HingeRadauTwo $secTagI $lpI $secTagJ $lpJ $secTagM}
-# set inputs(clmnInteg) {Lobatto -sections 5 $secTagI $secTagM $secTagM $secTagM $secTagJ}
-# set clmnLpFac 0.2
-
-# if ![info exists clmnShearReinfSFacs] {			
-	##set if not set in specParams
-	# set clmnShearReinfSFacs "1. 2. 1."
-	# puts "clmnShearReinfSFacs = $clmnShearReinfSFacs"
-# }
-
-### for Hardening:
-#	set inputs(beamType) forceBeamColumn	; #  dispBeamColumn
-#	set inputs(numIntegPntsBeam) 3
-#	set inputs(numSegBeam) 3
-#	#set inputs(lSegBeam) 2.0		;#m
-#	set inputs(beamInteg) {Lobatto \$secTag \$inputs(numIntegPntsBeam)}
-### for Softening
-# set inputs(beamType) forceBeamColumn
-# set inputs(numSegBeam) 1
-# set inputs(beamInteg) {HingeRadau $secTagI $lpI $secTagJ $lpJ $secTagM}
-# set inputs(beamInteg) {HingeRadauTwo $secTagI $lpI $secTagJ $lpJ $secTagM}
-# set inputs(beamInteg) {Lobatto -sections 5 $secTagI $secTagM $secTagM $secTagM $secTagJ}
-# set beamLpFac 0.2
-
-# set recMemSegs "1 3 4 6"
-#_____________________________________________________
 
 set inputs(secFolder) ../general/sections
 set inputs(floorMass) [expr ($inputs(deadMassFac)*$inputs(deadFloor)+$inputs(liveMassFac)*$inputs(liveFloor))*$inputs(planArea)+$inputs(deadMassFac)*$inputs(perimBeamDead)*$inputs(planPerim)]

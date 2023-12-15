@@ -15,15 +15,6 @@ proc updateVar {option varNam newV} {
 
 puts "~~~~~~~~~~~~~~~~~~~~~ Computing Joint Sizes ~~~~~~~~~~~~~~~~~~~~~"
 logCommands -comment "#~~~~~~~~~~~~~~~~~~~~~ Computing Joint Sizes ~~~~~~~~~~~~~~~~~~~~~\n"
-# if [info exists inputs(numSegBeam)] {
-# 	set nBeamSeg $inputs(numSegBeam)
-# 	set lSeg 0
-# } elseif [info exists inputs(lSegBeam)] {
-# 	set nBeamSeg 0
-# 	set lSeg $inputs(lSegBeam)
-# } else {
-# 	set nBeamSeg 1
-# }
 for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 	#beam and brace connections
 	foreach dir "X Y" nGridX "$inputs(nBaysX) [expr $inputs(nBaysX)+1]" nGridY "[expr $inputs(nBaysY)+1] $inputs(nBaysY)" {
@@ -119,7 +110,6 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 					}
 					# m
 					if {$conf == "/\\" || $conf == "|"} {
-						puts "updateVar -sum jntData($mNodePos,dim,$dir,nn,h) [expr $lhJ]"
 						set jntData($mNodePos,dim,$dir,nn,h) [expr $lhJ]
 						set jntData($mNodePos,dim,$dir,nn,v) [expr $H/2.+$lvJ]
 						set jntData($mNodePos,dim,$dir,pn,h) [expr $lhJ]
@@ -200,7 +190,6 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 manageGeomData -makeJntList
 #set missing jnt dims. based on the computed ones
 foreach pos [manageGeomData -getAllJntPos] {
-	# puts "pos = $pos"
 	foreach dir "X Y" {
 		foreach vrt "pp np nn pn" {
 			foreach com "h v" {

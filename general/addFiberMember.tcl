@@ -1,16 +1,18 @@
-proc addFiberMember {eleType elePos eleCode iNode jNode nDesStats rhoName p integStr transType zAxis release} {
+proc addFiberMember {eleType elePos eleCode iNode jNode nDesStats rhoName p integStr transType zAxis release nSegName} {
 	global inputs
 	global jntData
 	global eleData
 	global secIDBeams
 	global secIDClmns
 	upvar $rhoName rho
-	set bcType [eleCodeMap -getType $eleCode]
+	upvar $nSegName nSeg
+	set bcCodeType [eleCodeMap -getType $eleCode]
 	set mNodes [manageFEData -getEleAlignedJntPos $eleCode $elePos]
-	if {$bcType != "Column"} {
-		set dir [string index $bcType 0]
-		set bcType [string range $bcType 2 end]
+	if {$bcCodeType != "Column"} {
+		set dir [string index $bcCodeType 0]
+		set bcType [string range $bcCodeType 2 end]
 	} else {
+		set bcType Column
 		set dir Z
 	}
 	lappend mNodes $jNode
@@ -26,14 +28,25 @@ proc addFiberMember {eleType elePos eleCode iNode jNode nDesStats rhoName p inte
 		set d [expr sqrt($d)]
 		set vec($i) "$d $mn"
 	}
-	set nSeg [expr $i-1]
+	set nSeg $i
 	set eleL [lindex $vec($i) 0]
 	sortArray vec
 	set mNodes ""
 	set ds ""
+	set d1 0
+	set pos1 $iNode
 	for {set k 1} {$k <= $i} {incr k} {
-		lappend ds [lindex $vec($k) 0]
-		lappend mNodes [lindex $vec($k) 1]
+		set d2 [lindex $vec($k) 0]
+		set pos2 [lindex $vec($k) 1]
+		if {[expr abs($d2-$d1)] < [manageFEData -getNodeMergeTol]} {
+			manageFEData -mergeNode $pos1 $pos2
+			puts "manageFEData -mergeNode $pos1 $pos2"
+		} else {
+			lappend ds $d2
+			lappend mNodes $pos2
+		}
+		set d1 $d2
+		set pos1 $pos2
 	}
 	set rho 0
 	for {set iStat 1} {$iStat <= $inputs(numDesnStats)} {incr iStat} {
@@ -74,7 +87,7 @@ proc addFiberMember {eleType elePos eleCode iNode jNode nDesStats rhoName p inte
 
 	set zerOffTransTag 0
 	if {$nSeg > 1} {
-		set zerOffTransTag [addGeomTransf "$eleCode,$elePos,0" $transType $zAxis]
+		set zerOffTransTag [addGeomTransf -getZeroOffsetTransf "$transType $bcCodeType"]
 	}
 	set integType [lindex $integStr 0]
 	set offsVeci(X) 0

@@ -13,8 +13,8 @@ set inputs(nBaysX) 1
 set inputs(nBaysY) 0
 set inputs(lBayX) "6.09"
 set inputs(lBayY) ""
-set inputs(hStory) 5.49
-set inputs(hStoryBase) 4.27
+set inputs(hStory) 4.27
+set inputs(hStoryBase) 5.49
 set inputs(numDesnStats) 1		;#mainly for RC members
 set inputs(eccRatX) 0
 set inputs(eccRatY) 0
@@ -32,8 +32,8 @@ set inputs(cornerGrdList) "
 
 # Mass
 #_____________________________________________________
-set inputs(deadRoof)  [expr 1.1*47.88/$g*56.0] 		;#=46 (D) + 10 (superDead)
-set inputs(deadFloor) [expr 1.1*47.88/$g*61.7] 		;#64.7= 46(D)+15(superDead)+3.7(Facade) in kg/m2
+set inputs(deadRoof)  [expr 1.3*47.88/$g*56.0] 		;#=46 (D) + 10 (superDead)
+set inputs(deadFloor) [expr 1.3*47.88/$g*61.7] 		;#64.7= 46(D)+15(superDead)+3.7(Facade) in kg/m2
 set inputs(liveRoof)  [expr 1.*47.88/$g*30]
 set inputs(liveFloor) [expr 1.*47.88/$g*50]
 set inputs(perimBeamDead) 370.							;#kg/m of perimeter beaam
@@ -99,14 +99,13 @@ set inputs(cUnitsToM) 1.
 # General
 set inputs(rigidZoneFac) 0.5
 set inputs(clmnBasePlateHeightFac) 1.	;#ratio of the column section height considered as the base plate connection offset
-set inputs(clmnGeomtransfType) Linear	;#set to Linear when all story gravity force is applied on leaning column
+set inputs(clmnGeomtransfType) PDelta	;#set to Linear when all story gravity force is applied on leaning column
 
 #_____________________________________________________
 # Lumped
-# set inputs(hingeType) Lignos
-# set inputs(hingeType) ASCE
-# set inputs(beamType) Hinge
-# set inputs(columnType) Hinge
+# set inputs(SG1,hingeType) Lignos
+# set inputs(SG1,hingeType) ASCE
+# set inputs(SG1,eleType) Hinge
 # set inputs(nFactor) 1.
 # set inputs(MyFac) 1.				;#to allow calibrating the model
 # set inputs(lbToRy) 100
@@ -118,41 +117,17 @@ set inputs(clmnGeomtransfType) Linear	;#set to Linear when all story gravity for
 #_____________________________________________________
 set inputs(numSubdivL)	6
 set inputs(numSubdivT)	3
-#### Columns ####
-### for Hardening behavior:
-	set inputs(columnType) dispBeamColumn 	;#dispBeamColumn
-	set inputs(numIntegPntsClmn) 5
-	set inputs(numSegClmn) 1
-#	#set inputs(lSegClmn) 2.0		;#m
-	set inputs(clmnInteg) {Lobatto $secTag $inputs(numIntegPntsClmn)}
-
-### for Softening behavior:
-# set inputs(columnType) forceBeamColumn
-# set inputs(numSegClmn) 1
-# set inputs(clmnInteg) {HingeRadau $secTagI $lpI $secTagJ $lpJ $secTagM}
-# set inputs(clmnInteg) {HingeRadauTwo $secTagI $lpI $secTagJ $lpJ $secTagM}
-# set inputs(clmnInteg) {Lobatto -sections 5 $secTagI $secTagM $secTagM $secTagM $secTagJ}
-# #set clmnLpFac 0.2
-
-# if ![info exists clmnShearReinfSFacs] {			
-	##set if not set in specParams
-	# set clmnShearReinfSFacs "1. 2. 1."
-	# puts "clmnShearReinfSFacs = $clmnShearReinfSFacs"
-# }
-
-#### Beams ####
 ### for Hardening:
-	set inputs(beamType) dispBeamColumn	; #  dispBeamColumn
-	set inputs(numIntegPntsBeam) 5
-	set inputs(numSegBeam) 1
-#	#set inputs(lSegBeam) 2.0		;#m
-	set inputs(beamInteg) {Lobatto $secTag $inputs(numIntegPntsBeam)}
+	set inputs(SG1,eleType) dispBeamColumn	; #  dispBeamColumn
+	set inputs(SG1,numSeg) 1
+#	#set inputs(SG1,lSeg) 2.0		;#m
+	set inputs(SG1,IntegStr) {Lobatto $secTag 5}
 ### for Softening
-# set inputs(beamType) forceBeamColumn
-# set inputs(numSegBeam) 1
-# set inputs(beamInteg) {HingeRadau $secTagI $lpI $secTagJ $lpJ $secTagM}
-# set inputs(beamInteg) {HingeRadauTwo $secTagI $lpI $secTagJ $lpJ $secTagM}
-# set inputs(beamInteg) {Lobatto -sections 5 $secTagI $secTagM $secTagM $secTagM $secTagJ}
+# set inputs(SG1,eleType) forceBeamColumn
+# set inputs(SG1,numSeg) 1
+# set inputs(SG1,IntegStr) {HingeRadau $secTagI $lpI $secTagJ $lpJ $secTagM}
+# set inputs(SG1,IntegStr) {HingeRadauTwo $secTagI $lpI $secTagJ $lpJ $secTagM}
+# set inputs(SG1,IntegStr) {Lobatto -sections 5 $secTagI $secTagM $secTagM $secTagM $secTagJ}
 # #set beamLpFac 0.2
 
 # #set recMemSegs "1 3 4 6"
@@ -161,9 +136,11 @@ set inputs(numSubdivT)	3
 set inputs(braceType) dispBeamColumn
 set inputs(braceGeomType) Corotational
 set inputs(braceSpanRat) [expr 1./2.]
-set inputs(imperfectRat) 0.005;
+set inputs(imperfectRat) 0.005
 set inputs(nBraceSeg) 10				;#must be even
-
+set inputs(numIntegPntsBrace) 3
+set inputs(braceInteg) {Lobatto $secTag $inputs(numIntegPntsBrace)}
+set inputs(seeGussetSpring) 1
 #_____________________________________________________
 
 set inputs(secFolder) ../general/sections
@@ -202,7 +179,7 @@ set columnLabels "
 "
 for {set i 1} {$i <= $inputs(nFlrs)} {incr i} {
 	set columnAngleList($i) "
-		90 90
+		0 0
 	"
 }
 set L [expr 0.50*(1.05*$inputs(deadFloor)+0.25*$inputs(liveFloor))*6.1*9.14*$g]
@@ -219,3 +196,5 @@ for {set j 1} {$j < $inputs(nFlrs)} {incr j} {
 	set beamLoadList($j) "$L"
 }
 
+set settingsGroup(B1) SG1
+set settingsGroup(C1) SG1

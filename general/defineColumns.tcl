@@ -9,37 +9,38 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 	for {set i 1} {$i <= [expr $inputs(nBaysX)+1]} {incr i} {
 		for {set k 1} {$k <= [expr $inputs(nBaysY)+1]} {incr k} {
 			set elePos $j,$k,$i
-			set sec $eleData(section,$eleCode,$j,$k,$i)
+			set sec $eleData(section,$eleCode,$elePos)
 			if {$sec == "-"} continue
+			set eleData(numSeg,$eleCode,$elePos) 0
 			set rho 0
 			set j1 [expr $j-1]
 			set iNodePos $j1,$k,$i,1
-			set jNodePos $j,$k,$i,1
-			set angle $eleData(angle,$eleCode,$j,$k,$i)
+			set jNodePos $elePos,1
+			set angle $eleData(angle,$eleCode,$elePos)
 			set zAxis ""
 			if {$inputs(numDims) == 3} {
-				set zAxis $inputs(defClmnZAxis)
+				set zAxis $inputs(defZAxis-Column)
 				if {$angle > 1e-3} {
 					set zAxis [Vector rotateAboutZ $zAxis $angle]
 				}
 			}
-			if {$inputs(columnType) == "Hinge"} {
+			set sg $eleData(SG,$eleCode,$elePos)
+			if {$inputs($sg,eleType) == "Hinge"} {
 				set kRat 1
 				if {$inputs(matType) == "Concrete"} {
-					set kRat $kRatClmns($j,$k,$i,$angle)
+					set kRat $kRatClmns($elePos,$angle)
 					if {[info exists inputs(clmnCrackOverwrite)] && $inputs(clmnCrackOverwrite) != 0} {
 						set kRat $inputs(clmnCrackOverwrite)
 					}
 				}
-				set matId2 [manageFEData -getMaterial clmnHinge,$j,$k,$i,2]
-				set matId3 [manageFEData -getMaterial clmnHinge,$j,$k,$i,3]
-				addHingeColumn $elePos $eleCode $iNodePos $jNodePos $sec $angle $matId2 $matId3 $kRat rho $zAxis
+				set matId2 [manageFEData -getMaterial clmnHinge,$elePos,2]
+				set matId3 [manageFEData -getMaterial clmnHinge,$elePos,3]
+				addHingeColumn $elePos $eleCode $iNodePos $jNodePos $sec $angle $matId2 $matId3 $kRat rho $zAxis eleData(numSeg,$eleCode,$elePos)
 			} else {
-				set integType [lindex $inputs(clmnInteg) 0]
-				set p $columnGravLoad($j,$k,$i)
-				set eleType $inputs(columnType)
-				set integStr $inputs(clmnInteg)
-				addFiberMember $eleType $elePos $eleCode $iNodePos $jNodePos 1 rho $p $integStr $inputs(clmnGeomtransfType) $zAxis 0
+				set p $columnGravLoad($elePos)
+				set eleType $inputs($sg,eleType)
+				set integStr $inputs($sg,IntegStr)
+				addFiberMember $eleType $elePos $eleCode $iNodePos $jNodePos 1 rho $p $integStr $inputs(clmnGeomtransfType) $zAxis 0 eleData(numSeg,$eleCode,$elePos)
 			}
 			set eleData(unitSelfWeight,$eleCode,$elePos) $rho
 			set eleData(length,$eleCode,$elePos) $h

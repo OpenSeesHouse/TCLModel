@@ -1,13 +1,15 @@
-proc addHingeBeam {elePos eleCode iNode jNode sec springMatId kRat release rhoName zV} {
+proc addHingeBeam {elePos eleCode iNode jNode sec springMatId kRat release rhoName zV nSegName} {
     global inputs
     upvar $rhoName rho
+    upvar $nSegName nSeg
 	global jntData
     set rigidMatTag [manageFEData -getMaterial rigid]
 	source $inputs(secFolder)/$sec.tcl
 	source $inputs(secFolder)/convertToM.tcl
 	set rho [expr $inputs(selfWeightMultiplier)*$Area*$inputs(density)]
     set I33 [expr $kRat*$I33*($inputs(nFactor)+1)/$inputs(nFactor)]
-	set dir [string index [eleCodeMap -getType $eleCode] 0]
+	set bcType [eleCodeMap -getType $eleCode]
+	set dir [string index $bcType 0]
 	set mNodes [manageFEData -getEleAlignedJntPos $eleCode $elePos]
     set iiNode $iNode
     set jjNode $jNode
@@ -56,13 +58,16 @@ proc addHingeBeam {elePos eleCode iNode jNode sec springMatId kRat release rhoNa
 		set d [expr sqrt($d)]
 		set vec($i) "$d $mn"
 	}
-	set nMidNodes $i
+	set nSeg $i
 	sortArray vec
 	set mNodes ""
 	set ds ""
 	for {set k 1} {$k <= $i} {incr k} {
 		lappend ds [lindex $vec($k) 0]
 		lappend mNodes [lindex $vec($k) 1]
+	}
+	if {$nSeg > 1} {
+		set zerOffTransTag [addGeomTransf -getZeroOffsetTransf "Linear $bcType"]
 	}
 	set offsVeci(X) 0
 	set offsVeci(Y) 0
@@ -79,7 +84,7 @@ proc addHingeBeam {elePos eleCode iNode jNode sec springMatId kRat release rhoNa
 		incr i
 		set mOfs 0
 		set ofsNd $mNode
-		if {$i == $nMidNodes} {
+		if {$i == $nSeg} {
 			set ofsNd $jNode
 		}
 		if [manageGeomData -jntExists $ofsNd] {
@@ -100,7 +105,7 @@ proc addHingeBeam {elePos eleCode iNode jNode sec springMatId kRat release rhoNa
         }
 		set eleId [addElement elasticBeamColumn $eleTag $iNode $mNode $args]
 		lappend eleTags $eleId
-		if {$i != $nMidNodes} {
+		if {$i != $nSeg && [manageGeomData -jntExists $mNode]} {
 			set iOfs [expr 0.5*($jntData($mNode,dim,$dir,pp,h) + $jntData($mNode,dim,$dir,pn,h))*$inputs(rigidZoneFac)]
 		}
 		set iNode $mNode

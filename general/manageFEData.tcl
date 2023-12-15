@@ -11,12 +11,14 @@ proc manageFEData {act args} {
 	global lastSecTag
 	global eleAlignedPos
 	global nodeCrds
+	global nodeMergeTol
 	if {$act == "-initiate"} {
 		set lastNodeTag 0
 		set lastEleTag 0
 		set lastTransfTag 0
 		set lastMaterialTag 0
 		set lastSecTag 0
+		set nodeMergeTol 0.01  ;#in units of m
 		if [info exists nodeTagMap] {
 			unset nodeTagMap
 			unset eleTagMap
@@ -159,6 +161,16 @@ proc manageFEData {act args} {
 			return "$nodeCrds($pos,x) $nodeCrds($pos,y) $nodeCrds($pos,z)"
 		}
 		error "nodeCrds not found for pos: $pos"
+	}
+	if {$act == "-getNodeMergeTol"} {
+		return $nodeMergeTol
+	}
+	if {$act == "-mergeNode"} {
+		set pos1 [lindex $args 0]; #retained node
+		set pos2 [lindex $args 1]; #removed node
+		set nodeTagMap($pos2) [$nodeTagMap($pos1)]
+		puts "$pos2 merged with $pos1"
+		return
 	}
 	error "unknown act: $act in manageFEData"
 }

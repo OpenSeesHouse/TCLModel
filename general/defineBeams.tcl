@@ -21,6 +21,7 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 				if {$sec == "-"} {
 					continue
 				}
+				set eleData(numSeg,$eleCode,$pos) 0
 				set rho 0
 				set rlsStr $eleData(release,$eleCode,$pos)
 				set release [releaseFromChar $rlsStr]
@@ -30,8 +31,9 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 				} else {
 					set jNodePos "$j,$k,[expr $i+1],1"
 				}
-				set zAxis $inputs(def[set dir]BeamZAxis)
-				if {$inputs(beamType) == "Hinge"} {
+				set zAxis $inputs(defZAxis-$dir-Beam)
+				set sg $eleData(SG,$eleCode,$pos)
+				if {$inputs($sg,eleType) == "Hinge"} {
 					set id [manageFEData -getMaterial beamHinge,$j,$k,$i,$dir]
 					set kRat 1
 					if {$inputs(matType) == "Concrete"} {
@@ -40,14 +42,13 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 							set kRat $inputs(beamCrackOverwrite)
 						}
 					}
-					set eleTags [addHingeBeam $pos $eleCode $iNodePos $jNodePos $sec $id $kRat $release rho $zAxis]
+					addHingeBeam $pos $eleCode $iNodePos $jNodePos $sec $id $kRat $release rho $zAxis eleData(numSeg,$eleCode,$pos)
 				} else {
 					set p 0
-					set eleType $inputs(beamType)
-					set integStr $inputs(beamInteg)
-					set eleTags [addFiberMember $eleType $pos $eleCode $iNodePos $jNodePos $inputs(numDesnStats) rho $p $integStr Linear $zAxis $release]
+					set eleType $inputs($sg,eleType)
+					set integStr $inputs($sg,IntegStr)
+					addFiberMember $eleType $pos $eleCode $iNodePos $jNodePos $inputs(numDesnStats) rho $p $integStr Linear $zAxis $release eleData(numSeg,$eleCode,$pos)
 				}
-				#TODO use eleTags list for defining internal element resp. recorders
 				set eleData(unitSelfWeight,$eleCode,$pos) $rho
 				set eleData(length,$eleCode,$pos) $l
 				set sumStrucWeigh($eleCode,$j) [expr $sumStrucWeigh($eleCode,$j)+$l*$rho]

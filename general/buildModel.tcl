@@ -36,12 +36,12 @@ source $inputs(generalFolder)/defineBaseSupports.tcl
 source $inputs(generalFolder)/defineBeams.tcl
 source $inputs(generalFolder)/defineColumns.tcl
 source $inputs(generalFolder)/defineBraces.tcl
-source $inputs(generalFolder)/cleanupNodes.tcl
 if {$inputs(defLeanClmn) == 1} {
 	source $inputs(generalFolder)/defineLeaningColumns.tcl
 }
 source $inputs(generalFolder)/defineDiaphragms.tcl
 source $inputs(generalFolder)/defineMasses.tcl
+source $inputs(generalFolder)/cleanupNodes.tcl
 if {$inputs(doEigen) == 1} {
 	source $inputs(generalFolder)/doEigenAnalysis.tcl
 } elseif [info exists T1] {

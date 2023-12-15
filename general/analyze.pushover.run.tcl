@@ -16,23 +16,23 @@ for {set iDrift 0} {$iDrift < [llength $inputs(targetDriftList)]} {incr iDrift} 
 	set targetDrift [lindex $inputs(targetDriftList) $iDrift]
 	set targetDisp [expr $targetDrift*$LBuilding]
 	puts "***************** Applying targetDrift= $targetDrift, targetDisp= $targetDisp ****************"
-	set curD [nodeDisp $roofNode $cntrlDof]
+	set curD [nodeDisp $roofNodeTag $cntrlDof]
 	set deltaD [expr $targetDisp - $curD]
 	set nSteps [expr int(abs($deltaD)/$incr1)]
 	algorithm Newton
 	set sign [expr abs($deltaD)/$deltaD]
-	integrator DisplacementControl $roofNode $cntrlDof [expr $sign*$incr]
+	integrator DisplacementControl $roofNodeTag $cntrlDof [expr $sign*$incr]
 	analysis Static
 	puts "########################## Trying: Newton, incr=$incr1 ##########################"
 	set ok [analyze $nSteps]
-	set curD [nodeDisp $roofNode $cntrlDof]
+	set curD [nodeDisp $roofNodeTag $cntrlDof]
 	set deltaD [expr $targetDisp-$curD]
 	set iTry 1
 	while {1} {
 		if {$sign > 0 && $deltaD < $incr} break
 		if {$sign < 0 && $deltaD > -$incr} break
 		puts "~~~~~~~~~~~~~~~~~~~~~~~~~~ curD= $curD, deltaD= $deltaD ~~~~~~~~~~~~~~~~~~~~~~~~~~"
-		integrator DisplacementControl $roofNode $cntrlDof [expr $sign*$incr1]
+		integrator DisplacementControl $roofNodeTag $cntrlDof [expr $sign*$incr1]
 		analysis Static
 		if {$iTry <= $numAlgos} {
 			set algo [lindex $algoList [expr $iTry-1]]
@@ -42,9 +42,9 @@ for {set iDrift 0} {$iDrift < [llength $inputs(targetDriftList)]} {incr iDrift} 
 			set nSteps [expr int(1.*$incr/$incr1)]
 			set ok [analyze $nSteps]
 			if {$ok == 0} {
-				set curD [nodeDisp $roofNode $cntrlDof]
+				set curD [nodeDisp $roofNodeTag $cntrlDof]
 				set deltaD [expr $targetDisp-$curD]
-				integrator DisplacementControl $roofNode $cntrlDof [expr $sign*$incr]
+				integrator DisplacementControl $roofNodeTag $cntrlDof [expr $sign*$incr]
 				analysis Static
 				set nSteps [expr int(abs($deltaD)/$incr)]
 				set ok [analyze $nSteps]
@@ -62,10 +62,10 @@ for {set iDrift 0} {$iDrift < [llength $inputs(targetDriftList)]} {incr iDrift} 
 			}
 		}
 		incr iTry
-		set curD [nodeDisp $roofNode $cntrlDof]
+		set curD [nodeDisp $roofNodeTag $cntrlDof]
 		set deltaD [expr $targetDisp-$curD]		
 	}
-	set endDisp [nodeDisp $roofNode $cntrlDof]
+	set endDisp [nodeDisp $roofNodeTag $cntrlDof]
 	if {$failureFlag == 0} {
 		puts "########################## Analysis Successful! ##########################"
 	} else {

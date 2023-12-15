@@ -9,12 +9,12 @@ set inputs(rigidMatTag) 2
 if {$inputs(hasWall)} {
 	source $inputs(generalFolder)/RCWallSection.tcl
 }
-if {$inputs(columnType) == "Hinge" || $inputs(beamType) == "Hinge"} {
+if {$inputs(eleType) == "Hinge" || $inputs(eleType) == "Hinge"} {
 	source $inputs(generalFolder)/computeHingeRC.tcl
 	source $inputs(generalFolder)/calculateMy.tcl
 }
 set ID 2
-if {$inputs(columnType) != "Hinge" || $inputs(beamType) != "Hinge"} {
+if {$inputs(eleType) != "Hinge" || $inputs(eleType) != "Hinge"} {
 
 	# Steel
 	set R0 18;			# control the transition from elastic to plastic branches
@@ -134,7 +134,7 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 					source "$inputs(secFolder)/$sec.tcl"
 					source "$inputs(secFolder)/convertToM.tcl"
 					set GJ [expr $Gc*$J]
-					if {$inputs(beamType) == "Hinge"} {
+					if {$inputs(eleType) == "Hinge"} {
 						set hingChar $sec-$L
 						set ind [lsearch $hingList $hingChar]
 						if {$ind != -1} {
@@ -216,7 +216,7 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 				set typJ $J
 			}
 			set GJ [expr $Gc*$J]
-			if {$inputs(columnType) == "Hinge"} {
+			if {$inputs(eleType) == "Hinge"} {
 				set P $columnGravLoad($j,$k,$i)
 				# set P 0
 				set hingChar $sec-$L-[expr int($P)]

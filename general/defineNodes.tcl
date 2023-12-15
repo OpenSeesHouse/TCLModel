@@ -8,27 +8,6 @@ puts "~~~~~~~~~~~~~~~~~~~~~ Defining Nodes ~~~~~~~~~~~~~~~~~~~~~"
 logCommands -comment "#~~~~~~~~~~~~~~~~~~~~~ Defining Nodes ~~~~~~~~~~~~~~~~~~~~~\n"
 
 set pi 3.1415
-if [info exists inputs(numSegBeam)] {
-	set nBeamSeg $inputs(numSegBeam)
-	set lSegBeam 0
-} elseif [info exists inputs(lSegBeam)] {
-	set nBeamSeg 0
-	set lSegBeam $inputs(lSegBeam)
-} else {
-	set nBeamSeg 1
-	set lSegBeam 0
-}
-if [info exists inputs(numSegClmn)] {
-	set nClmnSeg $inputs(numSegClmn)
-	set lSegClmn 0
-} elseif [info exists inputs(lSegClmn)] {
-	set nClmnSeg 0
-	set lSegClmn $inputs(lSegClmn)
-} else {
-	set nClmnSeg 1
-	set lSegClmn 0
-}
-set masterNodeList ""
 set allkiList ""
 for {set i 1} {$i <= [expr $inputs(nBaysX)+1]} {incr i} {
 	for {set k 1} {$k <= [expr $inputs(nBaysY)+1]} {incr k} {
@@ -64,25 +43,24 @@ for {set j 0} {$j <= $inputs(nFlrs)} {incr j} {
 			}
 			foreach "x y z" "$X($k,$i)	$Y($k,$i)	$Z($j)" {}
 			if {$loc == 1} {
-				set tag [addNode $pos $x $y $z]
-				lappend slaveNodeList($j) $tag
-				lappend cntrNodes($j) $tag
-				if {$inputs(numDims) == 2 && $masterNode($j) == 0} {
-					set masterNode($j) $tag		;#used in numDim == 2 for leaning column
+				addNode $pos $x $y $z
+				lappend slaveNodeList($j) $pos
+				if {$masterNode($j) == 0} {
+					set masterNode($j) $pos		;#used in numDim == 2 for leaning column
 				}
 			} elseif {$loc == 2} {
 				set eleCode [eleCodeMap X-Beam]
 				set elePos "$j,$k,$i"
 				set x [expr $x*(1-$inputs(braceSpanRat))+$X($k,$i1)*$inputs(braceSpanRat)]
-				set tag [addNode $pos $x $y $z $eleCode $elePos]
-				lappend slaveNodeList($j) $tag
+				addNode $pos $x $y $z $eleCode $elePos
+				lappend slaveNodeList($j) $pos
 			} elseif {$loc == 3} {
 				set eleCode [eleCodeMap Y-Beam]
 				set elePos "$j,$k,$i"
 				set y [expr $y*(1-$inputs(braceSpanRat))+$Y($k1,$i)*$inputs(braceSpanRat)]
-				set tag [addNode $pos $x $y $z $eleCode $elePos]
-				lappend slaveNodeList($j) $tag
-			} elseif {($nBeamSeg > 1 || $lSegBeam > 0) && ($loc == "BX" || $loc == "BY")} {
+				addNode $pos $x $y $z $eleCode $elePos
+				lappend slaveNodeList($j) $pos
+			} elseif {$loc == "BX" || $loc == "BY"} {
 				if {$j == 0} {
 					continue
 				}
@@ -94,6 +72,20 @@ for {set j 0} {$j <= $inputs(nFlrs)} {incr j} {
 				set elePos $j,$k,$i
 				set sec $eleData(section,$eleCode,$elePos,1)
 				if {$sec == "-"} {
+					continue
+				}
+				set sg $eleData(SG,$eleCode,$elePos)
+				if [info exists inputs($sg,numSeg)] {
+					set nSeg $inputs($sg,numSeg)
+					set lSeg 0
+				} elseif [info exists inputs($sg,lSeg)] {
+					set nSeg 0
+					set lSeg $inputs($sg,lSeg)
+				} else {
+					set nSeg 1
+					set lSeg 0
+				}
+				if {$nSeg <= 1 && $lSeg == 0} {
 					continue
 				}
 				set i1 $i
@@ -117,9 +109,8 @@ for {set j 0} {$j <= $inputs(nFlrs)} {incr j} {
 				set l [expr $l-$d1-$d2]
 				set dx [expr $dx*$l]
 				set dy [expr $dy*$l]
-				set nSeg $nBeamSeg
 				if {$nSeg == 0} {
-					set nSeg [expr int($l/$lSegBeam)]
+					set nSeg [expr int($l/$lSeg)]
 				}
 				set dx [expr $dx/$nSeg]
 				set dy [expr $dy/$nSeg]
@@ -129,7 +120,7 @@ for {set j 0} {$j <= $inputs(nFlrs)} {incr j} {
 					set y [expr $y+$dy]
 					addNode $pos $x $y $z  $eleCode $elePos
 				}
-			} elseif {($nClmnSeg > 1 || $lSegClmn > 0) && $loc == "C"} {
+			} elseif {$loc == "C"} {
 				if {$j == 0} {
 					continue
 				}
@@ -139,23 +130,39 @@ for {set j 0} {$j <= $inputs(nFlrs)} {incr j} {
 				if {$sec == "-"} {
 					continue
 				}
+				set sg $eleData(SG,$eleCode,$elePos)
+				if {$inputs($sg,eleType) == "Hinge"} {
+					continue
+				}
+				if [info exists inputs($sg,numSeg)] {
+					set nSeg $inputs($sg,numSeg)
+					set lSeg 0
+				} elseif [info exists inputs($sg,lSeg)] {
+					set nSeg 0
+					set lSeg $inputs($sg,lSeg)
+				} else {
+					set nSeg 1
+					set lSeg 0
+				}
+				if {$nSeg <= 1 && $lSeg == 0} {
+					continue
+				}
 				set j1 [expr $j-1]
 				set iNode $j1,$k,$i,1
 				set jNode $j,$k,$i,1
 				foreach "x y z" [manageFEData -getNodeCrds $iNode] {}
 				set l [expr $Z($j)-$Z($j1)]
 				set d1 [expr ($jntData($iNode,dim,X,pp,v) + \
-							  $jntData($iNode,dim,X,np,v) +	\
-							  $jntData($iNode,dim,Y,pp,v) + \
-							  $jntData($iNode,dim,Y,np,v))*0.25*$inputs(rigidZoneFac)]
+					$jntData($iNode,dim,X,np,v) +	\
+					$jntData($iNode,dim,Y,pp,v) + \
+					$jntData($iNode,dim,Y,np,v))*0.25*$inputs(rigidZoneFac)]
 				set d2 [expr -($jntData($jNode,dim,X,pn,v) + \
-                        	   $jntData($jNode,dim,X,nn,v) +	\
-                        	   $jntData($jNode,dim,Y,pn,v) + \
-                        	   $jntData($jNode,dim,Y,nn,v))*0.25*$inputs(rigidZoneFac)]
+					$jntData($jNode,dim,X,nn,v) +	\
+					$jntData($jNode,dim,Y,pn,v) + \
+					$jntData($jNode,dim,Y,nn,v))*0.25*$inputs(rigidZoneFac)]
 				set l [expr $l-$d1-$d2]
-				set nSeg $nClmnSeg
 				if {$nSeg == 0} {
-					set nSeg [expr int($l/$lSegClmn)]
+					set nSeg [expr int($l/$lSeg)]
 				}
 				set dz [expr $l/$nSeg]
 				for {set m 1} {$m < $nSeg} {incr m} {
@@ -254,23 +261,50 @@ for {set j 0} {$j <= $inputs(nFlrs)} {incr j} {
 					}
 					set pos $eleCode,$elePos,$mem,g1
 					addNode $pos $xi $yi $zi
-					set pos $eleCode,$elePos,$mem,g2
-					addNode $pos $xi $yi $zi
+					if {$inputs(seeGussetSpring)} {
+						set pos $eleCode,$elePos,$mem,g2
+						addNode $pos $xi $yi $zi
+					}
 					foreach d "xj yj zj" dd "dx dy dz" {
 						set $d [expr [set $d]-[set $dd]*$dgj]
 					}
-					set pos $eleCode,$elePos,$mem,g3
-					addNode $pos $xj $yj $zj
+					if {$inputs(seeGussetSpring)} {
+						set pos $eleCode,$elePos,$mem,g3
+						addNode $pos $xj $yj $zj
+					}
 					set pos $eleCode,$elePos,$mem,g4
 					addNode $pos $xj $yj $zj
-
 					#imperfect sinusoidal meshing
 					if {$inputs(numDims) == 2} {
-						set dnx -$dz
-						set dnz $dx
 						set dny 0.
+						if {$mem == "L"} {
+							set dnx -$dz
+							set dnz $dx
+						} else {
+							set dnx $dz
+							set dnz -$dx
+						}
 					} else {
 						foreach "dnx dny dnz" $dn {}
+						# if {$dir == "X"} {
+						# 	if {$mem == "L"} {
+						# 		set dnx -$dz
+						# 		set dnz $dx
+						# 	} else {
+						# 		set dnx $dz
+						# 		set dnz -$dx
+						# 	}
+						# 	set dny 0
+						# } else {
+						# 	if {$mem == "L"} {
+						# 		set dny -$dz
+						# 		set dnz $dy
+						# 	} else {
+						# 		set dny $dz
+						# 		set dnz -$dy
+						# 	}
+						# 	set dnx 0
+						# }
 					}
 					set dl [expr $l/$inputs(nBraceSeg)]
 					set dr [expr ($dx**2.+$dy**2.)**0.5]

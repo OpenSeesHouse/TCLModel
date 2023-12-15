@@ -1,5 +1,10 @@
 proc addDiaphragm {perpDirn masterNode slaveNodeList} {
-	eval "rigidDiaphragm $perpDirn $masterNode $slaveNodeList"
+	set mntag [manageFEData -getNode $masterNode]
+	set snTags ""
+	foreach sn $slaveNodeList {
+		lappend snTags [manageFEData -getNode $sn]
+	}
+	eval "rigidDiaphragm $perpDirn $mntag $snTags"
 	return
 	# global inputs
 	# set E		$inputs(E)		
