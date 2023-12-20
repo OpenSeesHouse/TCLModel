@@ -24,12 +24,15 @@ set inputs(ly) [lsum $inputs(lBayY)]
 set inputs(cornerCrdList) "
 	9.14			0.
 	[expr $inputs(lx)-9.14] 0.
-	$inputs(lx) [expr $inputs(ly)-9.14]
-	0.	$inputs(ly)
+	$inputs(lx) 6.09
+	$inputs(lx) [expr $inputs(ly)-6.09]
+	[expr $inputs(lx)-9.14] $inputs(ly)
+	9.14 $inputs(ly)
+	0 [expr $inputs(ly)-6.09]
+	0.	6.09
 "
 # for recording corner nodes' drifts 
 set inputs(cornerGrdList) "
-	1	2
 	2	1
 	[expr $inputs(nBaysX)+1-1]	1
 	[expr $inputs(nBaysX)+1]	2
@@ -37,6 +40,7 @@ set inputs(cornerGrdList) "
 	[expr $inputs(nBaysX)+1-1]	[expr $inputs(nBaysY)+1]
 	2	[expr $inputs(nBaysY)+1]
 	1	[expr $inputs(nBaysY)+1-1]
+	1	2
 "
 set inputs(planArea) [expr $inputs(lx)*$inputs(ly)]
 set inputs(planPerim) [expr 2*($inputs(lx)+$inputs(ly))]
@@ -170,7 +174,7 @@ set inputs(seeGussetSpring) 1
 
 #_____________________________________________________
 
-set inputs(secFolder) ../general/sections
+set inputs(secFolder) $inputs(generalFolder)/sections
 # set inputs(lx) [lsum $inputs(lBayX)]
 # set inputs(ly) [lsum $inputs(lBayY)]
 # set inputs(eccRatX) 0.05

@@ -48,6 +48,7 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 					updateVar -sum jntData($iNode,dim,$dir,pp,v) $H2
 					updateVar -sum jntData($jNode,dim,$dir,nn,v) $H2
 					updateVar -sum jntData($jNode,dim,$dir,np,v) $H2
+					source $inputs(secFolder)/unsetSecProps.tcl
 				}
 
 				#brace
@@ -183,6 +184,7 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 				updateVar -sum jntData($iNodePos,dim,Y,pp,v) [expr $inputs(clmnBasePlateHeightFac)*$dy]
 				updateVar -sum jntData($iNodePos,dim,Y,np,v) [expr $inputs(clmnBasePlateHeightFac)*$dy]
 			}
+			source $inputs(secFolder)/unsetSecProps.tcl
 		}
 	}
 }

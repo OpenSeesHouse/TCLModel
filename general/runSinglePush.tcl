@@ -1,6 +1,6 @@
 #input: inputs(modelFolder), inputs(resFolder), inputs(pushDir)
-set checkResultAvailable 0
-if {$checkResultAvailable} {
+set inputs(checkResultAvailable) 0
+if {$inputs(checkResultAvailable)} {
 	set file [open $inputs(resFolder)/globalDriftX.out r]
 	set lines [split [read $file] \n]
 	close $file

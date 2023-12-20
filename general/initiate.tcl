@@ -1,7 +1,7 @@
 
 #Units: m, N, s
 set g 9.81
-source "$inputs(generalFolder)/lsum.tcl"
+source $inputs(generalFolder)/lsum.tcl
 source $inputs(generalFolder)/lNorm.tcl
 source $inputs(generalFolder)/Vector.tcl
 source $inputs(generalFolder)/sortArray.tcl
@@ -21,7 +21,6 @@ if ![info exists inputs(modelFolder)] {
 }
 logCommands -comment "modelFolder: $inputs(modelFolder)\n"
 source inputs.tcl
-source designData.tcl
 if {[info exists inputs(sharedInputsFile)] && $inputs(sharedInputsFile) != ""} {
 	source $inputs(sharedInputsFile)
 }

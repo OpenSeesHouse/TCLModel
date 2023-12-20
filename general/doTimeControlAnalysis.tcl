@@ -1,21 +1,5 @@
-#########################################################################
-#     please keep this notification at the beginning of this file       #
-#                                                                       #
-# Code to perform time-control analysis by avoidance of numerical divergence #
-#                                                                       #
-#                  Developed by Seyed Alireza Jalali                    #
-#        as part of the OpenSees course in civil808 institute           #
-#  for more information and any questions about this code,              #
-#               Join  "OpenSees SAJ" telegram group:                    #
-#            (https://t.me/joinchat/CJlXoECQvxiJXal0PkLfwg)             #
-#                     or visit: www.civil808.com                        #
-#                                                                       #
-#      DISTRIBUTION OF THIS CODE WITHOUT WRITTEN PERMISSION FROM        #
-#                THE DEVELOPER IS HEREBY RESTRICTED                     #
-#########################################################################
-
-#inputs: deltaT, Tmax, checkMaxResp
-set tol 1.e-2
+#inputs: deltaT, Tmax, inputs(checkMaxResp)
+set tol 1.e-3
 set tol1 $tol
 set algoList "Newton ModifiedNewton {NewtonLineSearch 0.65} KrylovNewton BFGS Broyden"
 wipeAnalysis
@@ -33,7 +17,8 @@ set curTime [getTime]
 set DT [expr $Tmax-$curTime]
 set nSteps [expr round($DT/$dt1)]
 
-if {$analType == "Dynamic"} {
+puts "########################## Trying: Newton, dt=$dt1 ##########################"
+if {$inputs(analType) == "dynamic"} {
 	set tryStep 0.1
 	integrator Newmark 0.5 0.25
 	analysis Transient
@@ -45,12 +30,11 @@ if {$analType == "Dynamic"} {
 	analysis Static
 	set ok [analyze $nSteps]
 }
-puts "########################## Trying: Newton, dt=$dt1 ##########################"
 set curTime [getTime]
 set DT [expr $Tmax-$curTime]
 set iTry 1
 while {$DT >= $deltaT} {
-	if {$checkMaxResp && [getMaxResp recTags] > 0.1} {
+	if {$inputs(checkMaxResp) && [getMaxResp recTags] > 0.1} {
 		set failureFlag 1
 		break
 	}
@@ -61,7 +45,7 @@ while {$DT >= $deltaT} {
 		test $testType $tol1 30
 		eval "algorithm $algo"
 		set nSteps [expr round($tryStep/$dt1)]
-		if {$analType == "Dynamic"} {
+		if {$inputs(analType) == "dynamic"} {
 			set ok [analyze $nSteps $dt1]
 		} else {
 			# Static
@@ -73,7 +57,7 @@ while {$DT >= $deltaT} {
 			set curTime [getTime]
 			set DT [expr $Tmax-$curTime]
 			set nSteps [expr round($DT/$deltaT)]
-			if {$analType == "Dynamic"} {
+			if {$inputs(analType) == "dynamic"} {
 				set ok [analyze $nSteps $deltaT]
 			} else {
 				# Static

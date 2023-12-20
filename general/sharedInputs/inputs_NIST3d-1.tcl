@@ -24,12 +24,15 @@ set inputs(ly) [lsum $inputs(lBayY)]
 set inputs(cornerCrdList) "
 	9.14			0.
 	[expr $inputs(lx)-9.14] 0.
-	$inputs(lx) [expr $inputs(ly)-9.14]
-	0.	$inputs(ly)
+	$inputs(lx) 6.09
+	$inputs(lx) [expr $inputs(ly)-6.09]
+	[expr $inputs(lx)-9.14] $inputs(ly)
+	9.14 $inputs(ly)
+	0 [expr $inputs(ly)-6.09]
+	0.	6.09
 "
 # for recording corner nodes' drifts 
 set inputs(cornerGrdList) "
-	1	2
 	2	1
 	[expr $inputs(nBaysX)+1-1]	1
 	[expr $inputs(nBaysX)+1]	2
@@ -37,6 +40,7 @@ set inputs(cornerGrdList) "
 	[expr $inputs(nBaysX)+1-1]	[expr $inputs(nBaysY)+1]
 	2	[expr $inputs(nBaysY)+1]
 	1	[expr $inputs(nBaysY)+1-1]
+	1	2
 "
 set inputs(planArea) [expr $inputs(lx)*$inputs(ly)]
 set inputs(planPerim) [expr 2*($inputs(lx)+$inputs(ly))]
@@ -44,8 +48,8 @@ set inputs(planPerim) [expr 2*($inputs(lx)+$inputs(ly))]
 
 # Mass
 #_____________________________________________________
-set inputs(deadRoof)  [expr 1.1*47.88/$g*56.0] 		;#=46 (D) + 10 (superDead)
-set inputs(deadFloor) [expr 1.1*47.88/$g*61.7] 		;#64.7= 46(D)+15(superDead)+3.7(Facade) in kg/m2
+set inputs(deadRoof)  [expr 1.4*47.88/$g*56.0] 		;#=46 (D) + 10 (superDead)
+set inputs(deadFloor) [expr 1.4*47.88/$g*61.7] 		;#64.7= 46(D)+15(superDead)+3.7(Facade) in kg/m2
 set inputs(liveRoof)  [expr 1.*47.88/$g*30]
 set inputs(liveFloor) [expr 1.*47.88/$g*50]
 set inputs(perimBeamDead) 370.							;#kg/m of perimeter beaam
@@ -139,7 +143,7 @@ set inputs(numSubdivL)	6
 set inputs(numSubdivT)	3
 ### for Hardening behavior:
 	set inputs(SG2,eleType) dispBeamColumn 	;#dispBeamColumn
-	set inputs(SG2,numSeg) 3
+	set inputs(SG2,numSeg) 1
 #	#set inputs(SG2,lSeg) 2.0		;#m
 	set inputs(SG2,IntegStr) {Lobatto $secTag 5}
 
@@ -173,7 +177,7 @@ set inputs(seeGussetSpring) 1
 
 #_____________________________________________________
 
-set inputs(secFolder) ../general/sections
+set inputs(secFolder) $inputs(generalFolder)/sections
 # set inputs(lx) [lsum $inputs(lBayX)]
 # set inputs(ly) [lsum $inputs(lBayY)]
 # set inputs(eccRatX) 0.05

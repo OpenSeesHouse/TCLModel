@@ -143,7 +143,7 @@ set inputs(braceInteg) {Lobatto $secTag $inputs(numIntegPntsBrace)}
 set inputs(seeGussetSpring) 1
 #_____________________________________________________
 
-set inputs(secFolder) ../general/sections
+set inputs(secFolder) $inputs(generalFolder)/sections
 set inputs(floorMass) [expr ($inputs(deadMassFac)*$inputs(deadFloor)+$inputs(liveMassFac)*$inputs(liveFloor))*$inputs(planArea)+$inputs(deadMassFac)*$inputs(perimBeamDead)*$inputs(planPerim)]
 set inputs(roofMass) [expr ($inputs(deadMassFac)*$inputs(deadRoof)+$inputs(liveMassFac)*$inputs(liveRoof))*$inputs(planArea)]
 puts "inputs(floorMass)= $inputs(floorMass)"

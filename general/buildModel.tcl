@@ -44,12 +44,29 @@ source $inputs(generalFolder)/defineMasses.tcl
 source $inputs(generalFolder)/cleanupNodes.tcl
 if {$inputs(doEigen) == 1} {
 	source $inputs(generalFolder)/doEigenAnalysis.tcl
-} elseif [info exists T1] {
-	set Tperiod $T1
-	set omega_1 [expr (2.*3.1415/$T1)]
-	set omega2List [expr $omega_1**2]
-	if [info exists T2] {
-		lappend omega2List [expr (2.*3.1415/$T2)**2]
+	set file [open periods.txt w]
+	for {set i 1} {$i <= $inputs(numModes)} {incr i} {
+		puts $file [set T$i]
+	}
+	close $file
+} else {
+	set omega2List ""
+	set inputs(numModes) 0
+	if [catch {open periods.txt r} file] {
+		if {$inputs(analType) == "dynamic"} {
+			puts "WARNING! periods and the omega2List could not be set"
+		}
+	} else {
+		set i 0
+		foreach T [split [read $file] " \n"] {
+			if {$T == ""} continue
+			incr i
+			set T$i $T
+			puts "T$i= $T"
+			lappend omega2List [expr (2.*3.1415/$T)**2]
+		}
+			set inputs(numModes) $i
+		close $file
 	}
 }
 if {[info exists omega2List] && $inputs(doRayleigh)} {

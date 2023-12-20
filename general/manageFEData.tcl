@@ -12,6 +12,7 @@ proc manageFEData {act args} {
 	global eleAlignedPos
 	global nodeCrds
 	global nodeMergeTol
+	global zeroOffsetTransf
 	if {$act == "-initiate"} {
 		set lastNodeTag 0
 		set lastEleTag 0
@@ -19,14 +20,10 @@ proc manageFEData {act args} {
 		set lastMaterialTag 0
 		set lastSecTag 0
 		set nodeMergeTol 0.01  ;#in units of m
-		if [info exists nodeTagMap] {
-			unset nodeTagMap
-			unset eleTagMap
-			unset transfTagMap
-			unset matTagMap
-			unset secTagMap
-			unset eleAlignedPos
-			unset nodeCrds
+		foreach arrName "nodeTagMap eleTagMap transfTagMap matTagMap secTagMap eleAlignedPos nodeCrds zeroOffsetTransf" {
+			if [info exists $arrName] {
+				unset $arrName
+			}
 		}
 		# set beamAlignedLocs(X) "2 BX_"
 		# set beamAlignedLocs(Y) "3 BY_"
@@ -40,7 +37,7 @@ proc manageFEData {act args} {
 		}
 		set nodeTagMap($pos) [incr lastNodeTag]
 		set arg0 [lindex $args 1]
-		
+
 		if {$arg0 == "-setAligned"} {
 			set eleCode [lindex $args 2]
 			set elePos [lindex $args 3]

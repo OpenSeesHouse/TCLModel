@@ -1,0 +1,173 @@
+Date : 2023-12-20 06:46:25
+Directory : i:\OmranElmAfzar\Software\TCLModel
+Total : 129 files,  6459 codes, 1168 comments, 476 blanks, all 8103 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| Tcl      |        129 |      6,459 |      1,168 |        476 |      8,103 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++--------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                           | files      | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                              |        129 |      6,459 |      1,168 |        476 |      8,103 |
+| . (Files)                                                                      |          4 |         70 |         26 |          5 |        101 |
+| Examples                                                                       |         30 |        479 |          0 |         75 |        554 |
+| Examples\CBF2D-4                                                               |          2 |         26 |          0 |          5 |         31 |
+| Examples\MC-16                                                                 |          2 |        122 |          0 |          7 |        129 |
+| Examples\MC-4                                                                  |          2 |         31 |          0 |          7 |         38 |
+| Examples\MC-8                                                                  |          2 |         59 |          0 |          8 |         67 |
+| Examples\NIST-sym-16                                                           |          2 |         39 |          0 |          5 |         44 |
+| Examples\NIST-sym-16-MEF-10%                                                   |          2 |         39 |          0 |          5 |         44 |
+| Examples\NIST-sym-16-MEF-20%                                                   |          2 |         39 |          0 |          5 |         44 |
+| Examples\NIST-sym-4                                                            |          2 |         13 |          0 |          5 |         18 |
+| Examples\NIST-sym-4-MEF-10%                                                    |          2 |         13 |          0 |          5 |         18 |
+| Examples\NIST-sym-4-MEF-20%                                                    |          2 |         13 |          0 |          5 |         18 |
+| Examples\NIST-sym-8                                                            |          2 |         21 |          0 |          4 |         25 |
+| Examples\NIST-sym-8-MEF-10%                                                    |          2 |         21 |          0 |          4 |         25 |
+| Examples\NIST-sym-8-MEF-20%                                                    |          2 |         21 |          0 |          4 |         25 |
+| Examples\SMF2D-4-fiber                                                         |          2 |         11 |          0 |          3 |         14 |
+| Examples\SMF2D-4-hinge                                                         |          2 |         11 |          0 |          3 |         14 |
+| general                                                                        |         95 |      5,910 |      1,142 |        396 |      7,448 |
+| general (Files)                                                                |         90 |      5,029 |        804 |        295 |      6,128 |
+| general\sharedInputs                                                           |          5 |        881 |        338 |        101 |      1,320 |
++--------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++--------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                       | language | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| i:\OmranElmAfzar\Software\TCLModel\Examples\CBF2D-4\designData.tcl             | Tcl      |         24 |          0 |          5 |         29 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\CBF2D-4\inputs.tcl                 | Tcl      |          2 |          0 |          0 |          2 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\MC-16\designData.tcl               | Tcl      |        119 |          0 |          6 |        125 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\MC-16\inputs.tcl                   | Tcl      |          3 |          0 |          1 |          4 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\MC-4\designData.tcl                | Tcl      |         28 |          0 |          5 |         33 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\MC-4\inputs.tcl                    | Tcl      |          3 |          0 |          2 |          5 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\MC-8\designData.tcl                | Tcl      |         56 |          0 |          6 |         62 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\MC-8\inputs.tcl                    | Tcl      |          3 |          0 |          2 |          5 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\NIST-sym-16-MEF-10%\designData.tcl | Tcl      |         34 |          0 |          3 |         37 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\NIST-sym-16-MEF-10%\inputs.tcl     | Tcl      |          5 |          0 |          2 |          7 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\NIST-sym-16-MEF-20%\designData.tcl | Tcl      |         34 |          0 |          3 |         37 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\NIST-sym-16-MEF-20%\inputs.tcl     | Tcl      |          5 |          0 |          2 |          7 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\NIST-sym-16\designData.tcl         | Tcl      |         34 |          0 |          3 |         37 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\NIST-sym-16\inputs.tcl             | Tcl      |          5 |          0 |          2 |          7 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\NIST-sym-4-MEF-10%\designData.tcl  | Tcl      |          8 |          0 |          3 |         11 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\NIST-sym-4-MEF-10%\inputs.tcl      | Tcl      |          5 |          0 |          2 |          7 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\NIST-sym-4-MEF-20%\designData.tcl  | Tcl      |          8 |          0 |          3 |         11 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\NIST-sym-4-MEF-20%\inputs.tcl      | Tcl      |          5 |          0 |          2 |          7 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\NIST-sym-4\designData.tcl          | Tcl      |          8 |          0 |          3 |         11 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\NIST-sym-4\inputs.tcl              | Tcl      |          5 |          0 |          2 |          7 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\NIST-sym-8-MEF-10%\designData.tcl  | Tcl      |         16 |          0 |          1 |         17 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\NIST-sym-8-MEF-10%\inputs.tcl      | Tcl      |          5 |          0 |          3 |          8 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\NIST-sym-8-MEF-20%\designData.tcl  | Tcl      |         16 |          0 |          1 |         17 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\NIST-sym-8-MEF-20%\inputs.tcl      | Tcl      |          5 |          0 |          3 |          8 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\NIST-sym-8\designData.tcl          | Tcl      |         16 |          0 |          1 |         17 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\NIST-sym-8\inputs.tcl              | Tcl      |          5 |          0 |          3 |          8 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\SMF2D-4-fiber\designData.tcl       | Tcl      |          8 |          0 |          2 |         10 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\SMF2D-4-fiber\inputs.tcl           | Tcl      |          3 |          0 |          1 |          4 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\SMF2D-4-hinge\designData.tcl       | Tcl      |          8 |          0 |          2 |         10 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\SMF2D-4-hinge\inputs.tcl           | Tcl      |          3 |          0 |          1 |          4 |
+| i:\OmranElmAfzar\Software\TCLModel\checkSections.tcl                           | Tcl      |         15 |          1 |          0 |         16 |
+| i:\OmranElmAfzar\Software\TCLModel\general\Box-section.tcl                     | Tcl      |         17 |          1 |          3 |         21 |
+| i:\OmranElmAfzar\Software\TCLModel\general\BraceSections.tcl                   | Tcl      |         36 |          2 |          3 |         41 |
+| i:\OmranElmAfzar\Software\TCLModel\general\ComputeFatigueTube.tcl              | Tcl      |          7 |          0 |          1 |          8 |
+| i:\OmranElmAfzar\Software\TCLModel\general\I-section.tcl                       | Tcl      |         16 |         16 |          3 |         35 |
+| i:\OmranElmAfzar\Software\TCLModel\general\Joint3d.tcl                         | Tcl      |         49 |          1 |          2 |         52 |
+| i:\OmranElmAfzar\Software\TCLModel\general\RCsection.tcl                       | Tcl      |         55 |          1 |          4 |         60 |
+| i:\OmranElmAfzar\Software\TCLModel\general\SDOFNTHA.tcl                        | Tcl      |         37 |          4 |          6 |         47 |
+| i:\OmranElmAfzar\Software\TCLModel\general\Vector.tcl                          | Tcl      |         24 |          0 |          0 |         24 |
+| i:\OmranElmAfzar\Software\TCLModel\general\addDiaphragm.tcl                    | Tcl      |          9 |         48 |          1 |         58 |
+| i:\OmranElmAfzar\Software\TCLModel\general\addElement.tcl                      | Tcl      |          8 |          0 |          0 |          8 |
+| i:\OmranElmAfzar\Software\TCLModel\general\addFiberMember.tcl                  | Tcl      |        166 |          1 |          2 |        169 |
+| i:\OmranElmAfzar\Software\TCLModel\general\addGeomTransf.tcl                   | Tcl      |         45 |          0 |          0 |         45 |
+| i:\OmranElmAfzar\Software\TCLModel\general\addHingeBeam.tcl                    | Tcl      |        115 |          0 |          0 |        115 |
+| i:\OmranElmAfzar\Software\TCLModel\general\addHingeColumn.tcl                  | Tcl      |         63 |          2 |          0 |         65 |
+| i:\OmranElmAfzar\Software\TCLModel\general\addNode.tcl                         | Tcl      |         16 |          0 |          1 |         17 |
+| i:\OmranElmAfzar\Software\TCLModel\general\addTMD.tcl                          | Tcl      |         42 |          1 |          6 |         49 |
+| i:\OmranElmAfzar\Software\TCLModel\general\analyze.GM.Free.tcl                 | Tcl      |         10 |          0 |          0 |         10 |
+| i:\OmranElmAfzar\Software\TCLModel\general\analyze.gm.uniform.tcl              | Tcl      |         12 |          0 |          1 |         13 |
+| i:\OmranElmAfzar\Software\TCLModel\general\analyze.gravity.tcl                 | Tcl      |         69 |          7 |          1 |         77 |
+| i:\OmranElmAfzar\Software\TCLModel\general\analyze.push.tcl                    | Tcl      |         51 |          2 |          2 |         55 |
+| i:\OmranElmAfzar\Software\TCLModel\general\analyze.pushover.run.tcl            | Tcl      |         72 |          2 |          2 |         76 |
+| i:\OmranElmAfzar\Software\TCLModel\general\beamColumnSectionsRC.tcl            | Tcl      |        241 |         75 |         25 |        341 |
+| i:\OmranElmAfzar\Software\TCLModel\general\beamColumnSectionsSteel.tcl         | Tcl      |        213 |         16 |         10 |        239 |
+| i:\OmranElmAfzar\Software\TCLModel\general\buildModel.tcl                      | Tcl      |         70 |          5 |          4 |         79 |
+| i:\OmranElmAfzar\Software\TCLModel\general\calculateMy.tcl                     | Tcl      |         79 |         76 |         32 |        187 |
+| i:\OmranElmAfzar\Software\TCLModel\general\checkInputs.tcl                     | Tcl      |         63 |          0 |          5 |         68 |
+| i:\OmranElmAfzar\Software\TCLModel\general\checkResultAvailable.tcl            | Tcl      |         95 |         11 |          7 |        113 |
+| i:\OmranElmAfzar\Software\TCLModel\general\cleanupNodes.tcl                    | Tcl      |         13 |          2 |          1 |         16 |
+| i:\OmranElmAfzar\Software\TCLModel\general\computeDrift3d.tcl                  | Tcl      |         12 |          0 |          0 |         12 |
+| i:\OmranElmAfzar\Software\TCLModel\general\computeFij.tcl                      | Tcl      |         25 |          6 |          1 |         32 |
+| i:\OmranElmAfzar\Software\TCLModel\general\computeHingeASCE.tcl                | Tcl      |         58 |         17 |          4 |         79 |
+| i:\OmranElmAfzar\Software\TCLModel\general\computeHingeHSS.tcl                 | Tcl      |         26 |         17 |          0 |         43 |
+| i:\OmranElmAfzar\Software\TCLModel\general\computeHingeRBS-old.tcl             | Tcl      |         11 |         23 |          3 |         37 |
+| i:\OmranElmAfzar\Software\TCLModel\general\computeHingeRBS.tcl                 | Tcl      |         15 |         19 |          4 |         38 |
+| i:\OmranElmAfzar\Software\TCLModel\general\computeHingeRC.tcl                  | Tcl      |         62 |         41 |         23 |        126 |
+| i:\OmranElmAfzar\Software\TCLModel\general\computeHingeW-old.tcl               | Tcl      |         19 |         24 |          3 |         46 |
+| i:\OmranElmAfzar\Software\TCLModel\general\computeHingeWBeam.tcl               | Tcl      |         27 |         22 |         11 |         60 |
+| i:\OmranElmAfzar\Software\TCLModel\general\computeHingeWColumn.tcl             | Tcl      |         43 |         13 |         14 |         70 |
+| i:\OmranElmAfzar\Software\TCLModel\general\computeHingeWWeak.tcl               | Tcl      |         17 |         23 |          3 |         43 |
+| i:\OmranElmAfzar\Software\TCLModel\general\computeJntData.tcl                  | Tcl      |        150 |         45 |         10 |        205 |
+| i:\OmranElmAfzar\Software\TCLModel\general\computeLp.tcl                       | Tcl      |          4 |          0 |          1 |          5 |
+| i:\OmranElmAfzar\Software\TCLModel\general\computeModalPattern.tcl             | Tcl      |         77 |          6 |          1 |         84 |
+| i:\OmranElmAfzar\Software\TCLModel\general\computePanelZone.tcl                | Tcl      |         10 |         20 |          7 |         37 |
+| i:\OmranElmAfzar\Software\TCLModel\general\computePhi.tcl                      | Tcl      |         52 |          7 |          1 |         60 |
+| i:\OmranElmAfzar\Software\TCLModel\general\computeRotatedDrift.tcl             | Tcl      |         34 |          1 |          4 |         39 |
+| i:\OmranElmAfzar\Software\TCLModel\general\covar.tcl                           | Tcl      |         23 |          0 |          0 |         23 |
+| i:\OmranElmAfzar\Software\TCLModel\general\defineBaseSupports.tcl              | Tcl      |         26 |          0 |          1 |         27 |
+| i:\OmranElmAfzar\Software\TCLModel\general\defineBeams.tcl                     | Tcl      |         57 |          1 |          0 |         58 |
+| i:\OmranElmAfzar\Software\TCLModel\general\defineBraces.tcl                    | Tcl      |        106 |         30 |          6 |        142 |
+| i:\OmranElmAfzar\Software\TCLModel\general\defineColumns.tcl                   | Tcl      |         49 |          1 |          1 |         51 |
+| i:\OmranElmAfzar\Software\TCLModel\general\defineDiaphragms.tcl                | Tcl      |         32 |          0 |          1 |         33 |
+| i:\OmranElmAfzar\Software\TCLModel\general\defineLeaningColumns.tcl            | Tcl      |         45 |         13 |          3 |         61 |
+| i:\OmranElmAfzar\Software\TCLModel\general\defineMasses.tcl                    | Tcl      |         18 |          1 |          1 |         20 |
+| i:\OmranElmAfzar\Software\TCLModel\general\defineNodes.tcl                     | Tcl      |        288 |         34 |          4 |        326 |
+| i:\OmranElmAfzar\Software\TCLModel\general\defineRayleighDamping.tcl           | Tcl      |          6 |          0 |          1 |          7 |
+| i:\OmranElmAfzar\Software\TCLModel\general\defineRecorders.tcl                 | Tcl      |        213 |         36 |          5 |        254 |
+| i:\OmranElmAfzar\Software\TCLModel\general\doDispControlAnalysis.tcl           | Tcl      |         83 |          0 |          2 |         85 |
+| i:\OmranElmAfzar\Software\TCLModel\general\doEigen.tcl                         | Tcl      |         24 |          2 |          2 |         28 |
+| i:\OmranElmAfzar\Software\TCLModel\general\doEigenAnalysis.tcl                 | Tcl      |          8 |          2 |          1 |         11 |
+| i:\OmranElmAfzar\Software\TCLModel\general\doTimeControlAnalysis.tcl           | Tcl      |         86 |          4 |          2 |         92 |
+| i:\OmranElmAfzar\Software\TCLModel\general\eleCodeMap.tcl                      | Tcl      |         39 |          0 |          0 |         39 |
+| i:\OmranElmAfzar\Software\TCLModel\general\findMax.tcl                         | Tcl      |         12 |          0 |          0 |         12 |
+| i:\OmranElmAfzar\Software\TCLModel\general\getMax.tcl                          | Tcl      |         16 |          0 |          0 |         16 |
+| i:\OmranElmAfzar\Software\TCLModel\general\getMaxAmp.tcl                       | Tcl      |         17 |          1 |          0 |         18 |
+| i:\OmranElmAfzar\Software\TCLModel\general\getMaxResp.tcl                      | Tcl      |         15 |          1 |          0 |         16 |
+| i:\OmranElmAfzar\Software\TCLModel\general\gmData.tcl                          | Tcl      |         53 |          1 |          0 |         54 |
+| i:\OmranElmAfzar\Software\TCLModel\general\idealizePush.tcl                    | Tcl      |         68 |          5 |          2 |         75 |
+| i:\OmranElmAfzar\Software\TCLModel\general\initiate.tcl                        | Tcl      |         36 |          2 |          3 |         41 |
+| i:\OmranElmAfzar\Software\TCLModel\general\interpolate.tcl                     | Tcl      |         39 |          1 |          1 |         41 |
+| i:\OmranElmAfzar\Software\TCLModel\general\interpolateMy.tcl                   | Tcl      |         52 |          4 |          0 |         56 |
+| i:\OmranElmAfzar\Software\TCLModel\general\interpolateXYFile.tcl               | Tcl      |         56 |          1 |          1 |         58 |
+| i:\OmranElmAfzar\Software\TCLModel\general\interpolateXYFileAtN.tcl            | Tcl      |         39 |          1 |          1 |         41 |
+| i:\OmranElmAfzar\Software\TCLModel\general\lNorm.tcl                           | Tcl      |          8 |          0 |          0 |          8 |
+| i:\OmranElmAfzar\Software\TCLModel\general\lsum.tcl                            | Tcl      |         10 |          0 |          0 |         10 |
+| i:\OmranElmAfzar\Software\TCLModel\general\manageFEData.tcl                    | Tcl      |        169 |          3 |          1 |        173 |
+| i:\OmranElmAfzar\Software\TCLModel\general\manageGeomData.tcl                  | Tcl      |        165 |          1 |          3 |        169 |
+| i:\OmranElmAfzar\Software\TCLModel\general\processDriftOutput.tcl              | Tcl      |         64 |          3 |         12 |         79 |
+| i:\OmranElmAfzar\Software\TCLModel\general\readDataFile.tcl                    | Tcl      |         18 |          4 |          0 |         22 |
+| i:\OmranElmAfzar\Software\TCLModel\general\readInputs.tcl                      | Tcl      |        405 |          8 |          6 |        419 |
+| i:\OmranElmAfzar\Software\TCLModel\general\readList.tcl                        | Tcl      |          6 |          0 |          0 |          6 |
+| i:\OmranElmAfzar\Software\TCLModel\general\recordModeShapes.tcl                | Tcl      |         16 |          0 |          0 |         16 |
+| i:\OmranElmAfzar\Software\TCLModel\general\releaseFromChar.tcl                 | Tcl      |         15 |          0 |          1 |         16 |
+| i:\OmranElmAfzar\Software\TCLModel\general\runMirroredTH.tcl                   | Tcl      |         88 |          3 |          4 |         95 |
+| i:\OmranElmAfzar\Software\TCLModel\general\runSinglePush.tcl                   | Tcl      |         32 |          8 |          1 |         41 |
+| i:\OmranElmAfzar\Software\TCLModel\general\runSingleTH.tcl                     | Tcl      |         79 |          3 |          4 |         86 |
+| i:\OmranElmAfzar\Software\TCLModel\general\runSingleTH_SF.tcl                  | Tcl      |         61 |         48 |          9 |        118 |
+| i:\OmranElmAfzar\Software\TCLModel\general\saveList.tcl                        | Tcl      |          6 |          0 |          0 |          6 |
+| i:\OmranElmAfzar\Software\TCLModel\general\sharedInputs\inputs_CBF2d.tcl       | Tcl      |        127 |         56 |         18 |        201 |
+| i:\OmranElmAfzar\Software\TCLModel\general\sharedInputs\inputs_NIST3d-1.tcl    | Tcl      |        220 |         88 |         24 |        332 |
+| i:\OmranElmAfzar\Software\TCLModel\general\sharedInputs\inputs_NIST3d-2.tcl    | Tcl      |        213 |         86 |         24 |        323 |
+| i:\OmranElmAfzar\Software\TCLModel\general\sharedInputs\inputs_NIST3d-sym.tcl  | Tcl      |        204 |         67 |         18 |        289 |
+| i:\OmranElmAfzar\Software\TCLModel\general\sharedInputs\inputs_SMF2d.tcl       | Tcl      |        117 |         41 |         17 |        175 |
+| i:\OmranElmAfzar\Software\TCLModel\general\shearSpring.tcl                     | Tcl      |          9 |         23 |          2 |         34 |
+| i:\OmranElmAfzar\Software\TCLModel\general\sortArray.tcl                       | Tcl      |         18 |          0 |          0 |         18 |
+| i:\OmranElmAfzar\Software\TCLModel\general\spectrum.tcl                        | Tcl      |         19 |          2 |          2 |         23 |
+| i:\OmranElmAfzar\Software\TCLModel\run.TH.tcl                                  | Tcl      |         18 |         12 |          1 |         31 |
+| i:\OmranElmAfzar\Software\TCLModel\run.eigen.tcl                               | Tcl      |         19 |          6 |          2 |         27 |
+| i:\OmranElmAfzar\Software\TCLModel\run.push.tcl                                | Tcl      |         18 |          7 |          2 |         27 |
+| Total                                                                          |          |      6,459 |      1,168 |        476 |      8,103 |
++--------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

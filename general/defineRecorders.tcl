@@ -11,8 +11,9 @@ if {[info exists inputs(recordCADSees)] == 0} {
 file mkdir $inputs(resFolder)/envelopeDrifts
 # file mkdir $inputs(resFolder)/Drifts
 if {$inputs(numDims) == 3} {
+	file mkdir $inputs(resFolder)/envelopeAccels
 	set perpDirn 3
-	# set baseCrnrs ""
+	set baseCrnrs ""
 	set roofCrnrs ""
 	foreach "i k" $inputs(cornerGrdList) {
 		set tag [manageFEData -getNode "0,$k,$i,1"]
@@ -23,10 +24,12 @@ if {$inputs(numDims) == 3} {
 	set rnTag [manageFEData -getNode $roofNode]
 	set bnTag [manageFEData -getNode $baseNode]
 	eval "recorder Drift -file $inputs(resFolder)/globalDriftX.out -time -iNode $bnTag -jNode $rnTag -dof 1 -perpDirn $perpDirn"
-	eval "recorder Drift -file $inputs(resFolder)/globalDriftY.out -time -iNode $bnTag -jNode $rnTag -dof 2 -perpDirn $perpDirn"
-	eval "recorder Drift -file $inputs(resFolder)/globalDriftR.out -time -iNode $bnTag -jNode $rnTag -dof 6 -perpDirn $perpDirn"
-	eval "recorder EnvelopeDrift -file $inputs(resFolder)/globalDriftCNX.out -time -process maxAbs -iNode $baseCrnrs -jNode $roofCrnrs -dof 1 -perpDirn $perpDirn"
-	eval "recorder EnvelopeDrift -file $inputs(resFolder)/globalDriftCNY.out -time -process maxAbs -iNode $baseCrnrs -jNode $roofCrnrs -dof 2 -perpDirn $perpDirn"
+	if {$inputs(analType) == "push"} {
+		eval "recorder Drift -file $inputs(resFolder)/globalDriftY.out -time -iNode $bnTag -jNode $rnTag -dof 2 -perpDirn $perpDirn"
+		eval "recorder Drift -file $inputs(resFolder)/globalDriftR.out -time -iNode $bnTag -jNode $rnTag -dof 6 -perpDirn $perpDirn"
+	}
+	# eval "recorder EnvelopeDrift -file $inputs(resFolder)/globalDriftCNX.out -time -process maxAbs -iNode $baseCrnrs -jNode $roofCrnrs -dof 1 -perpDirn $perpDirn"
+	# eval "recorder EnvelopeDrift -file $inputs(resFolder)/globalDriftCNY.out -time -process maxAbs -iNode $baseCrnrs -jNode $roofCrnrs -dof 2 -perpDirn $perpDirn"
 } else {
 	set perpDirn 2
 	set bsnTag [manageFEData -getNode $baseNode]
@@ -47,34 +50,46 @@ set allNodes $nd1
 for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 	set nd2 [manageFEData -getNode $masterNode($j)]
 	if {$inputs(numDims) == 2} {
-		set recTags($j) [eval "recorder EnvelopeDrift -file $inputs(resFolder)/envelopeDrifts/CMX$j.out -time -iNode $nd1 -jNode $nd2 -dof 1 -perpDirn $perpDirn"]
-		# recorder Drift -file $inputs(resFolder)/Drifts/$j.out -time -iNode $iNode -jNode $jNode -dof 1 -perpDirn $perpDirn
+		set recTags($j) [eval "recorder EnvelopeDrift -file $inputs(resFolder)/envelopeDrifts/CMX$j.out -iNode $nd1 -jNode $nd2 -dof 1 -perpDirn $perpDirn"]
+		if {$inputs(doFreeVibrate)} {
+			set recTagsAmp($j) [eval "recorder EnvelopeDrift -file $inputs(resFolder)/envelopeDrifts/CMX$j-amp.out -iNode $nd1 -jNode $nd2 -dof 1 -perpDirn $perpDirn"]
+		}
 	} else {
 		set crnrNds ""
 		foreach "i k" $inputs(cornerGrdList) {
 			set tag [manageFEData -getNode $j,$k,$i,1]
 			lappend crnrNds $tag
 		}
-		set recTags([expr 2*$j-1]) [eval "recorder EnvelopeDrift -file $inputs(resFolder)/envelopeDrifts/CMX$j.out -time -iNode $nd1 -jNode $nd2 -dof 1 -perpDirn $perpDirn"]
-		set recTags([expr 2*$j-0]) [eval "recorder EnvelopeDrift -file $inputs(resFolder)/envelopeDrifts/CMY$j.out -time -iNode $nd1 -jNode $nd2 -dof 2 -perpDirn $perpDirn"]
-		eval "recorder EnvelopeDrift -file $inputs(resFolder)/envelopeDrifts/CMR$j.out -time -iNode $nd1 -jNode $nd2 -dof 6 -perpDirn $perpDirn"
-		eval "recorder EnvelopeDrift -file $inputs(resFolder)/envelopeDrifts/CNX$j.out -time -process maxAbs -iNode $baseCrnrs -jNode $crnrNds -dof 1 -perpDirn $perpDirn"
-		eval "recorder EnvelopeDrift -file $inputs(resFolder)/envelopeDrifts/CNY$j.out -time -process maxAbs -iNode $baseCrnrs -jNode $crnrNds -dof 2 -perpDirn $perpDirn"
-		# recorder Drift -file $inputs(resFolder)/Drifts/$j.out -time -iNode $iNode -jNode $jNode -dof 1 2 6 -perpDirn $perpDirn
+		set recTags([expr 2*$j-1]) [eval "recorder EnvelopeDrift -file $inputs(resFolder)/envelopeDrifts/CMX$j.out -iNode $nd1 -jNode $nd2 -dof 1 -perpDirn $perpDirn"]
+		set recTags([expr 2*$j-0]) [eval "recorder EnvelopeDrift -file $inputs(resFolder)/envelopeDrifts/CMY$j.out -iNode $nd1 -jNode $nd2 -dof 2 -perpDirn $perpDirn"]
+		if {$inputs(doFreeVibrate)} {
+			set recTagsAmp([expr 2*$j-1]) [eval "recorder EnvelopeDrift -file $inputs(resFolder)/envelopeDrifts/CMX$j-amp.out -iNode $nd1 -jNode $nd2 -dof 1 -perpDirn $perpDirn"]
+			set recTagsAmp([expr 2*$j-0]) [eval "recorder EnvelopeDrift -file $inputs(resFolder)/envelopeDrifts/CMY$j-amp.out -iNode $nd1 -jNode $nd2 -dof 2 -perpDirn $perpDirn"]
+		}
+		eval "recorder EnvelopeDrift -file $inputs(resFolder)/envelopeDrifts/CMR$j.out -iNode $nd1 -jNode $nd2 -dof 6 -perpDirn $perpDirn"
+		eval "recorder EnvelopeDrift -file $inputs(resFolder)/envelopeDrifts/CNX$j-max.out -process maxAbs -iNode $baseCrnrs -jNode $crnrNds -dof 1 -perpDirn $perpDirn"
+		eval "recorder EnvelopeDrift -file $inputs(resFolder)/envelopeDrifts/CNY$j-max.out -process maxAbs -iNode $baseCrnrs -jNode $crnrNds -dof 2 -perpDirn $perpDirn"
+		eval "recorder EnvelopeDrift -file $inputs(resFolder)/envelopeDrifts/CNX$j.out                     -iNode $baseCrnrs -jNode $crnrNds -dof 1 -perpDirn $perpDirn"
+		eval "recorder EnvelopeDrift -file $inputs(resFolder)/envelopeDrifts/CNY$j.out                     -iNode $baseCrnrs -jNode $crnrNds -dof 2 -perpDirn $perpDirn"
+		# recorder Drift -file $inputs(resFolder)/Drifts/$j.out -iNode $iNode -jNode $jNode -dof 1 2 6 -perpDirn $perpDirn
 		set baseCrnrs $crnrNds
+		if {$inputs(numDims) == 3 && [info exists seriesTagX]} {
+			eval "recorder EnvelopeNode -file $inputs(resFolder)/envelopeAccels/CNX$j.out -node $crnrNds -timeSeries $seriesTagX -dof 1 accel"
+			eval "recorder EnvelopeNode -file $inputs(resFolder)/envelopeAccels/CNY$j.out -node $crnrNds -timeSeries $seriesTagY -dof 2 accel"
+		}
 	}
 	lappend allNodes $nd2
 	set nd1 $nd2
 }
 if [info exists seriesTagX] {
-	eval "recorder EnvelopeNode -file $inputs(resFolder)/allStoryAccelsX.out -node $allNodes -timeSeries $seriesTagX -dof 1 accel"
+	eval "recorder EnvelopeNode -file $inputs(resFolder)/envelopeAccels/allCMX.out -node $allNodes -timeSeries $seriesTagX -dof 1 accel"
 	if {$inputs(numDims) == 3} {
-		eval "recorder EnvelopeNode -file $inputs(resFolder)/allStoryAccelsY.out -node $allNodes -timeSeries $seriesTagY -dof 2 accel"
+		eval "recorder EnvelopeNode -file $inputs(resFolder)/envelopeAccels/allCMY.out -node $allNodes -timeSeries $seriesTagY -dof 2 accel"
 	}
 }
 
-# eval "recorder EnvelopeNode -file $inputs(resFolder)/envbaseReacts.out -time -node $slaveNodeList(0) -dof 1 2 6 reaction"
-# eval "recorder Node -file $inputs(resFolder)/baseReacts.out -time -node $slaveNodeList(0) -dof 1 2 6 reaction"
+# eval "recorder EnvelopeNode -file $inputs(resFolder)/envbaseReacts.out -node $slaveNodeList(0) -dof 1 2 6 reaction"
+# eval "recorder Node -file $inputs(resFolder)/baseReacts.out -node $slaveNodeList(0) -dof 1 2 6 reaction"
 
 for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 	set shearList($j) ""

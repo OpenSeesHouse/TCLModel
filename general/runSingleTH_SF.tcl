@@ -2,11 +2,11 @@
 #outputs: disp, failureFlag
 
 #set resFilePath test.txt
-set inputs(generalFolder) general
+set inputs(generalFolder) ../../general
 # source $inputs(generalFolder)/readDataFile.tcl
 setMaxOpenFiles 2048
 set inputs(doEigen) 0
-set file [open $inputs(modelFolder)/periods.txt r]
+set file [open periods.txt r]
 set i 1
 foreach T [split [read $file] \n] {
 	if {$T == ""} continue
@@ -15,10 +15,8 @@ foreach T [split [read $file] \n] {
 	incr i
 }
 close $file
-set inputs(generalFolder) general
-logCommands -file $inputs(modelFolder)/cmndsLog.tcl
+logCommands -file cmndsLog.tcl
 source $inputs(generalFolder)/initiate.tcl
-source $inputs(generalFolder)/lsum.tcl
 source $inputs(generalFolder)/computeDrift3d.tcl
 # source $inputs(generalFolder)/spectrum.tcl
 source $inputs(generalFolder)/gmData.tcl
@@ -75,8 +73,8 @@ if {$resAvailable == 0} {
 	source $inputs(generalFolder)/defineRecorders.tcl
 	puts "recorders defined !"
 	source $inputs(generalFolder)/analyze.gm.uniform.tcl
-	# set freePeriod [expr 4*$Tperiod]
-	# set maxFreeTime [expr 3*$Tmax]
+	# set freeVibrPeriod [expr 4*$Tperiod]
+	# set inputs(maxFreeVibrTime) [expr 3*$Tmax]
 	# set resTol 1.e-4
 	#source $inputs(generalFolder)/analyze.gm.free.tcl
 }

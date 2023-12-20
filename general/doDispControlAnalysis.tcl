@@ -1,24 +1,8 @@
-#########################################################################
-#     please keep this notification at the beginning of this file       #
-#                                                                       #
-# Code to perform disp-control analysis by avoidance of numerical divergence#
-#                                                                       #
-#                  Developed by Seyed Alireza Jalali                    #
-#        as part of the OpenSees course in civil808 institute           #
-#  for more information and any questions about this code,              #
-#               Join  "OpenSees SAJ" telegram group:                    #
-#            (https://t.me/joinchat/CJlXoECQvxiJXal0PkLfwg)             #
-#                     or visit: www.civil808.com                        #
-#                                                                       #
-#      DISTRIBUTION OF THIS CODE WITHOUT WRITTEN PERMISSION FROM        #
-#                THE DEVELOPER IS HEREBY RESTRICTED                     #
-#########################################################################
 
-#source this file after building the model and applying the pushover load pattern
-set tol 1.e-1										;#minimum tolerance of convergence test
+set tol 1.e-3
 set tol1 $tol
 set algoList "ModifiedNewton {NewtonLineSearch 0.65} KrylovNewton Newton" ;#the desired list of algorithms; broyden and BFGS may lead to unacceptable values in static analysis
-# wipeAnalysis
+wipeAnalysis
 set testType NormDispIncr  
 set numAlgos [llength $algoList]
 constraints Transformation

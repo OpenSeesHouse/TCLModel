@@ -59,8 +59,8 @@ pattern Plain 1 Linear {
 	}
 }
 wipeAnalysis
-# constraints Transformation
-constraints Plain
+constraints Transformation
+# constraints Plain
 numberer RCM
 # system BandGeneral
 system UmfPack

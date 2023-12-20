@@ -18,7 +18,7 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
                     set lBrace [manageGeomData -getBraceLength $mem $code $pos]
                     source $inputs(secFolder)/$sec.tcl
                     source $inputs(secFolder)/convertToM.tcl
-                    source ../general/ComputeFatigueTube.tcl
+                    source $inputs(generalFolder)/ComputeFatigueTube.tcl
                     set matID [manageFEData -newMaterial brace,$dir,$j,$k,$i,$mem]
                     uniaxialMaterial Fatigue $matID $braceMatTag -E0 $e0 -m $m
 					Box-section $matID $ID $t3 $t2 $tf $tw $inputs(numSubdivL) $inputs(numSubdivT) [expr $G*$J]
@@ -32,6 +32,7 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
                     set matID [manageFEData -newMaterial gusset,$dir,$j,$k,$i,$mem]
                     uniaxialMaterial Steel02 $matID $MyGuss $Kcal 0.01
                     # uniaxialMaterial Elastic $matID [expr 0.01*$inputs(E)*$inputs(typIz)/$lBrace]
+    				source $inputs(secFolder)/unsetSecProps.tcl
                 }
             }
         }

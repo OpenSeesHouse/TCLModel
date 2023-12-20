@@ -1,6 +1,7 @@
 /ParaIDA
 /runIDA_1.m
 /videos
+/MATLAB
 *.out
 *.ops
 *.xlsx
