@@ -5,6 +5,7 @@
 # set iRec 1
 # set resFilePath tmp
 # set inputs(resFolder) NTH/$iRec/$sa
+# set gmPath ../../GMFiles/farField/AT2
 #end
 set inputs(doEigen) 0
 set inputs(recordCADSees) 0
@@ -15,7 +16,7 @@ set inputs(doFreeVibrate) 1
 set inputs(freeVibTol) 1.e-5
 set inputs(colpsDrift) 0.1
 set inputs(checkMaxResp) 1
-set inputs(checkResultAvailable) 1
+set inputs(checkResultAvailable) 0
 cd $modelPath
 source $inputs(generalFolder)/runMirroredTH.tcl
 # source $inputs(generalFolder)/runSingleTH.tcl

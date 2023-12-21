@@ -4,19 +4,19 @@
 source $inputs(generalFolder)/readDataFile.tcl
 setMaxOpenFiles 2048
 source $inputs(generalFolder)/initiate.tcl
-source $inputs(generalFolder)/spectrum.tcl
+source $inputs(generalFolder)/interpSpectrum.tcl
 source $inputs(generalFolder)/gmData.tcl
 if {$inputs(numDims) == 3} {
 	set numX [expr 2*$iRec-1]
 	set numY [expr 2*$iRec]
-	set inputFileX "$inputs(generalFolder)/GMFiles/$numX.AT2"
-	set inputFileY "$inputs(generalFolder)/GMFiles/$numY.AT2"
-	set filePathX "$inputs(generalFolder)/GMFiles/transformed/$numX.rec"
-	set filePathY "$inputs(generalFolder)/GMFiles/transformed/$numY.rec"
+	set inputFileX "$gmPath/$numX.AT2"
+	set inputFileY "$gmPath/$numY.AT2"
+	set filePathX "$gmPath/transformed/$numX.txt"
+	set filePathY "$gmPath/transformed/$numY.txt"
 	set outList [gmData $inputFileX "" 0]
 } else {
-	set inputFileX "$inputs(generalFolder)/GMFiles/$iRec.AT2"
-	set filePathX "$inputs(generalFolder)/GMFiles/transformed/$iRec.rec"
+	set inputFileX "$gmPath/$iRec.AT2"
+	set filePathX "$gmPath/transformed/$iRec.rec"
 	set outList [gmData $inputFileX "" 0]
 }
 set dt [lindex $outList 0]
@@ -34,8 +34,8 @@ if {$resAvailable == 0} {
 	source $inputs(generalFolder)/buildModel.tcl
 	source $inputs(generalFolder)/analyze.gravity.tcl
 	if {$inputs(numDims) == 3} {
-		set saUnscldX [spectrum "$inputs(generalFolder)/GMFiles/spectra/$numX.txt" $T1]
-		set saUnscldY [spectrum "$inputs(generalFolder)/GMFiles/spectra/$numY.txt" $T1]
+		set saUnscldX [interpSpectrum "$gmPath/spectra/$numX.txt" $T1]
+		set saUnscldY [interpSpectrum "$gmPath/spectra/$numY.txt" $T1]
 		set saUnscld [expr ($saUnscldX**2. + $saUnscldY**2.)**0.5]
 		puts "$saUnscldX $saUnscldY $saUnscld"
 		set fac [expr $g*$sa/$saUnscld]
@@ -44,7 +44,7 @@ if {$resAvailable == 0} {
 		timeSeries Path $seriesTagX -dt $dt -filePath $filePathX -factor $fac  -startTime [getTime]
 		timeSeries Path $seriesTagY -dt $dt -filePath $filePathY -factor $fac  -startTime [getTime]
 	} else {
-		set saUnscld [spectrum "$inputs(generalFolder)/GMFiles/spectra/$iRec.txt" $T1]
+		set saUnscld [interpSpectrum "$gmPath/spectra/$iRec.txt" $T1]
 		set fac [expr $g*$sa/$saUnscld]
 		set seriesTagX 4
 		set seriesTagY 0

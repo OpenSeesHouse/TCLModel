@@ -1,4 +1,4 @@
-set secFolder general/sections
+set secFolder general/sections/steel
 set allFiles [glob -directory $secFolder -type f  pattern *.tcl]
 set n [llength $allFiles]
 set out [open tmp.txt w]
