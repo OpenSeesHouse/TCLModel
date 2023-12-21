@@ -27,10 +27,10 @@ if {$resAvailable == 0} {
 	file mkdir $inputs(resFolder)
 	set numX [expr 2*$iRec-1]
 	set numY [expr 2*$iRec]
-	set inputFileX "$inputs(generalFolder)/GMFiles/$numX.AT2"
-	set inputFileY "$inputs(generalFolder)/GMFiles/$numY.AT2"
-	set filePathX "$inputs(generalFolder)/GMFiles/transformed/$numX.rec"
-	set filePathY "$inputs(generalFolder)/GMFiles/transformed/$numY.rec"
+	set inputFileX "$gmPath/$numX.AT2"
+	set inputFileY "$gmPath/$numY.AT2"
+	set filePathX "$gmPath/transformed/$numX.rec"
+	set filePathY "$gmPath/transformed/$numY.rec"
 	set outList [gmData $inputFileX "" 0]
 	set dt [lindex $outList 0]
 	set tAll [lindex $outList 1]
