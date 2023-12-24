@@ -206,9 +206,14 @@ for {set j 0} {$j <= $inputs(nFlrs)} {incr j} {
 				set missConfs(L) "| \\"
 				set missConfs(R) "| /"
 				foreach mem "L R" {
-					if {[lsearch $missConfs($mem) $conf] != -1} {
-						continue
+					set skip 0
+					foreach c $missConfs($mem) {
+						if {$conf == $c} {
+							set skip 1
+							break
+						}
 					}
+					if {$skip} continue
 					if {$mem == "L"} {
 						set iNode $j1,$k,$i,1
 						set jNode $j,$k1,$i1,1

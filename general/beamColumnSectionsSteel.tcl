@@ -22,11 +22,11 @@ set inputs(typJ) $J
 uniaxialMaterial Elastic $tag [expr 100*$inputs(typA)*$inputs(Es)/$inputs(hStory)]
 
 	set tag [manageFEData -newMaterial fiberBeams]
-	uniaxialMaterial Steel02 $tag $inputs(fyBeam) $E 0.01
+	uniaxialMaterial Steel02 $tag [expr $inputs(beamRy)*$inputs(fyBeam)] $E 0.01
 	# uniaxialMaterial Elastic 1 $E
 
 	set tag [manageFEData -newMaterial fiberClmns]
-	uniaxialMaterial Steel02 $tag $inputs(fyClmn) $E 0.01
+	uniaxialMaterial Steel02 $tag [expr $inputs(clmnRy)*$inputs(fyClmn)] $E 0.01
 	# uniaxialMaterial Elastic 2 $E
 
 set matTag [manageFEData -getMaterial fiberBeams]

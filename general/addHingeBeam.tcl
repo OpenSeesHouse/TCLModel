@@ -1,8 +1,10 @@
-proc addHingeBeam {elePos eleCode iNode jNode sec springMatId kRat release rhoName zV nSegName} {
+proc addHingeBeam {elePos eleCode iNode jNode sec springMatId kRat fixStr rhoName zV nSegName} {
     global inputs
     upvar $rhoName rho
     upvar $nSegName nSeg
 	global jntData
+	set fixI [string range $fixStr 0 0]
+	set fixJ [string range $fixStr 1 1]
     set rigidMatTag [manageFEData -getMaterial rigid]
 	source $inputs(secFolder)/$sec.tcl
 	source $inputs(secFolder)/convertToM.tcl
@@ -20,7 +22,7 @@ proc addHingeBeam {elePos eleCode iNode jNode sec springMatId kRat release rhoNa
     }
     set tag1 0
     set tag2 0
-    if {$release != 3 && $release != 1} {
+    if {$fixI} {
         set iiNode "$eleCode,$elePos,h1"
         eval "addNode $iiNode [manageFEData -getNodeCrds $iNode]"
         set tag1 "$eleCode,$elePos,h1"
@@ -33,7 +35,7 @@ proc addHingeBeam {elePos eleCode iNode jNode sec springMatId kRat release rhoNa
                 "-mat $springMatId $rigidMatTag $rigidMatTag -dir 3 1 2"]
         }
     }
-    if {$release != 3 && $release != 2} {
+    if {$fixJ} {
         set jjNode "$eleCode,$elePos,h2"
         eval "addNode $jjNode [manageFEData -getNodeCrds $jNode]"
         set tag2 "$eleCode,$elePos,h2"
@@ -80,6 +82,7 @@ proc addHingeBeam {elePos eleCode iNode jNode sec springMatId kRat release rhoNa
 	set i 0
 	set iOfs [expr 0.5*($jntData($iNode,dim,$dir,pp,h) + $jntData($iNode,dim,$dir,pn,h))*$inputs(rigidZoneFac)]
     set iNode $iiNode
+	set fix1 $fixI
 	foreach mNode $mNodes d $ds {
 		incr i
 		set mOfs 0
@@ -98,6 +101,14 @@ proc addHingeBeam {elePos eleCode iNode jNode sec springMatId kRat release rhoNa
 			set transTag [addGeomTransf "$eleCode,$elePos,$i" Linear $zV offsVeci offsVecj]
 		}
 		set eleTag "$eleCode,$elePos,$i"
+		set fix2 $fixJ
+		if {$i != $nSeg} {
+			if [manageGeomData -jntExists $mNode] {
+			set iOfs [expr 0.5*($jntData($mNode,dim,$dir,pp,h) + $jntData($mNode,dim,$dir,pn,h))*$inputs(rigidZoneFac)]
+			}
+			set fix2 1
+		}
+		set release [releaseFromFixity $fix1$fix2]
         if {$inputs(numDims) == 3} {
             set args "$Area $inputs(E) $inputs(G) $J $I22 $I33 $transTag -mass $rho -release $release"
         } else {
@@ -105,10 +116,8 @@ proc addHingeBeam {elePos eleCode iNode jNode sec springMatId kRat release rhoNa
         }
 		set eleId [addElement elasticBeamColumn $eleTag $iNode $mNode $args]
 		lappend eleTags $eleId
-		if {$i != $nSeg && [manageGeomData -jntExists $mNode]} {
-			set iOfs [expr 0.5*($jntData($mNode,dim,$dir,pp,h) + $jntData($mNode,dim,$dir,pn,h))*$inputs(rigidZoneFac)]
-		}
 		set iNode $mNode
+		set fix1 $fix2
     }
     lappend eleTags $id2
     return $eleTags

@@ -9,9 +9,9 @@ set inputs(hasBrace) 1
 #_____________________________________________________
 set inputs(numDims) 2
 # set inputs(nFlrs) 12
-set inputs(nBaysX) 1
+set inputs(nBaysX) 2
 set inputs(nBaysY) 0
-set inputs(lBayX) "6.09"
+set inputs(lBayX) "9.14 9.14"
 set inputs(lBayY) ""
 set inputs(hStory) 4.27
 set inputs(hStoryBase) 5.49
@@ -21,8 +21,8 @@ set inputs(eccRatY) 0
 
 set inputs(ly) [expr 5*9.14]
 set inputs(lx) [expr 5*6.09]
-set inputs(planArea) [expr 0.25*$inputs(lx)*$inputs(ly)]
-set inputs(planPerim) [expr 0.5*($inputs(lx)+$inputs(ly))]
+set inputs(planArea) [expr 0.5*$inputs(lx)*$inputs(ly)]
+set inputs(planPerim) [expr 1.0*($inputs(lx)+$inputs(ly))]
 set inputs(cornerCrdList) "
 "
 # for recording corner nodes' drifts 
@@ -131,6 +131,8 @@ set inputs(numSubdivT)	3
 # set inputs(SG1,IntegStr) {Lobatto -sections 5 $secTagI $secTagM $secTagM $secTagM $secTagJ}
 # #set beamLpFac 0.2
 
+set inputs(numSubdivL)	6
+set inputs(numSubdivT)	3
 ### for Hardening:
 	set inputs(SG2,eleType) forceBeamColumn	; #  dispBeamColumn
 	set inputs(SG2,numSeg) 1
@@ -175,40 +177,42 @@ for {set j $inputs(nFlrs)} {$j >= 1} {incr j -1} {
 }
 
 set xBraceLabels "
-	R1
+	R1 R1
 "
+# - : gravity beam
+# B2: SMF lateral beam
 set xBeamLabels "
-	B1
+	B1 B1
 "
 set yBeamLabels "
 "
 for {set i 1} {$i <= $inputs(nFlrs)} {incr i} {
     set xBeamFixityList($i) "
-        00
+        00 00
     "
     set yBeamReleaseList($i) "
 	"
 }
 set columnLabels "
-	C1 C1
+	C1 C2 C1
 "
 for {set i 1} {$i <= $inputs(nFlrs)} {incr i} {
 	set columnAngleList($i) "
-		0 0
+		0 0 0
 	"
 }
 set L [expr 0.50*(1.05*$inputs(deadFloor)+0.25*$inputs(liveFloor))*6.1*9.14*$g]
 for {set j 1} {$j < $inputs(nFlrs)} {incr j} {
-	set pntLoadList($j) "$L $L"
+	set pntLoadList($j) "$L $L $L"
 }
 
 set L [expr 0.50*(1.05*$inputs(deadRoof)+0.25*$inputs(liveRoof))*6.1*9.14*$g]
 set j $inputs(nFlrs)
-set pntLoadList($j) "$L $L"
+set pntLoadList($j) "$L $L $L"
 
 set L [expr $inputs(perimBeamDead)*$g]
 for {set j 1} {$j < $inputs(nFlrs)} {incr j} {
-	set beamLoadList($j) "$L"
+	set beamLoadList($j) "$L $L"
 }
 
 set settingsGroup(B1) SG1

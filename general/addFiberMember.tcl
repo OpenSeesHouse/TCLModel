@@ -1,4 +1,4 @@
-proc addFiberMember {eleType elePos eleCode iNode jNode nDesStats rhoName p integStr transType zAxis release nSegName} {
+proc addFiberMember {eleType elePos eleCode iNode jNode nDesStats rhoName p integStr transType zAxis fixStr nSegName} {
 	global inputs
 	global jntData
 	global eleData
@@ -107,6 +107,38 @@ proc addFiberMember {eleType elePos eleCode iNode jNode nDesStats rhoName p inte
 			$jntData($iNode,dim,Y,np,v))*0.25*$inputs(rigidZoneFac)]
 	} elseif {$bcType == "Beam"} {
 		set iOfs [expr 0.5*($jntData($iNode,dim,$dir,pp,h) + $jntData($iNode,dim,$dir,pn,h))*$inputs(rigidZoneFac)]
+		set fixI [string range $fixStr 0 0]
+		set fixJ [string range $fixStr 1 1]
+		set rigidMatTag [manageFEData -getMaterial rigid]
+		if {!$fixI} {
+			set iiNode "$eleCode,$elePos,h1"
+			eval "addNode $iiNode $iCrds"
+			set tag1 "$eleCode,$elePos,h1"
+			if {$inputs(numDims) == 3} {
+				set id1 [addElement zeroLength $tag1 $iNode $iiNode \
+					"-mat $rigidMatTag $rigidMatTag $rigidMatTag $rigidMatTag $rigidMatTag \
+					-dir 1 2 3 4 5 -orient $xV $yV"]
+			} else {
+				set id1 [addElement zeroLength $tag1 $iNode $iiNode \
+					"-mat $rigidMatTag $rigidMatTag -dir 1 2"]
+			}
+			set iNode $iiNode
+		}
+		if {!$fixJ} {
+			set jjNode "$eleCode,$elePos,h2"
+			set jCrds [manageFEData -getNodeCrds $jNode]
+			eval "addNode $jjNode $jCrds"
+			set tag1 "$eleCode,$elePos,h2"
+			if {$inputs(numDims) == 3} {
+				set id1 [addElement zeroLength $tag1 $jjNode $jNode \
+					"-mat $rigidMatTag $rigidMatTag $rigidMatTag $rigidMatTag $rigidMatTag \
+					-dir 1 2 3 4 5 -orient $xV $yV"]
+			} else {
+				set id1 [addElement zeroLength $tag1 $jjNode $jNode \
+					"-mat $rigidMatTag $rigidMatTag -dir 1 2"]
+			}
+			set mNodes [lreplace $mNodes end end $jjNode]
+		}
 	}
 	foreach mNode $mNodes d $ds {
 		incr i

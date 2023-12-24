@@ -12,7 +12,7 @@ source $inputs(generalFolder)/addNode.tcl
 source $inputs(generalFolder)/addDiaphragm.tcl
 source $inputs(generalFolder)/addElement.tcl
 source $inputs(generalFolder)/addGeomTransf.tcl
-source $inputs(generalFolder)/releaseFromChar.tcl
+source $inputs(generalFolder)/releaseFromFixity.tcl
 source $inputs(generalFolder)/addHingeBeam.tcl
 source $inputs(generalFolder)/addHingeColumn.tcl
 source $inputs(generalFolder)/addFiberMember.tcl

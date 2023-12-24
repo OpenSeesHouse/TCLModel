@@ -303,20 +303,20 @@ set settingsGroup(C5) SG2
 ## beam end releases about local z axis
 ## R:retained	F:free
 # for {set i 1} {$i <= $inputs(nFlrs)} {incr i} {
-#     set xBeamReleaseList($i) "
-#         FF RR RR RR FF
-#         FF FF FF FF FF
-#         FF FF FF FF FF
-#         FF FF FF FF FF
-#         FF FF FF FF FF
-#         FF RR RR RR FF
+#     set xBeamFixityList($i) "
+#         00 11 11 11 00
+#         00 00 00 00 00
+#         00 00 00 00 00
+#         00 00 00 00 00
+#         00 00 00 00 00
+#         00 11 11 11 00
 #     "
 #     set yBeamReleaseList($i) "
-#         FF FF FF FF FF
-#         FF FF FF FF FF
-#         FF FF FF FF FF
-#         FF FF FF FF FF
-#         FF FF FF FF FF
-#         FF FF FF FF FF
+#         00 00 00 00 00
+#         00 00 00 00 00
+#         00 00 00 00 00
+#         00 00 00 00 00
+#         00 00 00 00 00
+#         00 00 00 00 00
 #     "
 # }

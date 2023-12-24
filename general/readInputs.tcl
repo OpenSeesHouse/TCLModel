@@ -53,11 +53,11 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 				} else {
 					set eleData(load,$code,$pos) 0
 				}
-				if [info exists xBeamReleaseList] {
-					set lab [lindex $xBeamReleaseList($j) [expr ($kk-1)*$inputs(nBaysX) + $i - 1]]
-					set eleData(release,$code,$pos) $lab
+				if [info exists xBeamFixityList] {
+					set lab [lindex $xBeamFixityList($j) [expr ($kk-1)*$inputs(nBaysX) + $i - 1]]
+					set eleData(fixity,$code,$pos) $lab
 				} else {
-					set eleData(release,$code,$pos)  "RR"
+					set eleData(fixity,$code,$pos)  "11"
 				}
 				set code [eleCodeMap "X-Wall"]
 				if [info exists xWallSecList] {
@@ -113,9 +113,9 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 				}
 				if [info exists yBeamReleaseList] {
 					set lab [lindex $yBeamReleaseList($j) [expr ($i-1)*$inputs(nBaysY) + $k - 1]]
-					set eleData(release,$code,$pos) $lab
+					set eleData(fixity,$code,$pos) $lab
 				} else {
-					set eleData(release,$code,$pos)  "RR"
+					set eleData(fixity,$code,$pos)  "11"
 				}
 				set code [eleCodeMap "Y-Wall"]
 				if [info exists yWallSecList] {

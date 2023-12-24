@@ -23,8 +23,7 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 				}
 				set eleData(numSeg,$eleCode,$pos) 0
 				set rho 0
-				set rlsStr $eleData(release,$eleCode,$pos)
-				set release [releaseFromChar $rlsStr]
+				set fixStr $eleData(fixity,$eleCode,$pos)
 				set iNodePos "$j,$k,$i,1"
 				if {$dir == Y} {
 					set jNodePos "$j,[expr $k+1],$i,1"
@@ -42,12 +41,12 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 							set kRat $inputs(beamCrackOverwrite)
 						}
 					}
-					addHingeBeam $pos $eleCode $iNodePos $jNodePos $sec $id $kRat $release rho $zAxis eleData(numSeg,$eleCode,$pos)
+					addHingeBeam $pos $eleCode $iNodePos $jNodePos $sec $id $kRat $fixStr rho $zAxis eleData(numSeg,$eleCode,$pos)
 				} else {
 					set p 0
 					set eleType $inputs($sg,eleType)
 					set integStr $inputs($sg,IntegStr)
-					addFiberMember $eleType $pos $eleCode $iNodePos $jNodePos $inputs(numDesnStats) rho $p $integStr Linear $zAxis $release eleData(numSeg,$eleCode,$pos)
+					addFiberMember $eleType $pos $eleCode $iNodePos $jNodePos $inputs(numDesnStats) rho $p $integStr Linear $zAxis $fixStr eleData(numSeg,$eleCode,$pos)
 				}
 				set eleData(unitSelfWeight,$eleCode,$pos) $rho
 				set eleData(length,$eleCode,$pos) $l

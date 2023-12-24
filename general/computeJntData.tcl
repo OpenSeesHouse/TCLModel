@@ -123,26 +123,6 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 						set jntData($nNodePos,dim,$dir,pp,h) [expr $lhI]
 						set jntData($nNodePos,dim,$dir,pp,v) [expr $H/2. + $lvI]
 					}
-
-					# #brace internal joints
-					# set missConfs(L) "| /"
-					# set missConfs(R) "| \\"
-					# foreach mem "L R" {
-					# 	if {[lsearch $missConfs($mem) $conf] != -1} {
-					# 		continue
-					# 	}
-					# 	for {set m 1} {$m < $inputs(nBraceSeg)} {incr m} {
-					# 		set pos $j,$k,$i,R$dir[set mem]_$m
-					# 		foreach d "X Y" {
-					# 			foreach vrt "pp np nn pn" {
-					# 				foreach com "h v" {
-					# 					set name $pos,dim,$d,$vrt,$com
-					# 					set jntData($name) 0
-					# 				}
-					# 			}
-					# 		}
-					# 	}
-					# }
 				}
 			}
 		}
