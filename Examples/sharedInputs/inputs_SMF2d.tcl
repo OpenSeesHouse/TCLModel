@@ -32,8 +32,8 @@ set inputs(cornerGrdList) "
 
 # Mass
 #_____________________________________________________
-set inputs(deadRoof)  [expr 1.1*47.88/$g*56.0] 		;#=46 (D) + 10 (superDead)
-set inputs(deadFloor) [expr 1.1*47.88/$g*61.7] 		;#64.7= 46(D)+15(superDead)+3.7(Facade) in kg/m2
+set inputs(deadRoof)  [expr $deadFac*47.88/$g*56.0] 		;#=46 (D) + 10 (superDead)
+set inputs(deadFloor) [expr $deadFac*47.88/$g*61.7] 		;#64.7= 46(D)+15(superDead)+3.7(Facade) in kg/m2
 set inputs(liveRoof)  [expr 1.*47.88/$g*30]
 set inputs(liveFloor) [expr 1.*47.88/$g*50]
 set inputs(perimBeamDead) 370.							;#kg/m of perimeter beaam
@@ -60,8 +60,8 @@ if {$inputs(matType) == "Steel"} {
 	# set hardeningRatio 0.001		;#for fiber method
 	set inputs(fyBeam) [expr 1*345.e6]
 	set inputs(fyClmn) [expr 1*345.e6]
-	set inputs(beamRy) 1.
-	set inputs(clmnRy) 1.
+	set inputs(beamRy) 1.1
+	set inputs(clmnRy) 1.1
 	set inputs(isColumnA992Gr50) 1
 	set inputs(isBeamA992Gr50) 1
 	set inputs(nu) 0.15
@@ -100,7 +100,7 @@ set inputs(cUnitsToN) 1.
 set inputs(cUnitsToM) 1.
 #_____________________________________________________
 # General
-set inputs(rigidZoneFac) 0.5
+set inputs(rigidZoneFac) 1.
 set inputs(clmnBasePlateHeightFac) 1.	;#ratio of the column section height considered as the base plate connection offset
 set inputs(clmnGeomtransfType) Linear	;#set to Linear when all story gravity force is applied on leaning column
 #_____________________________________________________

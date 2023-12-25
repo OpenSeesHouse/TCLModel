@@ -1,12 +1,12 @@
-Date : 2023-12-24 19:57:48
+Date : 2023-12-25 18:28:47
 Directory : i:\OmranElmAfzar\Software\TCLModel
-Total : 1461 files,  36077 codes, 1369 comments, 2004 blanks, all 39450 lines
+Total : 1476 files,  36227 codes, 1378 comments, 2017 blanks, all 39622 lines
 
 Languages
 +----------+------------+------------+------------+------------+------------+
 | language | files      | code       | comment    | blank      | total      |
 +----------+------------+------------+------------+------------+------------+
-| Tcl      |      1,458 |     35,956 |      1,368 |      1,999 |     39,323 |
+| Tcl      |      1,473 |     36,106 |      1,377 |      2,012 |     39,495 |
 | MATLAB   |          3 |        121 |          1 |          5 |        127 |
 +----------+------------+------------+------------+------------+------------+
 
@@ -14,15 +14,15 @@ Directories
 +----------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
 | path                                                                             | files      | code       | comment    | blank      | total      |
 +----------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
-| .                                                                                |      1,461 |     36,077 |      1,369 |      2,004 |     39,450 |
+| .                                                                                |      1,476 |     36,227 |      1,378 |      2,017 |     39,622 |
 | . (Files)                                                                        |          4 |         70 |         27 |          5 |        102 |
-| Examples                                                                         |         48 |      2,151 |        491 |        254 |      2,896 |
-| Examples\BRBF2D-16                                                               |          2 |        123 |          0 |          7 |        130 |
-| Examples\BRBF2D-4                                                                |          2 |         28 |          0 |          5 |         33 |
-| Examples\BRBF2D-8                                                                |          2 |         52 |          0 |          6 |         58 |
-| Examples\CBF2D-16                                                                |          2 |        123 |          0 |          7 |        130 |
-| Examples\CBF2D-4                                                                 |          2 |         28 |          0 |          5 |         33 |
-| Examples\CBF2D-8                                                                 |          2 |         52 |          0 |          6 |         58 |
+| Examples                                                                         |         52 |      2,225 |        493 |        260 |      2,978 |
+| Examples\BRBF2D-16                                                               |          2 |        128 |          0 |          7 |        135 |
+| Examples\BRBF2D-4                                                                |          2 |         33 |          0 |          5 |         38 |
+| Examples\BRBF2D-8                                                                |          2 |         57 |          0 |          6 |         63 |
+| Examples\CBF2D-16                                                                |          2 |        124 |          0 |          7 |        131 |
+| Examples\CBF2D-4                                                                 |          2 |         29 |          0 |          5 |         34 |
+| Examples\CBF2D-8                                                                 |          2 |         53 |          0 |          6 |         59 |
 | Examples\HR-30                                                                   |          2 |        260 |         89 |         27 |        376 |
 | Examples\MC-16                                                                   |          2 |        122 |          0 |          7 |        129 |
 | Examples\MC-4                                                                    |          2 |         31 |          0 |          7 |         38 |
@@ -36,16 +36,18 @@ Directories
 | Examples\NIST-sym-8                                                              |          2 |         21 |          0 |          4 |         25 |
 | Examples\NIST-sym-8-MEF-10%                                                      |          2 |         21 |          0 |          4 |         25 |
 | Examples\NIST-sym-8-MEF-20%                                                      |          2 |         21 |          0 |          4 |         25 |
+| Examples\SMF2D-16                                                                |          2 |         38 |          0 |          3 |         41 |
+| Examples\SMF2D-4                                                                 |          2 |         12 |          0 |          3 |         15 |
 | Examples\SMF2D-4-fiber                                                           |          2 |         11 |          0 |          3 |         14 |
-| Examples\SMF2D-4-hinge                                                           |          2 |         11 |          0 |          3 |         14 |
-| Examples\sharedInputs                                                            |          6 |      1,032 |        402 |        121 |      1,555 |
+| Examples\SMF2D-8                                                                 |          2 |         20 |          0 |          3 |         23 |
+| Examples\sharedInputs                                                            |          6 |      1,029 |        404 |        121 |      1,554 |
 | GMfiles                                                                          |          9 |        405 |         67 |         37 |        509 |
 | GMfiles (Files)                                                                  |          1 |          9 |          0 |          0 |          9 |
 | GMfiles\CreateSpectra                                                            |          8 |        396 |         67 |         37 |        500 |
-| general                                                                          |         90 |      5,106 |        767 |        293 |      6,166 |
-| sections                                                                         |      1,310 |     28,345 |         17 |      1,415 |     29,777 |
+| general                                                                          |         90 |      5,121 |        774 |        292 |      6,187 |
+| sections                                                                         |      1,321 |     28,406 |         17 |      1,423 |     29,846 |
 | sections\sectioner                                                               |          1 |         23 |          0 |          0 |         23 |
-| sections\steel                                                                   |      1,309 |     28,322 |         17 |      1,415 |     29,754 |
+| sections\steel                                                                   |      1,320 |     28,383 |         17 |      1,423 |     29,823 |
 +----------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
 
 Files
@@ -53,17 +55,17 @@ Files
 | filename                                                                         | language | code       | comment    | blank      | total      |
 +----------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
 | i:\OmranElmAfzar\Software\TCLModel\Examples\BRBF2D-16\designData.tcl             | Tcl      |        119 |          0 |          7 |        126 |
-| i:\OmranElmAfzar\Software\TCLModel\Examples\BRBF2D-16\inputs.tcl                 | Tcl      |          4 |          0 |          0 |          4 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\BRBF2D-16\inputs.tcl                 | Tcl      |          9 |          0 |          0 |          9 |
 | i:\OmranElmAfzar\Software\TCLModel\Examples\BRBF2D-4\designData.tcl              | Tcl      |         24 |          0 |          5 |         29 |
-| i:\OmranElmAfzar\Software\TCLModel\Examples\BRBF2D-4\inputs.tcl                  | Tcl      |          4 |          0 |          0 |          4 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\BRBF2D-4\inputs.tcl                  | Tcl      |          9 |          0 |          0 |          9 |
 | i:\OmranElmAfzar\Software\TCLModel\Examples\BRBF2D-8\designData.tcl              | Tcl      |         48 |          0 |          6 |         54 |
-| i:\OmranElmAfzar\Software\TCLModel\Examples\BRBF2D-8\inputs.tcl                  | Tcl      |          4 |          0 |          0 |          4 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\BRBF2D-8\inputs.tcl                  | Tcl      |          9 |          0 |          0 |          9 |
 | i:\OmranElmAfzar\Software\TCLModel\Examples\CBF2D-16\designData.tcl              | Tcl      |        119 |          0 |          7 |        126 |
-| i:\OmranElmAfzar\Software\TCLModel\Examples\CBF2D-16\inputs.tcl                  | Tcl      |          4 |          0 |          0 |          4 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\CBF2D-16\inputs.tcl                  | Tcl      |          5 |          0 |          0 |          5 |
 | i:\OmranElmAfzar\Software\TCLModel\Examples\CBF2D-4\designData.tcl               | Tcl      |         24 |          0 |          5 |         29 |
-| i:\OmranElmAfzar\Software\TCLModel\Examples\CBF2D-4\inputs.tcl                   | Tcl      |          4 |          0 |          0 |          4 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\CBF2D-4\inputs.tcl                   | Tcl      |          5 |          0 |          0 |          5 |
 | i:\OmranElmAfzar\Software\TCLModel\Examples\CBF2D-8\designData.tcl               | Tcl      |         48 |          0 |          6 |         54 |
-| i:\OmranElmAfzar\Software\TCLModel\Examples\CBF2D-8\inputs.tcl                   | Tcl      |          4 |          0 |          0 |          4 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\CBF2D-8\inputs.tcl                   | Tcl      |          5 |          0 |          0 |          5 |
 | i:\OmranElmAfzar\Software\TCLModel\Examples\HR-30\designData.tcl                 | Tcl      |         28 |          0 |          5 |         33 |
 | i:\OmranElmAfzar\Software\TCLModel\Examples\HR-30\inputs.tcl                     | Tcl      |        232 |         89 |         22 |        343 |
 | i:\OmranElmAfzar\Software\TCLModel\Examples\MC-16\designData.tcl                 | Tcl      |        119 |          0 |          6 |        125 |
@@ -90,12 +92,16 @@ Files
 | i:\OmranElmAfzar\Software\TCLModel\Examples\NIST-sym-8-MEF-20%\inputs.tcl        | Tcl      |          5 |          0 |          3 |          8 |
 | i:\OmranElmAfzar\Software\TCLModel\Examples\NIST-sym-8\designData.tcl            | Tcl      |         16 |          0 |          1 |         17 |
 | i:\OmranElmAfzar\Software\TCLModel\Examples\NIST-sym-8\inputs.tcl                | Tcl      |          5 |          0 |          3 |          8 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\SMF2D-16\designData.tcl              | Tcl      |         34 |          0 |          2 |         36 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\SMF2D-16\inputs.tcl                  | Tcl      |          4 |          0 |          1 |          5 |
 | i:\OmranElmAfzar\Software\TCLModel\Examples\SMF2D-4-fiber\designData.tcl         | Tcl      |          8 |          0 |          2 |         10 |
 | i:\OmranElmAfzar\Software\TCLModel\Examples\SMF2D-4-fiber\inputs.tcl             | Tcl      |          3 |          0 |          1 |          4 |
-| i:\OmranElmAfzar\Software\TCLModel\Examples\SMF2D-4-hinge\designData.tcl         | Tcl      |          8 |          0 |          2 |         10 |
-| i:\OmranElmAfzar\Software\TCLModel\Examples\SMF2D-4-hinge\inputs.tcl             | Tcl      |          3 |          0 |          1 |          4 |
-| i:\OmranElmAfzar\Software\TCLModel\Examples\sharedInputs\inputs_CBF2d-2.tcl      | Tcl      |        140 |         61 |         19 |        220 |
-| i:\OmranElmAfzar\Software\TCLModel\Examples\sharedInputs\inputs_CBF2d.tcl        | Tcl      |        138 |         59 |         19 |        216 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\SMF2D-4\designData.tcl               | Tcl      |          8 |          0 |          2 |         10 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\SMF2D-4\inputs.tcl                   | Tcl      |          4 |          0 |          1 |          5 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\SMF2D-8\designData.tcl               | Tcl      |         16 |          0 |          2 |         18 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\SMF2D-8\inputs.tcl                   | Tcl      |          4 |          0 |          1 |          5 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\sharedInputs\inputs_CBF2d-2.tcl      | Tcl      |        138 |         62 |         19 |        219 |
+| i:\OmranElmAfzar\Software\TCLModel\Examples\sharedInputs\inputs_CBF2d.tcl        | Tcl      |        137 |         60 |         19 |        216 |
 | i:\OmranElmAfzar\Software\TCLModel\Examples\sharedInputs\inputs_NIST3d-1.tcl     | Tcl      |        220 |         88 |         24 |        332 |
 | i:\OmranElmAfzar\Software\TCLModel\Examples\sharedInputs\inputs_NIST3d-2.tcl     | Tcl      |        213 |         86 |         24 |        323 |
 | i:\OmranElmAfzar\Software\TCLModel\Examples\sharedInputs\inputs_NIST3d-sym.tcl   | Tcl      |        204 |         67 |         18 |        289 |
@@ -111,7 +117,7 @@ Files
 | i:\OmranElmAfzar\Software\TCLModel\GMfiles\transfAll.tcl                         | Tcl      |          9 |          0 |          0 |          9 |
 | i:\OmranElmAfzar\Software\TCLModel\checkSections.tcl                             | Tcl      |         15 |          1 |          0 |         16 |
 | i:\OmranElmAfzar\Software\TCLModel\general\Box-section.tcl                       | Tcl      |         17 |          1 |          3 |         21 |
-| i:\OmranElmAfzar\Software\TCLModel\general\BraceSections.tcl                     | Tcl      |         51 |          2 |          3 |         56 |
+| i:\OmranElmAfzar\Software\TCLModel\general\BraceSections.tcl                     | Tcl      |         59 |          2 |          1 |         62 |
 | i:\OmranElmAfzar\Software\TCLModel\general\ComputeFatigueTube.tcl                | Tcl      |          7 |          0 |          1 |          8 |
 | i:\OmranElmAfzar\Software\TCLModel\general\I-section.tcl                         | Tcl      |         16 |         16 |          3 |         35 |
 | i:\OmranElmAfzar\Software\TCLModel\general\Joint3d.tcl                           | Tcl      |         49 |          1 |          2 |         52 |
@@ -149,7 +155,7 @@ Files
 | i:\OmranElmAfzar\Software\TCLModel\general\computeHingeWBeam.tcl                 | Tcl      |         27 |         22 |         11 |         60 |
 | i:\OmranElmAfzar\Software\TCLModel\general\computeHingeWColumn.tcl               | Tcl      |         43 |         13 |         14 |         70 |
 | i:\OmranElmAfzar\Software\TCLModel\general\computeHingeWWeak.tcl                 | Tcl      |         17 |         23 |          3 |         43 |
-| i:\OmranElmAfzar\Software\TCLModel\general\computeJntData.tcl                    | Tcl      |        150 |         26 |          9 |        185 |
+| i:\OmranElmAfzar\Software\TCLModel\general\computeJntData.tcl                    | Tcl      |        147 |         28 |          9 |        184 |
 | i:\OmranElmAfzar\Software\TCLModel\general\computeLp.tcl                         | Tcl      |          4 |          0 |          1 |          5 |
 | i:\OmranElmAfzar\Software\TCLModel\general\computeModalPattern.tcl               | Tcl      |         77 |          6 |          1 |         84 |
 | i:\OmranElmAfzar\Software\TCLModel\general\computePanelZone.tcl                  | Tcl      |         10 |         20 |          7 |         37 |
@@ -158,14 +164,14 @@ Files
 | i:\OmranElmAfzar\Software\TCLModel\general\covar.tcl                             | Tcl      |         23 |          0 |          0 |         23 |
 | i:\OmranElmAfzar\Software\TCLModel\general\defineBaseSupports.tcl                | Tcl      |         26 |          0 |          1 |         27 |
 | i:\OmranElmAfzar\Software\TCLModel\general\defineBeams.tcl                       | Tcl      |         56 |          1 |          0 |         57 |
-| i:\OmranElmAfzar\Software\TCLModel\general\defineBraces.tcl                      | Tcl      |        111 |         30 |          6 |        147 |
+| i:\OmranElmAfzar\Software\TCLModel\general\defineBraces.tcl                      | Tcl      |        120 |         30 |          6 |        156 |
 | i:\OmranElmAfzar\Software\TCLModel\general\defineColumns.tcl                     | Tcl      |         49 |          1 |          1 |         51 |
 | i:\OmranElmAfzar\Software\TCLModel\general\defineDiaphragms.tcl                  | Tcl      |         32 |          0 |          1 |         33 |
 | i:\OmranElmAfzar\Software\TCLModel\general\defineLeaningColumns.tcl              | Tcl      |         45 |         13 |          3 |         61 |
 | i:\OmranElmAfzar\Software\TCLModel\general\defineMasses.tcl                      | Tcl      |         18 |          1 |          1 |         20 |
-| i:\OmranElmAfzar\Software\TCLModel\general\defineNodes.tcl                       | Tcl      |        293 |         34 |          4 |        331 |
+| i:\OmranElmAfzar\Software\TCLModel\general\defineNodes.tcl                       | Tcl      |        296 |         34 |          5 |        335 |
 | i:\OmranElmAfzar\Software\TCLModel\general\defineRayleighDamping.tcl             | Tcl      |          6 |          0 |          1 |          7 |
-| i:\OmranElmAfzar\Software\TCLModel\general\defineRecorders.tcl                   | Tcl      |        220 |         32 |          5 |        257 |
+| i:\OmranElmAfzar\Software\TCLModel\general\defineRecorders.tcl                   | Tcl      |        216 |         36 |          5 |        257 |
 | i:\OmranElmAfzar\Software\TCLModel\general\doDispControlAnalysis.tcl             | Tcl      |         83 |          0 |          2 |         85 |
 | i:\OmranElmAfzar\Software\TCLModel\general\doEigen.tcl                           | Tcl      |         24 |          2 |          2 |         28 |
 | i:\OmranElmAfzar\Software\TCLModel\general\doEigenAnalysis.tcl                   | Tcl      |          8 |          2 |          1 |         11 |
@@ -189,7 +195,7 @@ Files
 | i:\OmranElmAfzar\Software\TCLModel\general\manageGeomData.tcl                    | Tcl      |        165 |          1 |          3 |        169 |
 | i:\OmranElmAfzar\Software\TCLModel\general\processDriftOutput.tcl                | Tcl      |         64 |          3 |         12 |         79 |
 | i:\OmranElmAfzar\Software\TCLModel\general\readDataFile.tcl                      | Tcl      |         18 |          4 |          0 |         22 |
-| i:\OmranElmAfzar\Software\TCLModel\general\readInputs.tcl                        | Tcl      |        405 |          8 |          6 |        419 |
+| i:\OmranElmAfzar\Software\TCLModel\general\readInputs.tcl                        | Tcl      |        407 |          9 |          6 |        422 |
 | i:\OmranElmAfzar\Software\TCLModel\general\readList.tcl                          | Tcl      |          6 |          0 |          0 |          6 |
 | i:\OmranElmAfzar\Software\TCLModel\general\recordModeShapes.tcl                  | Tcl      |         16 |          0 |          0 |         16 |
 | i:\OmranElmAfzar\Software\TCLModel\general\releaseFromFixity.tcl                 | Tcl      |         15 |          0 |          1 |         16 |
@@ -206,8 +212,19 @@ Files
 | i:\OmranElmAfzar\Software\TCLModel\sections\sectioner\sectioner.tcl              | Tcl      |         23 |          0 |          0 |         23 |
 | i:\OmranElmAfzar\Software\TCLModel\sections\steel\BRB1_00.tcl                    | Tcl      |          5 |          0 |          1 |          6 |
 | i:\OmranElmAfzar\Software\TCLModel\sections\steel\BRB1_75.tcl                    | Tcl      |          5 |          0 |          1 |          6 |
+| i:\OmranElmAfzar\Software\TCLModel\sections\steel\BRB2_00.tcl                    | Tcl      |          5 |          0 |          1 |          6 |
+| i:\OmranElmAfzar\Software\TCLModel\sections\steel\BRB2_25.tcl                    | Tcl      |          5 |          0 |          1 |          6 |
 | i:\OmranElmAfzar\Software\TCLModel\sections\steel\BRB2_50.tcl                    | Tcl      |          5 |          0 |          1 |          6 |
 | i:\OmranElmAfzar\Software\TCLModel\sections\steel\BRB2_75.tcl                    | Tcl      |          5 |          0 |          1 |          6 |
+| i:\OmranElmAfzar\Software\TCLModel\sections\steel\BRB3_00.tcl                    | Tcl      |          5 |          0 |          1 |          6 |
+| i:\OmranElmAfzar\Software\TCLModel\sections\steel\BRB3_75.tcl                    | Tcl      |          5 |          0 |          1 |          6 |
+| i:\OmranElmAfzar\Software\TCLModel\sections\steel\BRB4_25.tcl                    | Tcl      |          5 |          0 |          1 |          6 |
+| i:\OmranElmAfzar\Software\TCLModel\sections\steel\BRB4_50.tcl                    | Tcl      |          5 |          0 |          1 |          6 |
+| i:\OmranElmAfzar\Software\TCLModel\sections\steel\BRB5_00.tcl                    | Tcl      |          5 |          0 |          1 |          6 |
+| i:\OmranElmAfzar\Software\TCLModel\sections\steel\BRB5_25.tcl                    | Tcl      |          5 |          0 |          1 |          6 |
+| i:\OmranElmAfzar\Software\TCLModel\sections\steel\BRB5_75.tcl                    | Tcl      |          5 |          0 |          1 |          6 |
+| i:\OmranElmAfzar\Software\TCLModel\sections\steel\BRB6_50.tcl                    | Tcl      |          5 |          0 |          1 |          6 |
+| i:\OmranElmAfzar\Software\TCLModel\sections\steel\BRB7_25.tcl                    | Tcl      |          5 |          0 |          1 |          6 |
 | i:\OmranElmAfzar\Software\TCLModel\sections\steel\H400X237.tcl                   | Tcl      |         21 |          0 |          1 |         22 |
 | i:\OmranElmAfzar\Software\TCLModel\sections\steel\H400X262.tcl                   | Tcl      |         21 |          0 |          1 |         22 |
 | i:\OmranElmAfzar\Software\TCLModel\sections\steel\H400X288.tcl                   | Tcl      |         21 |          0 |          1 |         22 |
@@ -1510,8 +1527,8 @@ Files
 | i:\OmranElmAfzar\Software\TCLModel\sections\steel\W44X335.tcl                    | Tcl      |         23 |          0 |          1 |         24 |
 | i:\OmranElmAfzar\Software\TCLModel\sections\steel\W6X25.tcl                      | Tcl      |         23 |          0 |          1 |         24 |
 | i:\OmranElmAfzar\Software\TCLModel\sections\steel\W8X18.tcl                      | Tcl      |         23 |          0 |          1 |         24 |
-| i:\OmranElmAfzar\Software\TCLModel\sections\steel\convertToCm.tcl                | Tcl      |         24 |          1 |          2 |         27 |
-| i:\OmranElmAfzar\Software\TCLModel\sections\steel\convertToM.tcl                 | Tcl      |         47 |          2 |          2 |         51 |
+| i:\OmranElmAfzar\Software\TCLModel\sections\steel\convertToCm.tcl                | Tcl      |         28 |          1 |          1 |         30 |
+| i:\OmranElmAfzar\Software\TCLModel\sections\steel\convertToM.tcl                 | Tcl      |         49 |          2 |          0 |         51 |
 | i:\OmranElmAfzar\Software\TCLModel\sections\steel\unsetSecProps.tcl              | Tcl      |         22 |          1 |          1 |         24 |
-| Total                                                                            |          |     36,077 |      1,369 |      2,004 |     39,450 |
+| Total                                                                            |          |     36,227 |      1,378 |      2,017 |     39,622 |
 +----------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
