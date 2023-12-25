@@ -24,11 +24,14 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 						set eleData(gussetDimI_lh,$code,$pos)  $gussetDimI($lab,lh,$j)
 						set eleData(gussetDimI_lv,$code,$pos)  $gussetDimI($lab,lv,$j)
 						set eleData(gussetDimI_lr,$code,$pos)  $gussetDimI($lab,lr,$j)
-						set eleData(gussetDimI_tp,$code,$pos)  $gussetDimI($lab,tp,$j)
 						set eleData(gussetDimJ_lh,$code,$pos)  $gussetDimJ($lab,lh,$j)
 						set eleData(gussetDimJ_lv,$code,$pos)  $gussetDimJ($lab,lv,$j)
 						set eleData(gussetDimJ_lr,$code,$pos)  $gussetDimJ($lab,lr,$j)
-						set eleData(gussetDimJ_tp,$code,$pos)  $gussetDimJ($lab,tp,$j)
+						if [info exists gussetDimI($lab,tp,$j)] {
+							#not exist for BRB
+							set eleData(gussetDimI_tp,$code,$pos)  $gussetDimI($lab,tp,$j)
+							set eleData(gussetDimJ_tp,$code,$pos)  $gussetDimJ($lab,tp,$j)
+						}
 						set inputs(hasBrace) 1
 					}
 				} else {

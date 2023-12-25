@@ -24,6 +24,7 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 				#beam end jnts
 				set eleCode [eleCodeMap $dir-Beam]
 				set sec $eleData(section,$eleCode,$elePos)
+				#TODO consider the section change for multi-station members
 				if {$sec != "-"} {
 					source $inputs(secFolder)/$sec.tcl
 					source $inputs(secFolder)/convertToM.tcl
@@ -40,9 +41,6 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 					}
 					set iNode $j,$k,$i,1
 					set jNode $j,$k1,$i1,1
-					set dx [expr $X($k1,$i1)-$X($k,$i)]
-					set dy [expr $Y($k1,$i1)-$Y($k,$i)]
-					set l [expr ($dx*$dx+$dy*$dy)**0.5]
 					set H2 [expr $H/2.]
 					updateVar -sum jntData($iNode,dim,$dir,pn,v) $H2
 					updateVar -sum jntData($iNode,dim,$dir,pp,v) $H2
@@ -138,6 +136,7 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 			}
 			source $inputs(secFolder)/$sec.tcl
 			source $inputs(secFolder)/convertToM.tcl
+			#TODO consider column rotation angle
 			if {$inputs(matType) == "Steel"} {
 				set dy $t3
 				set dx $t2

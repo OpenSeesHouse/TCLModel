@@ -21,13 +21,13 @@ set inputs(typJ) $J
 
 uniaxialMaterial Elastic $tag [expr 100*$inputs(typA)*$inputs(Es)/$inputs(hStory)]
 
-	set tag [manageFEData -newMaterial fiberBeams]
-	uniaxialMaterial Steel02 $tag [expr $inputs(beamRy)*$inputs(fyBeam)] $E 0.01
-	# uniaxialMaterial Elastic 1 $E
+set tag [manageFEData -newMaterial fiberBeams]
+uniaxialMaterial Steel02 $tag [expr $inputs(beamRy)*$inputs(fyBeam)] $E 0.01
+# uniaxialMaterial Elastic 1 $E
 
-	set tag [manageFEData -newMaterial fiberClmns]
-	uniaxialMaterial Steel02 $tag [expr $inputs(clmnRy)*$inputs(fyClmn)] $E 0.01
-	# uniaxialMaterial Elastic 2 $E
+set tag [manageFEData -newMaterial fiberClmns]
+uniaxialMaterial Steel02 $tag [expr $inputs(clmnRy)*$inputs(fyClmn)] $E 0.01
+# uniaxialMaterial Elastic 2 $E
 
 set matTag [manageFEData -getMaterial fiberBeams]
 set cUnitsToKsi [expr $inputs(cUnitsToN)/($inputs(cUnitsToM)**2.)*1.45038e-7]
@@ -116,8 +116,8 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 			set sec $eleData(section,$code,$j,$k,$i)
 			if {$sec == "-"} continue
 			source "$inputs(secFolder)/$sec.tcl"
-			source "$inputs(secFolder)/convertToM.tcl"					
-				set sg $eleData(SG,$code,$pos)
+			source "$inputs(secFolder)/convertToM.tcl"
+			set sg $eleData(SG,$code,$pos)
 			if {$inputs($sg,eleType) == "Hinge"} {
 				logCommands -comment "#section: $sec j,k,i: $j,$k,$i\n"
 				set ID3 [manageFEData -newMaterial clmnHinge,$j,$k,$i,3]
@@ -143,7 +143,7 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 					uniaxialMaterial Bilin $ID3 $ke $alfah $alfah $my -$my $Lamda 0\
 						0 0 1 0 0 0 $tetap $tetap $tetapc $tetapc 0 0 $tetau $tetau 1 1 $inputs(nFactor)
 					# uniaxialMaterial Elastic $ID [expr ($inputs(nFactor)+1)*$ke]
-						
+
 					set ID2 [manageFEData -newMaterial clmnHinge,$j,$k,$i,2]
 					source $inputs(generalFolder)/computeHingeASCEWeak.tcl
 					set tetau [expr $tetay+$tetap+$tetapc]
@@ -169,7 +169,7 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 
 			#panel zone springs for X and Y directions
 			if {$inputs(usePZSpring) == 0} continue
-	error ("this part of code needs revision")
+			error ("this part of code needs revision")
 			logCommands -comment "#panel zone material:\n"
 			set dc $t3
 			#Strong dir.:
@@ -214,14 +214,14 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 					}
 				}
 				if {$sec == "-"} continue
-				
+
 				incr ID
 				logCommands -comment "#Panel Zone material: sec,j,k,i,dir= $sec,$j,$k,$i,$dir\n"
 				source "$inputs(secFolder)/$sec.tcl"
 				source "$inputs(secFolder)/convertToM.tcl"
 				set db $t3
 				source $inputs(secFolder)/unsetSecProps.tcl
-				
+
 				if {($dir == "X" && $angle == 0) || ($dir == "Y" && $angle == 90)} {
 					set bf	$bf_s
 					set tf	$tf_s

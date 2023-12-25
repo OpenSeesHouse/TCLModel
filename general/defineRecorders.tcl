@@ -8,6 +8,9 @@ logCommands -comment "~~~~~~~~~~~~~~~~~~~~~ defining recorders ~~~~~~~~~~~~~~~~~
 if {[info exists inputs(recordCADSees)] == 0} {
 	set inputs(recordCADSees) 0
 }
+if {[info exists inputs(doFreeVibrate)] == 0} {
+	set inputs(doFreeVibrate) 0
+}
 file mkdir $inputs(resFolder)/envelopeDrifts
 # file mkdir $inputs(resFolder)/Drifts
 if {$inputs(numDims) == 3} {

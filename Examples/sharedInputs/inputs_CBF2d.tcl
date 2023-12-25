@@ -154,7 +154,7 @@ set inputs(imperfectRat) 0.002
 set inputs(nBraceSeg) 10				;#must be even
 set inputs(numIntegPntsBrace) 3
 set inputs(braceInteg) {Lobatto $secTag $inputs(numIntegPntsBrace)}
-set inputs(seeGussetSpring) 1
+# set inputs(seeGussetSpring) 1
 #_____________________________________________________
 
 set inputs(secFolder) $inputs(generalFolder)/../sections/steel

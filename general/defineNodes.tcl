@@ -279,49 +279,53 @@ for {set j 0} {$j <= $inputs(nFlrs)} {incr j} {
 					}
 					set pos $eleCode,$elePos,$mem,g4
 					addNode $pos $xj $yj $zj
-					#imperfect sinusoidal meshing
-					if {$inputs(numDims) == 2} {
-						set dny 0.
-						if {$mem == "L"} {
-							set dnx -$dz
-							set dnz $dx
-						} else {
-							set dnx $dz
-							set dnz -$dx
-						}
-					} else {
-						foreach "dnx dny dnz" $dn {}
-						# if {$dir == "X"} {
-						# 	if {$mem == "L"} {
-						# 		set dnx -$dz
-						# 		set dnz $dx
-						# 	} else {
-						# 		set dnx $dz
-						# 		set dnz -$dx
-						# 	}
-						# 	set dny 0
-						# } else {
-						# 	if {$mem == "L"} {
-						# 		set dny -$dz
-						# 		set dnz $dy
-						# 	} else {
-						# 		set dny $dz
-						# 		set dnz -$dy
-						# 	}
-						# 	set dnx 0
-						# }
-					}
-					set dl [expr $l/$inputs(nBraceSeg)]
-					set dr [expr ($dx**2.+$dy**2.)**0.5]
-					for {set m 1} {$m < $inputs(nBraceSeg)} {incr m} {
-						set pos $eleCode,$elePos,$mem,$m
-						set xl [expr $m*$dl]
-						set yl [expr $inputs(imperfectRat)*$l*sin($pi*$xl/$l)]
 
-						set x [expr $xi+$xl*$dx+$yl*$dnx]
-						set y [expr $yi+$xl*$dy+$yl*$dny]
-						set z [expr $zi+$xl*$dz+$yl*$dnz]
-						addNode $pos $x $y $z $eleCode $elePos,$mem
+					source $inputs(secFolder)/$eleData(section,$eleCode,$elePos,L).tcl
+					if {$Shape != "BRB"} {
+						#imperfect sinusoidal meshing
+						if {$inputs(numDims) == 2} {
+							set dny 0.
+							if {$mem == "L"} {
+								set dnx -$dz
+								set dnz $dx
+							} else {
+								set dnx $dz
+								set dnz -$dx
+							}
+						} else {
+							foreach "dnx dny dnz" $dn {}
+							# if {$dir == "X"} {
+							# 	if {$mem == "L"} {
+							# 		set dnx -$dz
+							# 		set dnz $dx
+							# 	} else {
+							# 		set dnx $dz
+							# 		set dnz -$dx
+							# 	}
+							# 	set dny 0
+							# } else {
+							# 	if {$mem == "L"} {
+							# 		set dny -$dz
+							# 		set dnz $dy
+							# 	} else {
+							# 		set dny $dz
+							# 		set dnz -$dy
+							# 	}
+							# 	set dnx 0
+							# }
+						}
+						set dl [expr $l/$inputs(nBraceSeg)]
+						set dr [expr ($dx**2.+$dy**2.)**0.5]
+						for {set m 1} {$m < $inputs(nBraceSeg)} {incr m} {
+							set pos $eleCode,$elePos,$mem,$m
+							set xl [expr $m*$dl]
+							set yl [expr $inputs(imperfectRat)*$l*sin($pi*$xl/$l)]
+
+							set x [expr $xi+$xl*$dx+$yl*$dnx]
+							set y [expr $yi+$xl*$dy+$yl*$dny]
+							set z [expr $zi+$xl*$dz+$yl*$dnz]
+							addNode $pos $x $y $z $eleCode $elePos,$mem
+						}
 					}
 				}
 			}

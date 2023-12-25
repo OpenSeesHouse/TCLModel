@@ -137,7 +137,16 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 						set jNode $nd4
 					}
 					#imperfect sinusoidal meshing
-					addFiberMember $inputs(braceType) $elePos,$mem $eleCode $iNode $jNode 1 rho 0 $inputs(braceInteg) $inputs(braceGeomType) $zAxis 0 eleData(numSeg,$eleCode,$elePos,$mem)
+					source $inputs(secFolder)/$eleData(section,$eleCode,$elePos,L).tcl
+					source $inputs(secFolder)/convertToM.tcl
+					if {$Shape != "BRB"} {
+						addFiberMember $inputs(braceType) $elePos,$mem $eleCode $iNode $jNode 1 rho 0 $inputs(braceInteg) $inputs(braceGeomType) $zAxis 0 eleData(numSeg,$eleCode,$elePos,$mem)
+					} else {
+						set eleTag "$eleCode,$elePos,,$mem,1"
+						set matTag [manageFEData -getMaterial BRB]
+						addElement corotTruss $eleTag $iNode $jNode "$Area $matTag"
+						set rho [expr $Area*$inputs(density)*$inputs(selfWeightMultiplier)]
+					}
 					set eleData(unitSelfWeight,$eleCode,$pos,$mem) $rho
 					set sumStrucWeigh($eleCode,$j) [expr $sumStrucWeigh($eleCode,$j)+$l*$rho]
 				}

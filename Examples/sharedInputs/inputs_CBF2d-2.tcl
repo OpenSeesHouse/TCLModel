@@ -131,8 +131,6 @@ set inputs(numSubdivT)	3
 # set inputs(SG1,IntegStr) {Lobatto -sections 5 $secTagI $secTagM $secTagM $secTagM $secTagJ}
 # #set beamLpFac 0.2
 
-set inputs(numSubdivL)	6
-set inputs(numSubdivT)	3
 ### for Hardening:
 	set inputs(SG2,eleType) forceBeamColumn	; #  dispBeamColumn
 	set inputs(SG2,numSeg) 1
@@ -156,7 +154,7 @@ set inputs(imperfectRat) 0.002
 set inputs(nBraceSeg) 10				;#must be even
 set inputs(numIntegPntsBrace) 3
 set inputs(braceInteg) {Lobatto $secTag $inputs(numIntegPntsBrace)}
-set inputs(seeGussetSpring) 1
+# set inputs(seeGussetSpring) 1
 #_____________________________________________________
 
 set inputs(secFolder) $inputs(generalFolder)/../sections/steel
@@ -217,3 +215,4 @@ for {set j 1} {$j < $inputs(nFlrs)} {incr j} {
 
 set settingsGroup(B1) SG1
 set settingsGroup(C1) SG2
+set settingsGroup(C2) SG2
