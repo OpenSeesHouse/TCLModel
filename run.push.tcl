@@ -8,11 +8,11 @@ set inputs(doRayleigh) 0
 set inputs(generalFolder) ../../general
 set inputs(numPushSteps) 100
 #read models list 
-set models(1) Examples/SMF2d-16
+# set models(1) Examples/SMF2d-4
 # set models(1) Examples/SMF2d-4-fiber
-# set models(1) Examples/BRBF2D-16
+# set models(1) Examples/BRBF2D-4
 # set models(1) Examples/NIST-sym-4
-# set models(1) Examples/CBF2D-4
+set models(1) Examples/CBF2D-4
 set inputs(checkResultAvailable) 0
 foreach iModel "1" {
 	set inputs(modelFolder) $models($iModel)

@@ -81,6 +81,7 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 						}
 					}
 					if {$skip} continue
+					set sg $eleData(SG,$eleCode,$elePos,$mem)
 					set eleData(numSeg,$eleCode,$elePos,$mem) 0
 					if {$mem == "L"} {
 						set iNode $j1,$k,$i,1
@@ -140,9 +141,9 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 					source $inputs(secFolder)/$eleData(section,$eleCode,$elePos,L).tcl
 					source $inputs(secFolder)/convertToM.tcl
 					if {$Shape != "BRB"} {
-						addFiberMember $inputs(braceType) $elePos,$mem $eleCode $iNode $jNode 1 rho 0 $inputs(braceInteg) $inputs(braceGeomType) $zAxis 0 eleData(numSeg,$eleCode,$elePos,$mem)
+						addFiberMember $inputs($sg,eleType) $elePos,$mem $eleCode $iNode $jNode 1 rho 0 $inputs(braceInteg) $inputs(braceGeomType) $zAxis 0 eleData(numSeg,$eleCode,$elePos,$mem)
 					} else {
-						set eleTag "$eleCode,$elePos,,$mem,1"
+						set eleTag "$eleCode,$elePos,$mem,1"
 						set matTag [manageFEData -getMaterial BRB]
 						addElement corotTruss $eleTag $iNode $jNode "$Area $matTag"
 						set rho [expr $Area*$inputs(density)*$inputs(selfWeightMultiplier)]

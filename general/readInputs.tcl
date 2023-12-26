@@ -21,6 +21,13 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 						set eleData(section,$code,$pos,L)  $braceSec($lab,$j)
 						set eleData(section,$code,$pos,R)  $braceSec($lab,$j)
 						set eleData(config,$code,$pos)  $braceConfig($lab,$j)
+						if [info exists settingsGroup($lab)] {
+							set eleData(SG,$code,$pos,L)  $settingsGroup($lab)
+							set eleData(SG,$code,$pos,R)  $settingsGroup($lab)
+						} else {
+							set eleData(SG,$code,$pos,L)  SG1
+							set eleData(SG,$code,$pos,R)  SG1
+						}
 						set eleData(gussetDimI_lh,$code,$pos)  $gussetDimI($lab,lh,$j)
 						set eleData(gussetDimI_lv,$code,$pos)  $gussetDimI($lab,lv,$j)
 						set eleData(gussetDimI_lr,$code,$pos)  $gussetDimI($lab,lr,$j)

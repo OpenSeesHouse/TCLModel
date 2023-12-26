@@ -163,13 +163,12 @@ set inputs(numSubdivT)	3
 # set recMemSegs "1 3 4 6"
 
 #### Braces ####
-set inputs(braceType) dispBeamColumn
+set inputs(RG,eleType) forceBeamColumn
 set inputs(braceGeomType) Corotational
 set inputs(braceSpanRat) [expr 1./2.]
-set inputs(imperfectRat) 0.005;
-set inputs(nBraceSeg) 10				;#must be even
-set inputs(numIntegPntsBrace) 3
-set inputs(braceInteg) {Lobatto $secTag $inputs(numIntegPntsBrace)}
+set inputs(imperfectRat) 0.002
+set inputs(RG,numSeg) 10				;#must be even
+set inputs(braceInteg) {Lobatto $secTag 3}
 set inputs(seeGussetSpring) 1
 
 #_____________________________________________________
@@ -299,6 +298,7 @@ set settingsGroup(C2) SG1
 set settingsGroup(C3) SG1
 set settingsGroup(C4) SG2
 set settingsGroup(C5) SG2
+set settingsGroup(R1) RG
 
 ## beam end releases about local z axis
 ## R:retained	F:free

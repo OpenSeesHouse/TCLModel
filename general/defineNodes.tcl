@@ -214,6 +214,7 @@ for {set j 0} {$j <= $inputs(nFlrs)} {incr j} {
 						}
 					}
 					if {$skip} continue
+					set sg $eleData(SG,$eleCode,$elePos,$mem)
 					if {$mem == "L"} {
 						set iNode $j1,$k,$i,1
 						set jNode $j,$k1,$i1,1
@@ -314,9 +315,9 @@ for {set j 0} {$j <= $inputs(nFlrs)} {incr j} {
 							# 	set dnx 0
 							# }
 						}
-						set dl [expr $l/$inputs(nBraceSeg)]
+						set dl [expr $l/$inputs($sg,numSeg)]
 						set dr [expr ($dx**2.+$dy**2.)**0.5]
-						for {set m 1} {$m < $inputs(nBraceSeg)} {incr m} {
+						for {set m 1} {$m < $inputs($sg,numSeg)} {incr m} {
 							set pos $eleCode,$elePos,$mem,$m
 							set xl [expr $m*$dl]
 							set yl [expr $inputs(imperfectRat)*$l*sin($pi*$xl/$l)]
