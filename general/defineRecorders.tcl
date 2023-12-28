@@ -13,8 +13,8 @@ if {[info exists inputs(doFreeVibrate)] == 0} {
 }
 file mkdir $inputs(resFolder)/envelopeDrifts
 # file mkdir $inputs(resFolder)/Drifts
+file mkdir $inputs(resFolder)/envelopeAccels
 if {$inputs(numDims) == 3} {
-	file mkdir $inputs(resFolder)/envelopeAccels
 	set perpDirn 3
 	set baseCrnrs ""
 	set roofCrnrs ""

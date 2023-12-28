@@ -74,23 +74,32 @@ foreach dirFac $dirFacs {
 	}
 	for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 		set inputs(resFolder) $resPath/$dirFac
-		set input [open $inputs(resFolder)/envelopeDrifts/CNX$j-max.out r]
-		set file [read $input]
-		close $input
-		set lineList [split $file \n]
-		set line [lindex $lineList 2]
-		set CNDr_x [lrange $line end end]
-		set input [open $inputs(resFolder)/envelopeDrifts/CNY$j-max.out r]
-		set file [read $input]
-		close $input
-		set lineList [split $file \n]
-		set line [lindex $lineList 2]
-		set CNDr_y [lrange $line end end]
+		if {$inputs(numDims) == 3} {
+			set input [open $inputs(resFolder)/envelopeDrifts/CNX$j-max.out r]
+			set file [read $input]
+			close $input
+			set lineList [split $file \n]
+			set line [lindex $lineList 2]
+			set CNDr_x [lrange $line end end]
+			set input [open $inputs(resFolder)/envelopeDrifts/CNY$j-max.out r]
+			set file [read $input]
+			close $input
+			set lineList [split $file \n]
+			set line [lindex $lineList 2]
+			set CNDr_y [lrange $line end end]
 
-		# set drift3d [expr max($CNDr_x, $CNDr_y)]
-		set drift3d [expr ($CNDr_x**2.+$CNDr_y**2.)**0.5]
-		if {$drift3d > $maxDrift} {
-			set maxDrift $drift3d
+			# set drift [expr max($CNDr_x, $CNDr_y)]
+			set drift [expr ($CNDr_x**2.+$CNDr_y**2.)**0.5]
+		} else {
+			set input [open $inputs(resFolder)/envelopeDrifts/CMX$j.out r]
+			set file [read $input]
+			close $input
+			set lineList [split $file \n]
+			set line [lindex $lineList 2]
+			set drift [lrange $line end end]
+		}
+		if {$drift > $maxDrift} {
+			set maxDrift $drift
 			set maxDriftDir $dirFac
 		}
 	}
