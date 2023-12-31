@@ -26,12 +26,11 @@ if {$inputs(matType) == "Concrete"} {
 } else {
 	source $inputs(generalFolder)/beamColumnSectionsSteel.tcl
 }
-# if {$inputs(numDims) == 3} {
-# 	set zAxis(wallTransfX)	"0 1 0"
-# 	set zAxis(wallTransfY)	"-1 0 0"
-# }
 source $inputs(generalFolder)/computeJntData.tcl
 source $inputs(generalFolder)/defineNodes.tcl
+if [info exists isoltrLabel] {
+	source $inputs(generalFolder)/defineIsolators.tcl
+}
 source $inputs(generalFolder)/defineBaseSupports.tcl
 source $inputs(generalFolder)/defineBeams.tcl
 source $inputs(generalFolder)/defineColumns.tcl
@@ -65,7 +64,7 @@ if {$inputs(doEigen) == 1} {
 			puts "T$i= $T"
 			lappend omega2List [expr (2.*3.1415/$T)**2]
 		}
-			set inputs(numModes) $i
+		set inputs(numModes) $i
 		close $file
 	}
 }

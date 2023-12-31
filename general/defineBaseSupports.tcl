@@ -9,14 +9,18 @@ foreach loc "1 2 3" locName "central X-beam-splice Y-beam-splice" {
 		if ![manageGeomData -jntExists $pos] {
 			continue
 		}
-		set tag [manageFEData -getNode $pos]
+		#TODO allow column support hinging in presence of isolators
 		set x 1
 		set y 1
-		if {$loc == 1} {
+        if [info exists isoltrLabel] {
+			#bottom isolator node
+			set pos $k,$i,$loc,i
+		} elseif {$loc == 1} {
 			set xy $fixityFlag($k,$i)
 			set x [string index $xy 0]
 			set y [string index $xy 1]
 		}
+		set tag [manageFEData -getNode $pos]
 		if {$inputs(numDims) == 2} {
 			fix $tag 1 1 $y
 		} else {

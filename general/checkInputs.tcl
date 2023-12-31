@@ -36,8 +36,8 @@ foreach lName "gridOffsetListX gridOffsetListY columnLabels baseFixityFlags" {
 
 set n1 [llength $diaphMassList]
 set n3 [expr $inputs(nFlrs)*2]
-if {$n1 != $n3} { 
-	error "number of elements in diaphMassList is $n1 but should be $n3"	
+if {$n1 < $n3} { 
+	error "number of elements in diaphMassList($n1) is less than $n3"
 }
 
 set n3 [expr $inputs(nBaysX)*$inputs(nBaysY)]

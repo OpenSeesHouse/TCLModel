@@ -46,7 +46,7 @@ if {$inputs(numDims) == 2 || $inputs(pushDir) == "X"} {
 } else {
 	set cntrlDof 2
 }
-set roofNodeTag [manageFEData -getNode $roofNode]
+set roofNodeTag [manageFEData -getNode $inputs(roofNode)]
 set LBuilding $Z($inputs(nFlrs))
 set incr [expr 0.05*$LBuilding/$inputs(numPushSteps)]
 set tol 1.e-4

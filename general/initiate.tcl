@@ -10,6 +10,7 @@ source $inputs(generalFolder)/eleCodeMap.tcl
 source $inputs(generalFolder)/manageGeomData.tcl
 source $inputs(generalFolder)/addNode.tcl
 source $inputs(generalFolder)/addDiaphragm.tcl
+source $inputs(generalFolder)/addRigidPlate.tcl
 source $inputs(generalFolder)/addElement.tcl
 source $inputs(generalFolder)/addGeomTransf.tcl
 source $inputs(generalFolder)/releaseFromFixity.tcl

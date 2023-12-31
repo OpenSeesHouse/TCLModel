@@ -1,8 +1,12 @@
 puts "~~~~~~~~~~~~~~~~~~~~~ Defining Masses ~~~~~~~~~~~~~~~~~~~~~"
 logCommands -comment "#~~~~~~~~~~~~~~~~~~~~~ Defining Masses ~~~~~~~~~~~~~~~~~~~~~\n"
 set eps 1.e-6
-for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
+for {set j 0} {$j <= $inputs(nFlrs)} {incr j} {
+	if ![info exists diaphMass($j,X)] continue
 	set mass $diaphMass($j,X)
+    if {$j == 0 && ![info exists isoltrLabel]} {
+		continue
+	}
 	if {$inputs(numDims) == 2} {
 		set numSlaveNodeList [llength $slaveNodeList($j)]
 		set mass [expr $mass/$numSlaveNodeList]

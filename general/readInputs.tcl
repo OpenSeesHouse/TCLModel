@@ -226,6 +226,10 @@ for {set k 1} {$k <= $inputs(nBaysY)+1} {incr k} {
 		} else {
 			set fixityFlag($k,$i) 11
 		}
+		if [info exists isolatorLabels] {
+			set lab [lindex $isolatorLabels [expr ($kk-1)*($inputs(nBaysX)+1) + $i - 1]]
+			set isoltrLabel($k,$i) $lab
+		}
 	}
 }
 
@@ -373,7 +377,7 @@ if {1} {
 				}
 				set code [eleCodeMap Y-Beam]
 				set loadY 0.
-				if {$inputs(numDims) == 3} {
+				if {$inputs(numDims) == 3 && $inputs(nBaysY) > 0} {
 					if {$k == 1} {
 						set loadY	[expr $eleData(load,$code,$j,$k,$i)*$ly/2.]
 					} elseif {$k == $inputs(nBaysY)+1} {

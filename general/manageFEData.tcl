@@ -4,11 +4,13 @@ proc manageFEData {act args} {
 	global transfTagMap
 	global matTagMap
 	global secTagMap
+	global fricModelTagMap
 	global lastNodeTag
 	global lastEleTag
 	global lastTransfTag
 	global lastMaterialTag
 	global lastSecTag
+	global lastFricModelTag
 	global eleAlignedPos
 	global nodeCrds
 	global nodeMergeTol
@@ -112,6 +114,19 @@ proc manageFEData {act args} {
 	if {$act == "-getSection"} {
 		if [info exists secTagMap($args)] {
 			return $secTagMap($args)
+		}
+		return 0
+	}
+	if {$act == "-newFrictionModel"} {
+		if [info exists fricModelTagMap($args)] {
+			error "section with tag: $args already defined in map"
+		}
+		set fricModelTagMap($args) [incr lastFricModelTag]
+		return $lastFricModelTag
+	}
+	if {$act == "-getFrictionModel"} {
+		if [info exists fricModelTagMap($args)] {
+			return $fricModelTagMap($args)
 		}
 		return 0
 	}

@@ -24,8 +24,8 @@ if {$inputs(numDims) == 3} {
 		set tag [manageFEData -getNode "$inputs(nFlrs),$k,$i,1"]
 		lappend roofCrnrs $tag
 	}
-	set rnTag [manageFEData -getNode $roofNode]
-	set bnTag [manageFEData -getNode $baseNode]
+	set rnTag [manageFEData -getNode $inputs(roofNode)]
+	set bnTag [manageFEData -getNode $inputs(baseNode)]
 	eval "recorder Drift -file $inputs(resFolder)/globalDriftX.out -time -iNode $bnTag -jNode $rnTag -dof 1 -perpDirn $perpDirn"
 	if {$inputs(analType) == "push"} {
 		eval "recorder Drift -file $inputs(resFolder)/globalDriftY.out -time -iNode $bnTag -jNode $rnTag -dof 2 -perpDirn $perpDirn"
@@ -35,8 +35,8 @@ if {$inputs(numDims) == 3} {
 	# eval "recorder EnvelopeDrift -file $inputs(resFolder)/globalDriftCNY.out -time -process maxAbs -iNode $baseCrnrs -jNode $roofCrnrs -dof 2 -perpDirn $perpDirn"
 } else {
 	set perpDirn 2
-	set bsnTag [manageFEData -getNode $baseNode]
-	set rnTag [manageFEData -getNode $roofNode]
+	set bsnTag [manageFEData -getNode $inputs(baseNode)]
+	set rnTag [manageFEData -getNode $inputs(roofNode)]
 	eval "recorder Drift -file $inputs(resFolder)/globalDriftX.out -time -iNode $bsnTag -jNode $rnTag -dof 1 -perpDirn 2"
 }
 if {$inputs(recordCADSees)} {
@@ -48,11 +48,11 @@ if {$inputs(recordCADSees)} {
 	}
 	return
 }
-set nd1 [manageFEData -getNode $baseNode]
+set nd1 [manageFEData -getNode $inputs(baseNode)]
 set allNodes $nd1
 for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 	set nd2 [manageFEData -getNode $masterNode($j)]
-	if {$inputs(numDims) == 2} {
+	if {$inputs(numDims) == 2 || $inputs(nBaysY) == 0} {
 		set recTags($j) [eval "recorder EnvelopeDrift -file $inputs(resFolder)/envelopeDrifts/CMX$j.out -iNode $nd1 -jNode $nd2 -dof 1 -perpDirn $perpDirn"]
 		if {$inputs(doFreeVibrate)} {
 			set recTagsAmp($j) [eval "recorder EnvelopeDrift -file $inputs(resFolder)/envelopeDrifts/CMX$j-amp.out -iNode $nd1 -jNode $nd2 -dof 1 -perpDirn $perpDirn"]
@@ -76,7 +76,7 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 		eval "recorder EnvelopeDrift -file $inputs(resFolder)/envelopeDrifts/CNY$j.out                     -iNode $baseCrnrs -jNode $crnrNds -dof 2 -perpDirn $perpDirn"
 		# recorder Drift -file $inputs(resFolder)/Drifts/$j.out -iNode $iNode -jNode $jNode -dof 1 2 6 -perpDirn $perpDirn
 		set baseCrnrs $crnrNds
-		if {$inputs(numDims) == 3 && [info exists seriesTagX]} {
+		if [info exists seriesTagX] {
 			eval "recorder EnvelopeNode -file $inputs(resFolder)/envelopeAccels/CNX$j.out -node $crnrNds -timeSeries $seriesTagX -dof 1 accel"
 			eval "recorder EnvelopeNode -file $inputs(resFolder)/envelopeAccels/CNY$j.out -node $crnrNds -timeSeries $seriesTagY -dof 2 accel"
 		}
@@ -86,7 +86,7 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 }
 if [info exists seriesTagX] {
 	eval "recorder EnvelopeNode -file $inputs(resFolder)/envelopeAccels/allCMX.out -node $allNodes -timeSeries $seriesTagX -dof 1 accel"
-	if {$inputs(numDims) == 3} {
+	if {$inputs(numDims) == 3 && $inputs(nBaysY) > 0} {
 		eval "recorder EnvelopeNode -file $inputs(resFolder)/envelopeAccels/allCMY.out -node $allNodes -timeSeries $seriesTagY -dof 2 accel"
 	}
 }
@@ -97,7 +97,6 @@ if [info exists seriesTagX] {
 for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 	set shearList($j) ""
 }
-#TODO add gusset elements to the story shear element list
 
 set timeStr ""
 foreach typ "Hinge BeamColumn Truss" {
@@ -280,7 +279,27 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 		lappend shearList($j) [manageFEData -getElement $leanClmn($j)]
 	}
 	eval "recorder $shearRec -file $inputs(resFolder)/storyShears/X$j.out $timeStr -process sum -ele $shearList($j) -dof 1 force"
-	if {$inputs(numDims) == 3} {
+	if {$inputs(numDims) == 3 && $inputs(nBaysY) > 0} {
 		eval "recorder $shearRec -file $inputs(resFolder)/storyShears/Y$j.out $timeStr -process sum -ele $list $shearList($j) -dof 2 force"
 	}
+}
+
+if [info exists isoltrLabel] {
+	file mkdir $inputs(resFolder)/isolators
+	set list ""
+	foreach loc "1 2 3" locName "central X-beam-splice Y-beam-splice" {
+		for {set i 1} {$i <= [expr $inputs(nBaysX)+1]} {incr i} {
+			for {set k 1} {$k <= [expr $inputs(nBaysY)+1]} {incr k} {
+				set pos "$j,$k,$i,$loc"
+				if ![manageGeomData -jntExists $pos] {
+					continue
+				}
+				lappend list $k,$i,$loc,i
+			}
+		}
+	}
+	eval "recorder EnvelopeElement -file $inputs(resFolder)/isolators/energies.txt -ele $list energy"
+	eval "recorder EnvelopeElement -file $inputs(resFolder)/isolators/shearForces.txt -ele $list -dof 1 2 force"
+	eval "recorder EnvelopeNode -file $inputs(resFolder)/isolators/dispX.txt -node $slaveNodeList(0) -dof 1 disp"
+	eval "recorder EnvelopeNode -file $inputs(resFolder)/isolators/dispY.txt -node $slaveNodeList(0) -dof 2 disp"
 }
