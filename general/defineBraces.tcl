@@ -3,37 +3,6 @@ set eleCode
 if {$inputs(hasBrace) == 0} {
 	return
 }
-#define Braces
-#consists of these steps:
-
-# 1 --------------- jntData updating ----------------------------------------------------
-# 1.1 collecting gusset dimensions along with the panel zone dimensions
-# 1.2 adding new records to the jntData array as jntData(dim,pos,dir,vrtx:(pp|np|nn|pn),h,v)
-#     that form two cruciforms in X|Y dirs. each cruciform consists of 4 vertices and each vertex
-#     is defined using a couple of h,v coordinates
-# 1.3 iterating over brace connectivity and gusset dimension data and updating jntData array
-
-# 2 --------- material and behavior definition ---------------------------------------------
-# 2.1 reviewing Karamanci & Lignos (2014) for modelling buckling behavir using meshed
-#   imperfect co-rotational geometry and the proposed low-cycle fatigue rule
-# 2.2 reviewing Hsiao et al. (2012) for modelling plastic hinging at the gusset
-# 2.3 adding uniaxialMaterial objects required for fiber sections and gusset springs
-
-# 3 --------- defining the meshed geometry and the springs ---------------------------------
-# 3.1 updating element codes and the related node positions to see variability at each $j,$k,$i:
-#     1:panel-zone center
-#     2:gusset (rigid link and spring),
-#     3:brace mesh,
-#     4:beam splice,
-#     5:shear link (two external connectors + two springs + one internal connector)
-# 3.2 dividing the beams for chevron and EBF configs to create additional nodes
-# 3.3 defining end offset at the new internal edges of the divided beams
-# 3.4 defining the beam end springs for the shear link in case of EBF
-# 3.5 defining the rigid links and the rotational springs representing the gussets
-#     defining the out-of-plane (for numDims==3) and in-plane (numDims == 2)
-# 3.6 sinusoidal imperfection by defing node geometries
-# 3.7 defining the fiber-based beam-column elements in between the defined nodes
-
 puts "~~~~~~~~~~~~~~~~~~~~~ Defining Brace Materials and Sections ~~~~~~~~~~~~~~~~~~~~~"
 logCommands -comment "#~~~~~~~~~~~~~~~~~~~~~ Defining Brace Materials and Sections ~~~~~~~~~~~~~~~~~~~~~\n"
 source $inputs(generalFolder)/BraceSections.tcl

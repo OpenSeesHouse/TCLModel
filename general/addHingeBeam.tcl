@@ -114,7 +114,7 @@ proc addHingeBeam {elePos eleCode iNode jNode sec springMatId kRat fixStr rhoNam
         } else {
             set args "$Area $inputs(E) $I33 $transTag -mass $rho -release $release"
         }
-		set eleId [addElement elasticBeamColumn $eleTag $iNode $mNode $args]
+		set eleId [addElement elasticBeamColumn $eleTag $iNode $mNode $args -addToDamping]
 		lappend eleTags $eleId
 		set iNode $mNode
 		set fix1 $fix2

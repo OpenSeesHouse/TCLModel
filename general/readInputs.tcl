@@ -6,6 +6,27 @@ foreach "val1 val2" $diaphMassList {
 	incr j -1
 }
 
+if [info exists leanLoadList] {
+	set j $inputs(nFlrs)
+	foreach val $leanLoadList {
+		set leanLoad($j) $val
+		incr j -1
+	}
+} else {
+	for {set j $inputs(nFlrs)} {$j >= 1} {incr j -1} {
+		if {$j == $inputs(nFlrs)} {
+			set dead $inputs(deadRoof)
+			set live $inputs(liveRoof)
+		} else {
+			set dead $inputs(deadFloor)
+			set live $inputs(liveFloor)
+		}
+		set deadFac $inputs(deadMassFac)
+		set liveFac $inputs(liveMassFac)
+		set load [expr $g*($deadFac*$inputs(deadFloor)+$liveFac*$inputs(liveFloor))*$inputs(leaningArea)]
+		set leanLoad($j) $load
+	}
+}
 for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 	for {set k 1} {$k <= $inputs(nBaysY)+1} {incr k} {
 		set kk [expr $inputs(nBaysY)+1-$k+1]

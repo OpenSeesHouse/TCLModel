@@ -40,7 +40,6 @@ proc addFiberMember {eleType elePos eleCode iNode jNode nDesStats rhoName p inte
 		set pos2 [lindex $vec($k) 1]
 		if {[expr abs($d2-$d1)] < [manageFEData -getNodeMergeTol]} {
 			manageFEData -mergeNode $pos1 $pos2
-			puts "manageFEData -mergeNode $pos1 $pos2"
 		} else {
 			lappend ds $d2
 			lappend mNodes $pos2
@@ -86,7 +85,7 @@ proc addFiberMember {eleType elePos eleCode iNode jNode nDesStats rhoName p inte
 	set rho [expr $rho/$inputs(numDesnStats)]
 
 	set zerOffTransTag 0
-	if {$nSeg > 1} {
+	if {$nSeg > 1 || $bcType == "Brace"} {
 		set zerOffTransTag [addGeomTransf -getZeroOffsetTransf "$transType $bcCodeType"]
 	}
 	set integType [lindex $integStr 0]
@@ -182,7 +181,7 @@ proc addFiberMember {eleType elePos eleCode iNode jNode nDesStats rhoName p inte
 			eval "lappend eleArgs $str"
 		}
 		lappend eleArgs "-mass $rho"
-		set eleId [addElement $eleType $eleTag $iNode $mNode $eleArgs]
+		set eleId [addElement $eleType $eleTag $iNode $mNode $eleArgs -addToDamping]
 		lappend eleTags $eleId
 		set iOfs 0
 		if [manageGeomData -jntExists $mNode] {

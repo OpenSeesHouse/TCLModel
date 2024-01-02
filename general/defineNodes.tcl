@@ -43,7 +43,7 @@ for {set j 0} {$j <= $inputs(nFlrs)} {incr j} {
 			}
 			foreach "x y z" "$X($k,$i)	$Y($k,$i)	$Z($j)" {}
 			if {$loc == 1} {
-				addNode $pos $x $y $z
+				addNode $pos $x $y $z -addToDamping
 				lappend slaveNodeList($j) $pos
 				if {$masterNode($j) == 0} {
 					set masterNode($j) $pos		;#used in numDim == 2 for leaning column
@@ -52,13 +52,13 @@ for {set j 0} {$j <= $inputs(nFlrs)} {incr j} {
 				set eleCode [eleCodeMap X-Beam]
 				set elePos "$j,$k,$i"
 				set x [expr $x*(1-$inputs(braceSpanRat))+$X($k,$i1)*$inputs(braceSpanRat)]
-				addNode $pos $x $y $z $eleCode $elePos
+				addNode $pos $x $y $z -setAligned $eleCode $elePos
 				lappend slaveNodeList($j) $pos
 			} elseif {$loc == 3} {
 				set eleCode [eleCodeMap Y-Beam]
 				set elePos "$j,$k,$i"
 				set y [expr $y*(1-$inputs(braceSpanRat))+$Y($k1,$i)*$inputs(braceSpanRat)]
-				addNode $pos $x $y $z $eleCode $elePos
+				addNode $pos $x $y $z -setAligned $eleCode $elePos
 				lappend slaveNodeList($j) $pos
 			} elseif {$loc == "BX" || $loc == "BY"} {
 				if {$j == 0} {
@@ -118,7 +118,7 @@ for {set j 0} {$j <= $inputs(nFlrs)} {incr j} {
 					set pos $j,$k,$i,B[set dir]_$m
 					set x [expr $x+$dx]
 					set y [expr $y+$dy]
-					addNode $pos $x $y $z  $eleCode $elePos
+					addNode $pos $x $y $z -setAligned $eleCode $elePos
 				}
 			} elseif {$loc == "C"} {
 				if {$j == 0} {
@@ -168,7 +168,7 @@ for {set j 0} {$j <= $inputs(nFlrs)} {incr j} {
 				for {set m 1} {$m < $nSeg} {incr m} {
 					set pos $j,$k,$i,C_$m
 					set z [expr $z+$dz]
-					addNode $pos $x $y $z $eleCode $elePos
+					addNode $pos $x $y $z -setAligned $eleCode $elePos
 				}
 			} elseif {$loc == "RX" || $loc == "RY"} {
 				if {$j == 0} {
@@ -325,7 +325,7 @@ for {set j 0} {$j <= $inputs(nFlrs)} {incr j} {
 							set x [expr $xi+$xl*$dx+$yl*$dnx]
 							set y [expr $yi+$xl*$dy+$yl*$dny]
 							set z [expr $zi+$xl*$dz+$yl*$dnz]
-							addNode $pos $x $y $z $eleCode $elePos,$mem
+							addNode $pos $x $y $z -setAligned $eleCode $elePos,$mem
 						}
 					}
 				}

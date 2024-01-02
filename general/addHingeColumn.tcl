@@ -41,7 +41,7 @@ proc addHingeColumn {elePos eleCode iNode jNode sec angle matId2 matId3 kRat rho
         set id1 [addElement zeroLength $tag1 $iNode $iiNode \
             "-mat $matId3 $matId3 $rigidMatTag $rigidMatTag $rigidMatTag $rigidMatTag \
             -dir 6 5 1 2 3 4 -orient $xV $yV"]
-        set id [addElement elasticBeamColumn $eleTag $iiNode $jjNode "$Area $inputs(E) $inputs(G) $J $I22 $I33 $transfTag -mass $rho"]
+        set id [addElement elasticBeamColumn $eleTag $iiNode $jjNode "$Area $inputs(E) $inputs(G) $J $I22 $I33 $transfTag -mass $rho" -addToDamping]
         set id2 [addElement zeroLength $tag2 $jjNode $jNode \
             "-mat $matId3 $matId2 $rigidMatTag $rigidMatTag $rigidMatTag $rigidMatTag \
             -dir 6 5 1 2 3 4 -orient $xV $yV"]
@@ -58,7 +58,7 @@ proc addHingeColumn {elePos eleCode iNode jNode sec angle matId2 matId3 kRat rho
             error ("Currently, only 0 and 90 degrees are allowed for column rotation angle")
         }
         set id1 [addElement zeroLength $tag1 $iNode $iiNode "-mat $ID $rigidMatTag $rigidMatTag -dir 3 1 2"]
-        set id [addElement elasticBeamColumn $eleTag $iiNode $jjNode "$Area $inputs(E) $Iz $transfTag -mass $rho"]
+        set id [addElement elasticBeamColumn $eleTag $iiNode $jjNode "$Area $inputs(E) $Iz $transfTag -mass $rho" -addToDamping]
         set id2 [addElement zeroLength $tag2 $jjNode $jNode "-mat $ID $rigidMatTag $rigidMatTag -dir 3 1 2"]
     }
     return "$id1 $id $id2"
