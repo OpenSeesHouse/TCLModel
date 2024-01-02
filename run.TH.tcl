@@ -1,6 +1,6 @@
 #comment these to run externally:
 #start:
-# set modelPath Examples/SMF2d-iso-3
+# set modelPath Examples/BRBF2d-4
 # set sa 3.8
 # set iRec 2
 # set resFilePath tmp.txt
@@ -18,13 +18,13 @@ set inputs(colpsDrift) 0.1
 set inputs(checkMaxResp) 1
 set inputs(checkResultAvailable) 1
 cd $modelPath
-# source $inputs(generalFolder)/runMirroredTH.tcl
-source $inputs(generalFolder)/runSingleTH.tcl
+source $inputs(generalFolder)/runMirroredTH.tcl
+# source $inputs(generalFolder)/runSingleTH.tcl
 cd $inputs(generalFolder)/../
 #to communicate with external caller:
 if [info exists resFilePath] {
 	set file [open $resFilePath w]
-	# puts $file "$maxDrift $failureFlag $maxDriftDir"
-	puts $file "$maxDrift $failureFlag"
+	puts $file "$maxDrift $failureFlag $maxDriftDir"
+	# puts $file "$maxDrift $failureFlag"
 	close $file
 }

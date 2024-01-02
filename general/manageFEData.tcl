@@ -27,7 +27,6 @@ proc manageFEData {act args} {
 		set lastSecTag 0
 		set nodeMergeTol 0.01  ;#in units of m
 		foreach arrName "nodeTagMap eleTagMap transfTagMap matTagMap secTagMap eleAlignedPos nodeCrds zeroOffsetTransf dampingEleList dampingNodeList" {
-		foreach arrName "nodeTagMap eleTagMap transfTagMap matTagMap secTagMap eleAlignedPos nodeCrds zeroOffsetTransf dampingEleList dampingNodeList" {
 			if [info exists $arrName] {
 				unset $arrName
 			}
