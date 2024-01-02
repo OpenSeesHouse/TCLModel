@@ -5,6 +5,8 @@ proc manageFEData {act args} {
 	global matTagMap
 	global secTagMap
 	global fricModelTagMap
+	global dampingEleList
+	global dampingNodeList
 	global lastNodeTag
 	global lastEleTag
 	global lastTransfTag
@@ -22,7 +24,7 @@ proc manageFEData {act args} {
 		set lastMaterialTag 0
 		set lastSecTag 0
 		set nodeMergeTol 0.01  ;#in units of m
-		foreach arrName "nodeTagMap eleTagMap transfTagMap matTagMap secTagMap eleAlignedPos nodeCrds zeroOffsetTransf" {
+		foreach arrName "nodeTagMap eleTagMap transfTagMap matTagMap secTagMap eleAlignedPos nodeCrds zeroOffsetTransf dampingEleList dampingNodeList" {
 			if [info exists $arrName] {
 				unset $arrName
 			}
@@ -38,16 +40,27 @@ proc manageFEData {act args} {
 			error "node with tag: $pos already defined in map"
 		}
 		set nodeTagMap($pos) [incr lastNodeTag]
-		set arg0 [lindex $args 1]
-
-		if {$arg0 == "-setAligned"} {
-			set eleCode [lindex $args 2]
-			set elePos [lindex $args 3]
-			if ![info exists eleAlignedPos($eleCode,$elePos)] {
-				set eleAlignedPos($eleCode,$elePos) $pos
-			} else {
+		set args [lrange $args 1 end]
+		set i 0
+		while {$i < [llength $args]} {
+			set arg0 [lindex $args $i]
+			if {$arg0 == "-setAligned"} {
+				incr i
+				set eleCode [lindex $args 2]
+				set elePos [lindex $args 3]
 				lappend eleAlignedPos($eleCode,$elePos) $pos
+				# if ![info exists eleAlignedPos($eleCode,$elePos)] {
+				# 	set eleAlignedPos($eleCode,$elePos) $pos
+				# } else {
+				# 	lappend eleAlignedPos($eleCode,$elePos) $pos
+				# }
+			} elseif {$arg0 == "-addToDamping"} {
+				incr i
+				lappend dampingNodeList $lastNodeTag
+			} else {
+				error "unrecognized arg: $arg0"
 			}
+
 		}
 		return $lastNodeTag
 	}
@@ -61,7 +74,11 @@ proc manageFEData {act args} {
 		if [info exists eleTagMap($args)] {
 			error "element with tag: $args already defined in map"
 		}
-		set eleTagMap($args) [incr lastEleTag]
+		set pos [lindex $args 0]
+		set eleTagMap($pos) [incr lastEleTag]
+		if {[lindex $args 1] == "-addToDamping"} {
+			lappend dampingEleList $lastEleTag
+		}
 		return $lastEleTag
 	}
 	if {$act == "-getElement"} {
@@ -183,6 +200,12 @@ proc manageFEData {act args} {
 		set nodeTagMap($pos2) [$nodeTagMap($pos1)]
 		puts "$pos2 merged with $pos1"
 		return
+	}
+	if {$act == "-getDampingEleList"} {
+		return $dampingEleList
+	}
+	if {$act == "-getDampingNodeList"} {
+		return $dampingNodeList
 	}
 	error "unknown act: $act in manageFEData"
 }

@@ -177,10 +177,6 @@ set inputs(seeGussetSpring) 1
 #_____________________________________________________
 
 set inputs(secFolder) $inputs(generalFolder)/../sections/steel
-# set inputs(lx) [lsum $inputs(lBayX)]
-# set inputs(ly) [lsum $inputs(lBayY)]
-# set inputs(eccRatX) 0.05
-# set inputs(eccRatY) 0.05
 set inputs(centerMassX) 	[expr ($inputs(eccRatX)+0.5)*$inputs(lx)]
 set inputs(centerMassY) 	[expr ($inputs(eccRatY)+0.5)*$inputs(ly)]
 set inputs(centerMassXRoof) 	[expr ($inputs(eccRatX)+0.5)*$inputs(lx)]

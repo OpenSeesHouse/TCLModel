@@ -16,7 +16,7 @@ set inputs(doFreeVibrate) 1
 set inputs(freeVibTol) 1.e-5
 set inputs(colpsDrift) 0.1
 set inputs(checkMaxResp) 1
-set inputs(checkResultAvailable) 0
+set inputs(checkResultAvailable) 1
 cd $modelPath
 # source $inputs(generalFolder)/runMirroredTH.tcl
 source $inputs(generalFolder)/runSingleTH.tcl

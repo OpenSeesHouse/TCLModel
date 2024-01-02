@@ -36,7 +36,7 @@ foreach lName "gridOffsetListX gridOffsetListY columnLabels baseFixityFlags" {
 
 set n1 [llength $diaphMassList]
 set n3 [expr $inputs(nFlrs)*2]
-if {$n1 < $n3} { 
+if {$n1 < $n3} {
 	error "number of elements in diaphMassList($n1) is less than $n3"
 }
 
@@ -44,24 +44,32 @@ set n3 [expr $inputs(nBaysX)*$inputs(nBaysY)]
 if [info exists slabLoad] {
 	for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 		set n1 [llength $slabLoad($j)]
-		if {$n1 != $n3} { 
-			error "number of elements in slabLoad($j) is $n1 but should be $n3"	
+		if {$n1 != $n3} {
+			error "number of elements in slabLoad($j) is $n1 but should be $n3"
 		}
 	}
 }
 if [info exists deckLoad] {
 	for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 		set n1 [llength $deckLoad($j)]
-		if {$n1 != $n3} { 
-			error "number of elements in deckLoad($j) is $n1 but should be $n3"	
+		if {$n1 != $n3} {
+			error "number of elements in deckLoad($j) is $n1 but should be $n3"
 		}
 		if [info exists deckLoadDir] {
 			set n1 [llength $deckLoadDir($j)]
-			if {$n1 != $n3} { 
-				error "number of elements in deckLoadDir($j) is $n1 but should be $n3"	
+			if {$n1 != $n3} {
+				error "number of elements in deckLoadDir($j) is $n1 but should be $n3"
 			}
 		} else {
-			error "missing deckLoadDir definition"	
+			error "missing deckLoadDir definition"
 		}
+	}
+}
+
+if [info exists leanLoadList] {
+	set n1 [llength $leanLoadList]
+	set n3 $inputs(nFlrs)
+	if {$n1 != $n3} {
+		error "number of elements in leanLoadList($n1) should be $n3"
 	}
 }

@@ -2,11 +2,13 @@
 puts "~~~~~~~~~~~~~~~~~~~~~ Defining Leaning Columns ~~~~~~~~~~~~~~~~~~~~~"
 logCommands -comment "#~~~~~~~~~~~~~~~~~~~~~ Defining Leaning Columns ~~~~~~~~~~~~~~~~~~~~~\n"
 set j 0
-set crdX 0.
-if {$inputs(numDims) == 2} {
+if {$inputs(numDims) == 2 || $inputs(nBaysY) == 0} {
 	set crdX -$X(2)
+	set crdY 0.
+} else {
+	set crdX $inputs(centerMassX)
+	set crdY $inputs(centerMassY)
 }
-set crdY 0.
 set tag [addNode $j,98 $crdX $crdY $Z($j)]
 set clmnTrans [addGeomTransf -getZeroOffsetTransf "PDelta Column"]
 # set beamTrans [addGeomTransf -getZeroOffsetTransf "PDelta Y-Beam"]
@@ -37,14 +39,7 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 }
 pattern Plain 3 Linear {
 	for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
-		if {$j == $inputs(nFlrs)} {
-			set dead $inputs(deadRoof)
-			set live $inputs(liveRoof)
-		} else {
-			set dead $inputs(deadFloor)
-			set live $inputs(liveFloor)
-		}
-		set load [expr ($inputs(deadMassFac)*$dead+$inputs(liveMassFac)*$live)*$inputs(leaningArea)*$g]
+		set load $leanLoad($j)
 		if {$inputs(numDims) == 3} {
 			load [manageFEData -getNode $j,98] 0. 0 -$load 0. 0. 0.
 		} else {

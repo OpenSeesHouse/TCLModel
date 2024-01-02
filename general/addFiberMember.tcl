@@ -182,7 +182,7 @@ proc addFiberMember {eleType elePos eleCode iNode jNode nDesStats rhoName p inte
 			eval "lappend eleArgs $str"
 		}
 		lappend eleArgs "-mass $rho"
-		set eleId [addElement $eleType $eleTag $iNode $mNode $eleArgs]
+		set eleId [addElement $eleType $eleTag $iNode $mNode $eleArgs -addToDamping]
 		lappend eleTags $eleId
 		set iOfs 0
 		if [manageGeomData -jntExists $mNode] {

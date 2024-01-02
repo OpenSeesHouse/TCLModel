@@ -1,3 +1,4 @@
+source designData.tcl
 
 #initiation
 #_____________________________________________________
@@ -8,21 +9,21 @@ set inputs(hasBrace) 0
 #Geometry
 #_____________________________________________________
 set inputs(numDims) 2
-# set inputs(nFlrs) 12
+set inputs(nFlrs) 4
 set inputs(nBaysX) 3
 set inputs(nBaysY) 0
-set inputs(lBayX) "9.14 9.14 9.14"
+set inputs(lBayX) "6.1 6.1 6.1"
 set inputs(lBayY) ""
-set inputs(hStory) 5.49
-set inputs(hStoryBase) 4.27
+set inputs(hStory) 3.96
+set inputs(hStoryBase) 4.57
 set inputs(numDesnStats) 1		;#mainly for RC members
 set inputs(eccRatX) 0
 set inputs(eccRatY) 0
 
-set inputs(lx) [expr 5*9.14]
-set inputs(ly) [expr 5*6.09]
-set inputs(planArea) [expr 0.5*$inputs(lx)*$inputs(ly)]
-set inputs(planPerim) [expr $inputs(lx)+$inputs(ly)]
+# set inputs(lx) [expr 5*6.1]
+# set inputs(ly) [expr 5*6.09]
+set inputs(planArea) [expr 16*6.1*6.1]
+set inputs(planPerim) [expr 12*6.1]
 set inputs(cornerCrdList) "
 "
 # for recording corner nodes' drifts 
@@ -32,15 +33,15 @@ set inputs(cornerGrdList) "
 
 # Mass
 #_____________________________________________________
-set inputs(deadRoof)  [expr $deadFac*47.88/$g*56.0] 		;#=46 (D) + 10 (superDead)
-set inputs(deadFloor) [expr $deadFac*47.88/$g*61.7] 		;#64.7= 46(D)+15(superDead)+3.7(Facade) in kg/m2
-set inputs(liveRoof)  [expr 1.*47.88/$g*30]
-set inputs(liveFloor) [expr 1.*47.88/$g*50]
-set inputs(perimBeamDead) 370.							;#kg/m of perimeter beaam
+set inputs(deadRoof)   439.
+set inputs(deadFloor)  439.
+set inputs(liveRoof)  97.
+set inputs(liveFloor) 244.
+set inputs(perimBeamDead) [expr 488.*3.96]							;#kg/m of perimeter beaam
 set inputs(deadMassFac) 1.05
 set inputs(liveMassFac) 0.25
 set inputs(selfWeightMultiplier) 1
-set inputs(leaningAreaFac) 1.0
+set inputs(leaningAreaFac) 0.69
 #_____________________________________________________
 
 # Damping
@@ -60,8 +61,8 @@ if {$inputs(matType) == "Steel"} {
 	# set hardeningRatio 0.001		;#for fiber method
 	set inputs(fyBeam) [expr 1*345.e6]
 	set inputs(fyClmn) [expr 1*345.e6]
-	set inputs(beamRy) 1.1
-	set inputs(clmnRy) 1.1
+	set inputs(beamRy) 1.15
+	set inputs(clmnRy) 1.15
 	set inputs(isColumnA992Gr50) 1
 	set inputs(isBeamA992Gr50) 1
 	set inputs(nu) 0.15
@@ -102,7 +103,7 @@ set inputs(cUnitsToM) 1.
 # General
 set inputs(rigidZoneFac) 1.
 set inputs(clmnBasePlateHeightFac) 1.	;#ratio of the column section height considered as the base plate connection offset
-set inputs(clmnGeomtransfType) Linear	;#set to Linear when all story gravity force is applied on leaning column
+set inputs(clmnGeomtransfType) PDelta	;#set to Linear when all story gravity force is applied on leaning column
 #_____________________________________________________
 
 # Lumped
@@ -136,7 +137,20 @@ for {set j $inputs(nFlrs)} {$j >= 1} {incr j -1} {
 	lappend diaphMassList $mass
 	lappend diaphMassList $rotMass
 }
-
+set leanLoadList ""
+for {set j $inputs(nFlrs)} {$j >= 1} {incr j -1} {
+    if {$j == $inputs(nFlrs)} {
+        set dead $inputs(deadRoof)
+        set live $inputs(liveRoof)
+    } else {
+        set dead $inputs(deadFloor)
+        set live $inputs(liveFloor)
+    }
+    set deadFac 1.
+    set liveFac 1.
+    set load [expr $g*($deadFac*$inputs(deadFloor)+$liveFac*$inputs(liveFloor))*$inputs(leaningArea)]
+	lappend leanLoadList $load
+}
 # - : gravity beam
 # B2: SMF lateral beam
 set xBeamLabels "
@@ -156,11 +170,12 @@ for {set i 1} {$i <= $inputs(nFlrs)} {incr i} {
 		0 0 0 0
 	"
 }
-set L [expr 0.5*6.1*(1.05*$inputs(deadFloor)+0.25*$inputs(liveFloor))*$g+$inputs(perimBeamDead)*$g]
+set L [expr 0.5*6.1*(1.0*$inputs(deadFloor)+1.0*$inputs(liveFloor))*$g+$inputs(perimBeamDead)*$g]
 for {set j 1} {$j < $inputs(nFlrs)} {incr j} {
 	set beamLoadListX($j) "$L $L $L"
 }
 
-set L [expr 0.5*6.1*(1.05*$inputs(deadRoof)+0.25*$inputs(liveRoof))*$g]
+set L [expr 0.5*6.1*(1.0*$inputs(deadRoof)+1.0*$inputs(liveRoof))*$g]
 set j $inputs(nFlrs)
 set beamLoadListX($j) "$L $L $L"
+

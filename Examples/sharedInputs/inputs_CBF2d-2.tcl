@@ -198,19 +198,14 @@ for {set i 1} {$i <= $inputs(nFlrs)} {incr i} {
 		0 0 0
 	"
 }
-set L [expr 0.50*(1.05*$inputs(deadFloor)+0.25*$inputs(liveFloor))*6.1*9.14*$g]
+set L [expr 0.5*6.1*(1.05*$inputs(deadFloor)+0.25*$inputs(liveFloor))*$g+$inputs(perimBeamDead)*$g]
 for {set j 1} {$j < $inputs(nFlrs)} {incr j} {
-	set pntLoadList($j) "$L $L $L"
+	set beamLoadListX($j) "$L $L $L"
 }
 
-set L [expr 0.50*(1.05*$inputs(deadRoof)+0.25*$inputs(liveRoof))*6.1*9.14*$g]
+set L [expr 0.5*6.1*(1.05*$inputs(deadRoof)+0.25*$inputs(liveRoof))*$g]
 set j $inputs(nFlrs)
-set pntLoadList($j) "$L $L $L"
-
-set L [expr $inputs(perimBeamDead)*$g]
-for {set j 1} {$j < $inputs(nFlrs)} {incr j} {
-	set beamLoadList($j) "$L $L"
-}
+set beamLoadListX($j) "$L $L $L"
 
 set settingsGroup(B1) SG1
 set settingsGroup(C1) SG2

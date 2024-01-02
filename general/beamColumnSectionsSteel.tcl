@@ -34,7 +34,6 @@ set cUnitsToKsi [expr $inputs(cUnitsToN)/($inputs(cUnitsToM)**2.)*1.45038e-7]
 set cUnitToIn [expr $inputs(cUnitsToM)/0.0254]
 set N 0.
 set N0 0.
-set ID 5
 set beamList ""
 logCommands -comment "#~~~~ beam sections ~~~~\n"
 #beam sections/M-Theta's

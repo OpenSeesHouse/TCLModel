@@ -74,10 +74,17 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 		eval "recorder EnvelopeDrift -file $inputs(resFolder)/envelopeDrifts/CNY$j-max.out -process maxAbs -iNode $baseCrnrs -jNode $crnrNds -dof 2 -perpDirn $perpDirn"
 		eval "recorder EnvelopeDrift -file $inputs(resFolder)/envelopeDrifts/CNX$j.out                     -iNode $baseCrnrs -jNode $crnrNds -dof 1 -perpDirn $perpDirn"
 		eval "recorder EnvelopeDrift -file $inputs(resFolder)/envelopeDrifts/CNY$j.out                     -iNode $baseCrnrs -jNode $crnrNds -dof 2 -perpDirn $perpDirn"
-		# recorder Drift -file $inputs(resFolder)/Drifts/$j.out -iNode $iNode -jNode $jNode -dof 1 2 6 -perpDirn $perpDirn
+		if {$inputs(analType) == "push"} {
+			eval "recorder Drift -file $inputs(resFolder)/Drift-CNX$j.out -iNode $baseCrnrs -jNode $crnrNds -dof 1 -perpDirn $perpDirn"
+			eval "recorder Drift -file $inputs(resFolder)/Drift-CNY$j.out -iNode $baseCrnrs -jNode $crnrNds -dof 2 -perpDirn $perpDirn"
+			recorder Drift -file $inputs(resFolder)/Drift-CMX$j.out -iNode $nd1 -jNode $nd2 -dof 1 -perpDirn $perpDirn
+			recorder Drift -file $inputs(resFolder)/Drift-CMY$j.out -iNode $nd1 -jNode $nd2 -dof 2 -perpDirn $perpDirn
+		}
 		set baseCrnrs $crnrNds
 		if [info exists seriesTagX] {
 			eval "recorder EnvelopeNode -file $inputs(resFolder)/envelopeAccels/CNX$j.out -node $crnrNds -timeSeries $seriesTagX -dof 1 accel"
+		}
+		if [info exists seriesTagY] {
 			eval "recorder EnvelopeNode -file $inputs(resFolder)/envelopeAccels/CNY$j.out -node $crnrNds -timeSeries $seriesTagY -dof 2 accel"
 		}
 	}
@@ -86,7 +93,7 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 }
 if [info exists seriesTagX] {
 	eval "recorder EnvelopeNode -file $inputs(resFolder)/envelopeAccels/allCMX.out -node $allNodes -timeSeries $seriesTagX -dof 1 accel"
-	if {$inputs(numDims) == 3 && $inputs(nBaysY) > 0} {
+	if {$inputs(numDims) == 3 && $inputs(nBaysY) > 0 && [info exists seriesTagY]} {
 		eval "recorder EnvelopeNode -file $inputs(resFolder)/envelopeAccels/allCMY.out -node $allNodes -timeSeries $seriesTagY -dof 2 accel"
 	}
 }
