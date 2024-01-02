@@ -199,10 +199,12 @@ for {set i 1} {$i <= $inputs(nFlrs)} {incr i} {
 	"
 }
 set L [expr 0.5*6.1*(1.05*$inputs(deadFloor)+0.25*$inputs(liveFloor))*$g+$inputs(perimBeamDead)*$g]
+set L [expr 0.5*6.1*(1.05*$inputs(deadFloor)+0.25*$inputs(liveFloor))*$g+$inputs(perimBeamDead)*$g]
 for {set j 1} {$j < $inputs(nFlrs)} {incr j} {
 	set beamLoadListX($j) "$L $L"
 }
 
+set L [expr 0.5*6.1*(1.05*$inputs(deadRoof)+0.25*$inputs(liveRoof))*$g]
 set L [expr 0.5*6.1*(1.05*$inputs(deadRoof)+0.25*$inputs(liveRoof))*$g]
 set j $inputs(nFlrs)
 set beamLoadListX($j) "$L $L"

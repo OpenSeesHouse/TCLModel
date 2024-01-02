@@ -7,6 +7,8 @@ proc manageFEData {act args} {
 	global fricModelTagMap
 	global dampingEleList
 	global dampingNodeList
+	global dampingEleList
+	global dampingNodeList
 	global lastNodeTag
 	global lastEleTag
 	global lastTransfTag
@@ -24,6 +26,7 @@ proc manageFEData {act args} {
 		set lastMaterialTag 0
 		set lastSecTag 0
 		set nodeMergeTol 0.01  ;#in units of m
+		foreach arrName "nodeTagMap eleTagMap transfTagMap matTagMap secTagMap eleAlignedPos nodeCrds zeroOffsetTransf dampingEleList dampingNodeList" {
 		foreach arrName "nodeTagMap eleTagMap transfTagMap matTagMap secTagMap eleAlignedPos nodeCrds zeroOffsetTransf dampingEleList dampingNodeList" {
 			if [info exists $arrName] {
 				unset $arrName
@@ -56,6 +59,7 @@ proc manageFEData {act args} {
 				error "unrecognized arg: $arg0"
 			}
 
+
 		}
 		return $lastNodeTag
 	}
@@ -68,6 +72,11 @@ proc manageFEData {act args} {
 	if {$act == "-newElement"} {
 		if [info exists eleTagMap($args)] {
 			error "element with tag: $args already defined in map"
+		}
+		set pos [lindex $args 0]
+		set eleTagMap($pos) [incr lastEleTag]
+		if {[lindex $args 1] == "-addToDamping"} {
+			lappend dampingEleList $lastEleTag
 		}
 		set pos [lindex $args 0]
 		set eleTagMap($pos) [incr lastEleTag]
