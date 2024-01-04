@@ -9,6 +9,7 @@ proc manageFEData {act args} {
 	global dampingNodeList
 	global dampingEleList
 	global dampingNodeList
+	global storyMassMap
 	global lastNodeTag
 	global lastEleTag
 	global lastTransfTag
@@ -26,7 +27,7 @@ proc manageFEData {act args} {
 		set lastMaterialTag 0
 		set lastSecTag 0
 		set nodeMergeTol 0.01  ;#in units of m
-		foreach arrName "nodeTagMap eleTagMap transfTagMap matTagMap secTagMap eleAlignedPos nodeCrds zeroOffsetTransf dampingEleList dampingNodeList" {
+		foreach arrName "nodeTagMap eleTagMap transfTagMap matTagMap secTagMap eleAlignedPos nodeCrds zeroOffsetTransf dampingEleList dampingNodeList storyMassMap" {
 			if [info exists $arrName] {
 				unset $arrName
 			}
@@ -209,6 +210,23 @@ proc manageFEData {act args} {
 	}
 	if {$act == "-getDampingNodeList"} {
 		return $dampingNodeList
+	}
+	if {$act == "-setStoryMass"} {
+		set j [lindex $args 0]; #retained node
+		set m [lindex $args 1]; #removed node
+		if ![info exists storyMassMap($j)] {
+			set storyMassMap($j) $m
+		} else {
+			set storyMassMap($j) [expr $storyMassMap($j) + $m]
+		}
+		return
+	}
+	if {$act == "-getStoryMass"} {
+		set j [lindex $args 0]; #retained node
+		if ![info exists storyMassMap($j)] {
+			return 0
+		}
+		return $storyMassMap($j)
 	}
 	error "unknown act: $act in manageFEData"
 }

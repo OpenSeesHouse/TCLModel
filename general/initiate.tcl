@@ -17,6 +17,7 @@ source $inputs(generalFolder)/releaseFromFixity.tcl
 source $inputs(generalFolder)/addHingeBeam.tcl
 source $inputs(generalFolder)/addHingeColumn.tcl
 source $inputs(generalFolder)/addFiberMember.tcl
+source $inputs(generalFolder)/doEigen.tcl
 if ![info exists inputs(modelFolder)] {
 	set inputs(modelFolder) ""
 }

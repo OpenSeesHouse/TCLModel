@@ -45,6 +45,7 @@ for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
 			set eleData(unitSelfWeight,$eleCode,$elePos) $rho
 			set eleData(length,$eleCode,$elePos) $h
 			set sumStrucWeigh($eleCode,$j) [expr $sumStrucWeigh($eleCode,$j)+$h*$rho]
+			manageFEData -setStoryMass $j [expr $h*$rho]
 		}
 	}
 }

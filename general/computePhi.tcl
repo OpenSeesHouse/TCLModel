@@ -16,10 +16,9 @@ proc computePhi {nflrs shapeRecN iMode PhiName logFileN {massVecN ""} {upLevel 3
     #assemble Phi matrix (modal shapes)
     #iMode: mode number - i : dof (story) number
     set normTerm 0
-    for {set i 1} {$i <= $inputs(nFlrs)} {incr i} {
+    for {set i 1} {$i <= $nflrs} {incr i} {
         set v [recorderValue $shapeRec($iMode) $i]
         set Phi($iMode,$i) $v
-		# puts "Phi($iMode,$i) $v"
         if {$normalMethod == 1} {
             set absv [expr abs($v)]
             if {$absv > $normTerm} {
@@ -40,7 +39,7 @@ proc computePhi {nflrs shapeRecN iMode PhiName logFileN {massVecN ""} {upLevel 3
 	set sumPhi 0
 	set sumMiPhi 0
 	set sumMiPhi2 0
-    for {set i 1} {$i <= $inputs(nFlrs)} {incr i} {
+    for {set i 1} {$i <= $nflrs} {incr i} {
         if {$normalMethod == 1} {
             #normalize over maxAbs
             set Phi($iMode,$i) [expr $Phi($iMode,$i)/$refVal]

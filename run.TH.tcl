@@ -1,13 +1,13 @@
 #comment these to run externally:
 #start:
-# set modelPath Examples/BRBF2d-4
-# set sa 3.8
-# set iRec 2
-# set resFilePath tmp.txt
-# set inputs(resFolder) NTH/$iRec/$sa
-# set gmPath ../../GMFiles/FarField/AT2
+set modelPath Examples/BRBF2d-4
+set sa 3.8
+set iRec 2
+set resFilePath tmp.txt
+set inputs(resFolder) NTH/$iRec/$sa
+set gmPath ../../GMFiles/FarField/AT2
 #end
-set inputs(doEigen) 1
+set inputs(doEigen) 0
 set inputs(recordCADSees) 0
 set inputs(analType) dynamic
 set inputs(doRayleigh) 1
@@ -18,8 +18,8 @@ set inputs(colpsDrift) 0.1
 set inputs(checkMaxResp) 1
 set inputs(checkResultAvailable) 1
 cd $modelPath
-source $inputs(generalFolder)/runMirroredTH.tcl
-# source $inputs(generalFolder)/runSingleTH.tcl
+# source $inputs(generalFolder)/runMirroredTH.tcl
+source $inputs(generalFolder)/runSingleTH.tcl
 cd $inputs(generalFolder)/../
 #to communicate with external caller:
 if [info exists resFilePath] {

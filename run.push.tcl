@@ -14,13 +14,12 @@ set inputs(numPushSteps) 100
 # set models(1) Examples/NIST-sym-4
 set models(1) Examples/CBF2D-4
 set inputs(checkResultAvailable) 0
+set isAdaptive 0
 foreach iModel "1" {
 	set inputs(modelFolder) $models($iModel)
 	cd $inputs(modelFolder)
 	set inputs(resFolder) push-$inputs(pushDir)
 	source $inputs(generalFolder)/runSinglePush.tcl
-	# wipe
-	# source postProcGeneral/summarizeStoryRes.tcl
 	cd ..
 }
 

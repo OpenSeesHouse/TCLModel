@@ -26,16 +26,15 @@ if {$inputs(recordCADSees)} {
 } else {
 	logCommands -file $inputs(resFolder)/commands.ops
 }
-# source inputs.tcl
-
-# set inputs(doEigen) 1
 source $inputs(generalFolder)/initiate.tcl
+if {$isAdaptive} {
+	set inputs(numModes) $inputs(nFlrs)
+}
 source $inputs(generalFolder)/buildModel.tcl
 source $inputs(generalFolder)/analyze.gravity.tcl
 source $inputs(generalFolder)/defineRecorders.tcl
-# set inputs(targetDriftList) "
-#             0.02 0 -0.02 0
-#             0.04 0 -0.04 0
-#             0.05 0 -0.05 0
-#             "
-source $inputs(generalFolder)/analyze.push.tcl
+if {$isAdaptive} {
+	source $inputs(generalFolder)/analyze.push.adaptive.tcl
+} else {
+	source $inputs(generalFolder)/analyze.push.tcl
+}

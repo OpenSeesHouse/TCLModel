@@ -242,6 +242,7 @@ for {set j 0} {$j <= $inputs(nFlrs)} {incr j} {
 						set h $jntData($iNode,dim,$dir,np,h)
 						set v $jntData($iNode,dim,$dir,np,v)
 						set dgi [expr ($h**2+$v**2)*$inputs(rigidZoneFac)]
+						#TODO use digonal gusset dimension for computing dg
 						set h $jntData($jNode,dim,$dir,pn,h)
 						set v $jntData($jNode,dim,$dir,pn,v)
 						set dgj [expr ($h**2+$v**2)*$inputs(rigidZoneFac)]

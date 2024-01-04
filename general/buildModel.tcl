@@ -42,29 +42,26 @@ source $inputs(generalFolder)/defineDiaphragms.tcl
 source $inputs(generalFolder)/defineMasses.tcl
 source $inputs(generalFolder)/cleanupNodes.tcl
 if {$inputs(doEigen) == 1} {
-	source $inputs(generalFolder)/doEigenAnalysis.tcl
-	set file [open periods.txt w]
-	for {set i 1} {$i <= $inputs(numModes)} {incr i} {
-		puts $file [set T$i]
-	}
-	close $file
+	puts "~~~~~~~~~~~~~~~~~~~~~ Performing Eigen Analysis ~~~~~~~~~~~~~~~~~~~~~"
+	set omega2List [doEigen]
 } else {
 	set omega2List ""
 	set inputs(numModes) 0
-	if [catch {open periods.txt r} file] {
+	if [catch {open periods.out r} file] {
 		if {$inputs(analType) == "dynamic"} {
 			puts "WARNING! periods and the omega2List could not be set"
 		}
 	} else {
 		set i 0
-		foreach T [split [read $file] " \n"] {
+		foreach line [split [read $file] " \n"] {
+			foreach "i T" $line {}
 			if {$T == ""} continue
-			incr i
+			if [info exists T$i] break
 			set T$i $T
 			puts "T$i= $T"
 			lappend omega2List [expr (2.*3.1415/$T)**2]
+			set inputs(numModes) $i
 		}
-		set inputs(numModes) $i
 		close $file
 	}
 }

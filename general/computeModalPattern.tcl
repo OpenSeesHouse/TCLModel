@@ -1,11 +1,11 @@
 #compute updated lateral pattern
 set apStepCount 0
-proc computeModalPattern {massVecName inputs(resFolder) outF shapeRecName combinMethod patternType {specFile ""} {Tperiods ""} {specFac {1}}} {
+proc computeModalPattern {massVecName folder outF shapeRecName combinMethod patternType {specFile ""} {Tperiods ""} {specFac {1}}} {
     global apStepCount
-    global xDamp
+    global inputs
     upvar $outF F
     upvar $shapeRecName shapeRec
-    set x $xDamp
+    set x $inputs(dampRat)
     incr apStepCount
 
     #read and store the spectrun in T and S lists
@@ -24,11 +24,11 @@ proc computeModalPattern {massVecName inputs(resFolder) outF shapeRecName combin
         }
     }
     set nflrs [array size F]
-    set inputs(numModes) [array size shapeRec]
+    set numModes [array size shapeRec]
     #compute modal forces
-    file mkdir $inputs(resFolder)/modeShapes
-    for {set iMode 1} {$iMode <= $inputs(numModes)} {incr iMode 1} {
-        set logFileN $inputs(resFolder)/modeShapes/$iMode.txt
+    file mkdir $folder/modeShapes
+    for {set iMode 1} {$iMode <= $numModes} {incr iMode 1} {
+        set logFileN $folder/modeShapes/$iMode.out
         set S 1
         set T($iMode) 0
         if {$specFile != "" && $Tperiods != ""} {
@@ -36,14 +36,14 @@ proc computeModalPattern {massVecName inputs(resFolder) outF shapeRecName combin
             set S [interpolate $specTList $specSList $T($iMode) "" 1 1]
             set S [expr $S*$specFac]
         }
-        computeFij $inputs(nFlrs) $iMode f $S $shapeRecName $logFileN $massVecName $patternType
+        computeFij $nflrs $iMode f $S $shapeRecName $logFileN $massVecName $patternType
     } 
     #combine modal forces
     set sumF 0
-    set file [open $inputs(resFolder)/apF.txt a+]
+    set file [open $folder/apF.out a+]
     set line "$apStepCount"
-    for {set i 1} {$i <= $inputs(nFlrs)} {incr i 1} {
-        for {set iMode 1} {$iMode <= $inputs(numModes)} {incr iMode 1} {
+    for {set i 1} {$i <= $nflrs} {incr i 1} {
+        for {set iMode 1} {$iMode <= $numModes} {incr iMode 1} {
             if {$combinMethod == "SRSS"} {
                 set Fj [expr $f($iMode,$i)**2]
             } else {
@@ -54,7 +54,7 @@ proc computeModalPattern {massVecName inputs(resFolder) outF shapeRecName combin
                     set wj [expr 2.*3.1415/$T($iMode)]
                     set fji $f($iMode,$i)
                     set Fj 0
-                    for {set k 1} {$k <= $inputs(numModes)} {incr k} {
+                    for {set k 1} {$k <= $numModes} {incr k} {
                         if {$T($k) == 0} continue
                         set wk [expr 2.*3.1415/$T($k)]
                         set r [expr $wk/$wj]
@@ -79,6 +79,6 @@ proc computeModalPattern {massVecName inputs(resFolder) outF shapeRecName combin
     if {$patternType == "force"} {
         return "$sumF"
     } else {
-        return $F($inputs(nFlrs))
+        return $F($nflrs)
     }
 }

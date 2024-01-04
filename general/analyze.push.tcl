@@ -7,12 +7,7 @@ set sumWiHi 0.
 set sumWi 0.
 set allEleCodes [eleCodeMap -getAllCodes]
 for {set j 1} {$j <= $inputs(nFlrs)} {incr j} {
-	set mass $diaphMass($j,X)
-	foreach eleCode $allEleCodes {
-		if [info exists sumStrucWeigh($eleCode,$j)] {
-			set mass [expr $mass + $sumStrucWeigh($eleCode,$j)]
-		}
-	}
+	set mass [manageFEData -getStoryMass $j]
 	set sumWiHi [expr $sumWiHi+$mass*$g*$Z($j)**$inputs(kPush)]
 	set sumWi [expr $sumWi + $mass*$g]
 	set massArr($j) $mass
@@ -51,5 +46,5 @@ set LBuilding $Z($inputs(nFlrs))
 set incr [expr 0.05*$LBuilding/$inputs(numPushSteps)]
 set tol 1.e-4
 set algoList "Newton ModifiedNewton {NewtonLineSearch 0.65} KrylovNewton Broyden"
-source $inputs(generalFolder)/analyze.pushover.run.tcl
+source $inputs(generalFolder)/doDispControlAnalysis.tcl
 remove loadPattern 2
